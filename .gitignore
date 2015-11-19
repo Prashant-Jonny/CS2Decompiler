@@ -1,3 +1,25 @@
+/target
+/excluded_resources
+/.idea
+/.settings
+/repo
+.dropbox
+.project
+nb-configuration.xml
+nbactions.xml
+install-to-project-repo.py
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+*~
+ehthumbs.db
+Thumbs.db
+
 *.class
 
 # Mobile Tools for Java (J2ME)

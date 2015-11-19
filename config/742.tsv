@@ -1,0 +1,20 @@
+Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
+	WIDGET_OPCODE	IIII	V	getActiveWidget().setPosition(%1,%2,%3,%4)		Sets the position of the current active component, in the format (xoff, yoff, xPosMode, yPosMode)
+	WIDGET_OPCODE	IIII	V	getActiveWidget().setSize(%1,%2,%3,%4)		Sets the width of the current active component, in the format (width, height, xSizeMode, ySizeMode)
+	WIDGET_OPCODE	I	V	getActiveWidget().setHide(%1)		Sets the hidden status of the current active component (1=hidden, 0=visible)
+	WIDGET_OPCODE	II	V	getActiveWidget().setAspectRatio(%1,%2)		Sets the aspect ratio of the current active component (format: width, height)
+	WIDGET_OPCODE	I	V	getActiveWidget().setSolid(%1)		Sets the solid status of the current active component (0=can click through, 1=solid)
+	WIDGET_OPCODE	II	V	getActiveWidget().setScrollPosition(%1,%2)		Sets the current scroll position of the active component (format: xpos, ypos)
+	WIDGET_OPCODE	I	V	getActiveWidget().setColour(%1)		Sets the colour of the active component
+	WIDGET_OPCODE	I	V	getActiveWidget().setFilled(%1)		Sets whether the active box component is filled or just an outline (1=filled, 0=outline)
+	WIDGET_OPCODE	I	V	getActiveWidget().setAlpha(%1)		Sets the alpha (transparency) of the active component
+	WIDGET_OPCODE	I	V	getActiveWidget().setLineWeight(%1)		Sets the weight of the active line component
+	WIDGET_OPCODE	I	V	getActiveWidget().setGraphic(%1)		Sets the graphic (sprite) of the active component
+	WIDGET_OPCODE	I	V	getActiveWidget().setGraphicRotation(%1)		Sets the graphic (sprite) rotation on the active component
+	WIDGET_OPCODE	I	V	getActiveWidget().setGraphicRepeat(%1)		Sets whether the graphic (sprite) on the active component should be repeated (1=repeat, 0=no repeat)
+	WIDGET_OPCODE	I	V	getActiveWidget().setModel(%1)		Sets the model on the active component
+	WIDGET_OPCODE	IIIIII	V	getActiveWidget().setModelConstraints(%1,%2,%3,%4,%5,%6)		Sets the model constraints on the active component (format: unknown1, unknown2, rotateX, rotateY, rotateZ, zoom)
+	WIDGET_OPCODE	I	V	getActiveWidget().setAnimation(%1)		Sets the model animation on the active component
+	WIDGET_OPCODE	O	V	getActiveWidget().setText(%1)		Sets the text on the active component
+	WIDGET_OPCODE	I	V	getActiveWidget().setFont(%1)		Sets the text font on the active component
+316	WIDGET_OPCODE	III	V	%1.setScrollMax(%2, %3)		Sets the scroll max info (x,y)
