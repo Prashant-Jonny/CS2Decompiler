@@ -1,3 +1,8 @@
+
+# Welcome
+Welcome to our project, To get started see the questions below and their answers and make sure to visit the wiki if you need help
+
+
 # Q: What is CS2Decompiler?
 
 CS2Decompiler stands for "RuneScape 2 ClientScript Language Decompiler" in more advance it's a programming language that's created by jagex and compiled to byte code using flow graph method.. Our application aim to decompile that bytecode language into something more readable to the human-eye, and to understand how things works
@@ -11,5 +16,5 @@ CS2Decompiler stands for "RuneScape 2 ClientScript Language Decompiler" in more 
 * Go to `User` java source file, And set up the constants
 * Run the project from `User` class
 
-# Q: Where i can find more details about the decompiler?
-You can always use out Github  wiki for this project
+# Q: More Dtails?
+You can always use our Github wiki for more details and info about this project
