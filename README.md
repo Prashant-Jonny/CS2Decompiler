@@ -16,5 +16,5 @@ CS2Decompiler stands for "RuneScape 2 ClientScript Language Decompiler" in more 
 * Go to `User` java source file, And set up the constants
 * Run the project from `User` class
 
-# Q: More Dtails?
+# Q: More Details?
 You can always use our Github wiki for more details and info about this project
