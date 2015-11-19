@@ -11,9 +11,6 @@ CS2Decompiler stands for "RuneScape 2 ClientScript Language Decompiler" in more 
 * Go to `User` java source file, And set up the constants
 * Run the project from `User` class
 
-# More Details?
-You can always use our Github wiki for more details and info about this project
-
 # Libraries used
 * Slf4j 1.7.12
 * Slf4j-log4j 1.7.12
@@ -27,3 +24,6 @@ You can always use our Github wiki for more details and info about this project
 * JGraph-core 0.9.1
 * JGraph 5.13
 * JGraph-ext 0.9.1
+
+# More Details?
+You can always use our Github wiki for more details and info about this project
