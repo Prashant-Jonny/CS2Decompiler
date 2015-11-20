@@ -343,6 +343,48 @@ public class ClientGeneral {
     
     
     /**
+     * Returns whether chat has been restricted (to quick chat only) within the client.
+     */
+    public static Supplier<CallMethodInstruction> PUSH_CHAT_RESTRICTED = () ->
+            new CallMethodInstruction(InstructionType.PUSH_CHAT_RESTRICTED)
+                    .setName("isChatRestricted()")
+                    .setPushType(StackType.INT);
+    
+    
+    /**
+     * Returns the number of free slots available in the specified inventory.
+     */
+    public static Supplier<CallMethodInstruction> PUSH_INV_FREESLOTCOUNT = () ->
+            new CallMethodInstruction(InstructionType.PUSH_INV_FREESLOTCOUNT)
+                    .setName("getFreeSlots")
+                    .setArgumentTypes(StackType.INT)
+                    .setPushType(StackType.INT)
+                    .setPrefixFormatters(invFormatter); 
+    
+    
+    /**
+     * Returns the weighted number objects in the specified inventory, where the weight is determined by the specified parameter.
+     */
+    public static Supplier<CallMethodInstruction> PUSH_INV_WEIGHTEDSLOTCOUNT = () ->
+            new CallMethodInstruction(InstructionType.PUSH_INV_WEIGHTEDSLOTCOUNT)
+                    .setName("getWeightedSlotCount")
+                    .setArgumentTypes(StackType.INT, StackType.INT)
+                    .setPushType(StackType.INT)
+                    .setPrefixFormatters(invFormatter); 
+    
+    
+    /**
+     * Returns the weighted number objects in the specified inventory, where the weight is determined by the specified parameter. Stacks count for multiple objects.
+     */
+    public static Supplier<CallMethodInstruction> PUSH_INV_WEIGHTEDSLOTCOUNT_STACKS = () ->
+            new CallMethodInstruction(InstructionType.PUSH_INV_WEIGHTEDSLOTCOUNT_STACKS)
+                    .setName("getWeightedStackedSlotCount")
+                    .setArgumentTypes(StackType.INT, StackType.INT)
+                    .setPushType(StackType.INT)
+                    .setPrefixFormatters(invFormatter);
+    
+    
+    /**
      * Returns the language ID of the client.
      */
     public static Supplier<CallMethodInstruction> PUSH_LANGUAGE = () ->

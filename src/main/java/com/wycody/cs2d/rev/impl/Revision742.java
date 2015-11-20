@@ -426,7 +426,10 @@ public class Revision742 extends Revision {
         registerInstruction(776, ClientGeneral.PUSH_PLAYER_ISMEMBER);
         registerInstruction(681, ClientGeneral.PUSH_PLAYER_COMBATLEVEL);
         registerInstruction(464, ClientGeneral.PUSH_PLAYER_ISFEMALE);
-        //4x unknown
+        registerInstruction(237, ClientGeneral.PUSH_CHAT_RESTRICTED);
+        registerInstruction(660, ClientGeneral.PUSH_INV_FREESLOTCOUNT);
+        registerInstruction(774, ClientGeneral.PUSH_INV_WEIGHTEDSLOTCOUNT);
+        registerInstruction(186, ClientGeneral.PUSH_INV_WEIGHTEDSLOTCOUNT_STACKS);
         registerInstruction(346, ClientGeneral.PUSH_LANGUAGE);
         
         //Enum instructions
