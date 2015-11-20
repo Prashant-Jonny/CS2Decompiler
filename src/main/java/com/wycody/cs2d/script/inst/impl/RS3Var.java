@@ -7,8 +7,7 @@ import com.wycody.cs2d.script.inst.impl.var.rs3.StoreVar;
 import com.wycody.cs2d.script.inst.impl.var.rs3.StoreVarBit;
 import java.util.function.Supplier;
 
-public class RS3Var {
-    //TODO: Lambdas
+public interface RS3Var {
     public static final Supplier<Instruction> RS3_STORE_VARBIT = () -> new StoreVarBit(-1,-1);
     public static final Supplier<Instruction> RS3_STORE_VAR = () -> new StoreVar(-1,-1);
     public static final Supplier<Instruction> RS3_PUSH_VARBIT = () -> new PushVarBit(-1,-1);

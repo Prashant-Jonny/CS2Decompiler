@@ -484,7 +484,45 @@ public class Revision850 extends RS3Revision {
 
 	@Override
 	public void registerLarges() {
-		//redundant
+		//NOT redundant - DO NOT FUCKING REMOVE
+        registerLarge(109);
+        registerLarge(964);
+        registerLarge(537);
+        registerLarge(403);
+        registerLarge(687);
+        registerLarge(226);
+        registerLarge(375);
+        registerLarge(1064);
+        registerLarge(569);
+        registerLarge(281);
+        registerLarge(835);
+        registerLarge(206);
+        registerLarge(131);
+        registerLarge(17);
+        registerLarge(165);
+        registerLarge(244);
+        registerLarge(641);
+        registerLarge(26);
+        registerLarge(444);
+        registerLarge(702);
+        registerLarge(48);
+        registerLarge(933);
+        registerLarge(342);
+        registerLarge(563);
+        registerLarge(84);
+        registerLarge(483);
+        registerLarge(685);
+        registerLarge(0);
+        registerLarge(1131);
+        registerLarge(324);
+        registerLarge(544);
+        registerLarge(445);
+        registerLarge(129);
+        registerLarge(191);
+        registerLarge(809);
+        registerLarge(979);
+        registerLarge(166);
+        registerLarge(865);
 	}
 	
     //Temp.
@@ -497,7 +535,8 @@ Unknown opcode: 342
 	public Instruction decode(CS2Script script, Context context, WrappedByteBuffer buffer, int id, int address) {
         if(!this.isKnowOpcode(id) && !unids.contains(id)){
             unids.add(id);
-            System.err.println("Unknown opcode: "+id);
+            if(print_unknowns)
+                System.err.println("Unknown opcode: " + id);
         }else{
 //            System.err.println();
             //System.err.println("opcode: "+id);
@@ -508,13 +547,33 @@ Unknown opcode: 342
         instr.setBaseData(id, address);
 
         if (InstructionType.PUSH_VAR == instr.getType() || instr.getType() == InstructionType.STORE_VAR) {
-            VarDomainType varDomainType = SerialEnum.forID(VarDomainType.values(), buffer.getUnsignedByte());
-            int i_2_ = buffer.getUnsignedShort();
+            int var_domain_id= buffer.getUnsignedByte();
+            int var_type = buffer.getUnsignedShort();
+            int operand = buffer.getUnsignedByte();
 
-            instr.setObjectOperand(varTypeDomain.get(varDomainType).list(i_2_));
-            instr.setIntegerOperand((int) buffer.getUnsignedByte());
+
+            System.out.flush();
+            System.err.flush();
+
+            System.err.println(" ------ CRITICAL DEBUG INFO ------ ");
+            System.err.println("VAR_DOMAIN_ID = " + var_domain_id);
+            System.err.println("VAR_TYPE      = " + var_type);
+            System.err.println("OPERAND       = " + operand);
+
+            VarDomainType varDomainType = SerialEnum.forID(VarDomainType.values(), var_domain_id);
+            instr.setObjectOperand(varTypeDomain.get(varDomainType).list(var_type));
+            instr.setIntegerOperand(operand);
+
+
+            Object obj = varTypeDomain.get(varDomainType).list(var_type);
+            System.err.println("VAR_DOMAIN_TYPE = " + varDomainType);
+            System.err.println("OBJECT_OP      = " + obj);
+            System.err.println("POSITION       = " + address);
+            System.err.println(" ------ CRITICAL DEBUG INFO ------ ");
+
         } else if (instr.getType() == InstructionType.PUSH_OBJ) {
-            BaseVarType baseVarType = SerialEnum.forID(BaseVarType.values(), buffer.getUnsignedByte());
+            int idx = buffer.getUnsignedByte();
+            BaseVarType baseVarType = SerialEnum.forID(BaseVarType.values(), idx);
             switch (baseVarType) {
                 case INTEGER:                   
                     instr = Push.PUSH_INT.get();
@@ -543,11 +602,14 @@ Unknown opcode: 342
                 instr.setIntegerOperand((int) buffer.getUnsignedByte());
             }
         }
-        
-        System.out.println(id + "\t" + instr);
+
         instr.setScript(script);
+        if(debug_instructions)
+            System.out.println(id + "\t" + instr);
         return instr;
 	}
+
+    public static boolean debug_instructions = false, print_unknowns = false;
 
 	@Override
 	public CS2Script disassemble(Context context, WrappedByteBuffer buffer) {

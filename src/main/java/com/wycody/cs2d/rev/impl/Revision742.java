@@ -16,6 +16,7 @@ import com.wycody.cs2d.script.inst.impl.Chat;
 import com.wycody.cs2d.script.inst.impl.Clan;
 import com.wycody.cs2d.script.inst.impl.ClientGeneral;
 import com.wycody.cs2d.script.inst.impl.Config;
+import com.wycody.cs2d.script.inst.impl.Exchange;
 import com.wycody.cs2d.script.inst.impl.Friend;
 import com.wycody.cs2d.script.inst.impl.Input;
 import com.wycody.cs2d.script.inst.impl.Math;
@@ -514,6 +515,19 @@ public class Revision742 extends Revision {
         registerInstruction(214, Clan.PUSH_CHANNEL_USER_SLOT);
         registerInstruction(449, Clan.PUSH_CHANNEL_USER_SORTEDSLOT);
         registerInstruction(239, Clan.PUSH_VARCLAN_ENABLED);
+        
+        //Exchange instructions
+        registerInstruction(490, Exchange.PUSH_ISSELL);
+        registerInstruction(545, Exchange.PUSH_OBJID);
+        registerInstruction(466, Exchange.PUSH_PRICE);
+        registerInstruction(491, Exchange.PUSH_COUNT);
+        registerInstruction(155, Exchange.PUSH_COMPLETECOUNT);
+        registerInstruction(381, Exchange.PUSH_COMPLETEGOLD);
+        registerInstruction(215, Exchange.PUSH_ISEMPTY);
+        //1x unknown
+        registerInstruction(298, Exchange.PUSH_ISFINISHED);
+        registerInstruction(181, Exchange.PUSH_ISSUBMITTING);
+        
                 
         //Arithmatic (math) instructions
         registerInstruction(998, Math.SUM);

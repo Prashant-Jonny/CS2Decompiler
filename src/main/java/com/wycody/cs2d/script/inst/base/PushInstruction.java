@@ -55,8 +55,20 @@ public class PushInstruction extends Instruction {
         return 0;
     }
 
+
+    private String getExtra(){
+        switch (this.fieldType) {
+            case OPERAND:
+                return String.format("push<operand,%s>(%s)",this.stackType.name(),this.getOperand(this.srcType));
+            case FIELD:
+                return String.format("push<field,%s>(Fields[%d])",this.stackType.name(),this.integerOperand);
+            case ARRAY:
+                return String.format("push<array,%s>(array_%d[...])",this.stackType.name(),this.integerOperand);
+        }
+        return "#UNKNOWN";
+    }
     @Override
     public String toString() {
-        return String.format("%4d:(%d) => %s<%s>",this.address, this.id,"PUSH",this.fieldType);
+        return String.format("%4d:(%d) => %s<%s> %s",this.address, this.id,"PUSH",this.fieldType,getExtra());
     }
 }

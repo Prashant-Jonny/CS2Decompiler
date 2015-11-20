@@ -92,7 +92,7 @@ public class Main {
 			script.print(context);
 
 		} else {
-            int scriptId = 400;
+            int scriptId = 2445;
             
             if (args.length >= 1) {
                 try{
@@ -115,7 +115,7 @@ public class Main {
 			Context context = new Context();
 			CS2Decompiler decompiler = new CS2Decompiler(context);
             
-			context.withBlockEditing(true).withDebug(true).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
+			context.withBlockEditing(true).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 			
 			CS2Script script = decompiler.decompile(scriptId);//793
 			script.print(context);
@@ -128,7 +128,7 @@ public class Main {
 	public static ArrayList<CS2Script> findInstruction(CS2Decompiler decompiler, int id) throws IOException {
 		ArrayList<CS2Script> scripts = new ArrayList<CS2Script>();
 		a:for(int scriptId = 0; scriptId < decompiler.getContext().getCache().getFileCount(12); scriptId++) {
-			CS2Script script = decompiler.disassemble(scriptId);
+			CS2Script script = decompiler.disassemble(scriptId, new File("data/scripts/" + scriptId + ".cs2"));
 			b:for(Instruction instruction : script.getInstructions()) {
 				if(instruction.getId() == id) {
 					scripts.add(script);

@@ -25,6 +25,11 @@ public class PushVar extends Instruction {
 		VarType type = (VarType) objectOperand;
 		boolean usePlayerMap = integerOperand == 1;
 		BaseVarType baseVar = type.dataType.baseType;
+
+		System.out.flush();
+		System.err.flush();
+		System.err.println(address + " => " + baseVar);
+
 		VarDomainType domain = type.getDomain();
         String outcome = "";
         //this stuff was in a class becuse it gets used for other instructsions

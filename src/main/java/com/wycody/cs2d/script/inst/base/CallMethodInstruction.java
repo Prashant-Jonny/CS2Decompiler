@@ -255,11 +255,10 @@ public class CallMethodInstruction extends Instruction {
         StringBuilder s = new StringBuilder();
         if(this.methodName != null && this.methodName.length() > 0) {
 			s.append(s).append(this.methodName).append("\t");
-		} else {
-			s.append(this.nameFormat).append("\t");
 		}
-        
-        s.append(StackType.format(this.argumentTypes)).append(" -> ").append(StackType.format(this.returnTypes));
+
+        s.append(StackType.format(this.argumentTypes)).append(" -> ").append(StackType.format(this.returnTypes)).append("\t");
+        s.append(this.nameFormat).append("\t");
         return s.toString();
     }
     

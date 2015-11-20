@@ -2,6 +2,7 @@ package com.wycody.cs2d.script.inst.swtch;
 
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
+import com.wycody.cs2d.script.flow.impl.BasicBlock;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.types.StackType;
@@ -44,7 +45,14 @@ public class SwitchInstruction extends Instruction {
 	public void print(Context context, ScriptPrinter printer) {
 		printer.println("switch (" + block.getExpression() + ") {");
 		printer.tab();
-
+		for(CaseNode node : block.getCases()) {
+			printer.println("case " + node.getExpression() + ":");
+			printer.tab();
+			BasicBlock block = script.getBlockAt(1 + address + node.getJumpTarget());
+			block.print(context, printer);
+			printer.println("break;");
+			printer.untab();
+		}
 		printer.untab();
 		printer.println("}");
 	}
@@ -71,6 +79,19 @@ public class SwitchInstruction extends Instruction {
 	 */
 	public void setBlock(SwitchBlock block) {
 		this.block = block;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Switch SWITCH_BLOCK[").append(integerOperand);
+		sb.append(")\n");
+
+		SwitchBlock block = script.getSwitchBlock(integerOperand);
+		for(CaseNode node : block.getCases()) {
+			sb.append("\t\t").append(node.getExpression()).append(" -> ").append(node.getJumpTarget()+1+this.address).append("\n");
+		}
+		return sb.toString();
 	}
 
 }

@@ -22,16 +22,29 @@ import com.wycody.cs2d.script.inst.types.StackType;
  * Parses tsv files.
  */
 public class ConfigParser {
-    private static Map<String,Integer> revisions;
     
-    static{
-        revisions = new HashMap<String,Integer>();
-        revisions.put("850", 1133884859);
-        revisions.put("742", 1820259069);
+    static {
+        
+    }
+    
+    private final String urlBase;
+    
+    private final Map<String,Integer> revisionGids;
+    
+    public ConfigParser () {
+        this(null, null);
+    }
+    
+    public ConfigParser (String urlBase, Map<String,Integer> revisionGids) {
+        this.urlBase = urlBase;
+        this.revisionGids = revisionGids;
     }
     
     private int getGID(String revision) {
-        Integer key = revisions.get(revision);
+        if (revisionGids == null) {
+            throw new IllegalStateException("No revision GIDs declared - cannot get revision GID.");
+        }
+        Integer key = revisionGids.get(revision);
         if(key == null) {
 			throw new IllegalArgumentException("Invalid/Unknown revision: " + revision);
 		}
@@ -40,7 +53,10 @@ public class ConfigParser {
     
     
     public void download(String revision) {
-        String url = "https://docs.google.com/spreadsheets/u/1/d/1EO8M0vj9tUT-HnNzdBPRrPVL_EOh3ZMsxcf1H82NMT8/export?format=tsv&id=1EO8M0vj9tUT-HnNzdBPRrPVL_EOh3ZMsxcf1H82NMT8&gid="+getGID(revision);
+        if (urlBase == null) {
+            throw new IllegalStateException("No url declared - cannot download revision file.");
+        }
+        String url = urlBase+getGID(revision);
         System.out.println("Fetching from: " + url);
         URL uri;
         try {
@@ -136,7 +152,7 @@ public class ConfigParser {
         if(c == 'O' || c == 'o') {
 			return StackType.OBJECT;
 		}
-        throw new RuntimeException("Invalid stack type in config.");
+        throw new RuntimeException("Invalid stack type in config. ("+c+")");
     }
     
     private StackType[] parseArguments(String opcode_in) {

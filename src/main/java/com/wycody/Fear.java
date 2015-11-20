@@ -3,10 +3,14 @@ package com.wycody;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.thedoge.Blocks.DummyBlock;
 import com.thedoge.Blocks.MultiBlock;
 import com.thedoge.funky.Factory;
+import com.wycody.cs2d.script.inst.Instruction;
 import org.apache.commons.collections4.list.TreeList;
 
 import com.jagex.game.runetek5.config.enumtype.EnumTypeList;
@@ -55,12 +59,27 @@ public class Fear {
 	 * @throws FileNotFoundException
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
-		File f = new File("C:\\Users\\Ethan\\Documents\\rscd\\850\\");
-        
-        //test();
-        //test850(args);
 
-		test742(args);
+        //test();
+        // 686 605
+//396
+//		findSHIT(564);//
+
+        Revision850.debug_instructions=true;
+        Revision850.print_unknowns=true;
+        test850(new String[]{"10118"});
+
+
+
+        /*
+        script: 10118
+script: 10123           -- sets view count
+script: 10154           -- connection
+script: 3103
+script: 3106
+         */
+
+		//test742(args);
 	}
 
     private static void test742(String[] args) throws FileNotFoundException{
@@ -81,6 +100,9 @@ public class Fear {
            
             
 			context.withDebug(true).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
+
+
+
 
             /*
             [18:20:21] ?????? ??????: 2181
@@ -127,6 +149,92 @@ public class Fear {
 			script.print(context);*/
 		}
     }
+
+	public static ArrayList<CS2Script> findInstruction(CS2Decompiler decompiler, int id) throws IOException {
+		ArrayList<CS2Script> scripts = new ArrayList<CS2Script>();
+		a:for(int scriptId = 0; scriptId < decompiler.getContext().getCache().getFileCount(12); scriptId++) {
+			CS2Script script = decompiler.disassemble(scriptId);
+			b:for(Instruction instruction : script.getInstructions()) {
+				if(instruction.getId() == id) {
+					scripts.add(script);
+					continue a;
+				}
+			}
+		}
+		return scripts;
+	}
+
+	private static void findSHIT(int ... ids) throws FileNotFoundException {
+		FileStore s = FileStore.open(new File("F:\\LIVE\\"));
+		Cache c = new Cache(s);
+		ConfigParser config = new ConfigParser();
+		Revision revision = new Revision850(c);
+		config.download("850");
+		config.loadRevision("850", revision);
+
+		Main.paramTypeList = new ParamTypeList(c);
+		Main.enumTypeList = new EnumTypeList(c);
+		Main.structTypeList = new StructTypeList(c);
+
+		Context context = new Context().withCache(c).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
+		CS2Decompiler decompiler = new CS2Decompiler(context);
+		context.withBlockEditing(true).withDebug(false).withCache(c).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
+
+		CS2Decompiler.scriptLoader = scriptId -> {
+			try{
+				File fSrc = new File("F:\\LIVE\\IMPORT\\" + scriptId + ".rs2");
+				FileInputStream in = new FileInputStream(fSrc);
+				byte[] buffer = new byte[in.available()];
+				in.read(buffer);
+				return WrappedByteBuffer.wrap(buffer);
+			}catch(Exception e){
+				throw new Error(e);
+			}
+		};
+
+		HashSet<Integer> wantedIds = new HashSet<>();
+		for(int id: ids)
+				wantedIds.add(id);
+		/*
+		wantedIds.add(716);
+		wantedIds.add(571);
+		wantedIds.add(745);
+		wantedIds.add(96);
+		wantedIds.add(1051);
+		wantedIds.add(738);
+		wantedIds.add(147);
+		wantedIds.add(183);
+		wantedIds.add(950);
+		wantedIds.add(781);
+		wantedIds.add(135);
+		wantedIds.add(495);*/
+		wantedIds.add(617);
+		wantedIds.add(5);
+
+		File base = new File("F:\\LIVE\\IMPORT\\");
+		for(File scriptFile : base.listFiles()) {
+			String fileName = scriptFile.getName();
+			if(!fileName.contains(".rs2"))
+				continue;
+			int id = Integer.parseInt(fileName.replace(".rs2",""));
+			try {
+				CS2Script script = decompiler.disassemble(id);
+
+				for (Instruction instruction : script.getInstructions()) {
+					if (wantedIds.contains(instruction.getId())) {
+						System.out.println("script: " + id);
+						break;
+					}
+				}
+			}catch(Throwable t){
+				System.err.println("Error in script: " + id);
+				//t.printStackTrace();
+			}
+
+
+		}
+
+	}
     
     
     private static void test850(String[] args) throws FileNotFoundException{
@@ -136,7 +244,7 @@ public class Fear {
 			Revision revision = new Revision850(c);
             
             ConfigParser config = new ConfigParser();
-            config.download("850");
+            //config.download("850");
             config.loadRevision("850", revision);
             
 			Main.paramTypeList = new ParamTypeList(c);
@@ -161,7 +269,11 @@ public class Fear {
 
 			//int scriptId = 534;
             //1013 - wtf
-			int scriptId = 1434;////1895; //47;
+			//int scriptId = 1434;////1895; //47;
+
+
+
+			int scriptId = 11494; //11497 or 11494
 			if (args.length > 0) {
                 try{
                     System.err.println("Loading script: " + args[0]);
