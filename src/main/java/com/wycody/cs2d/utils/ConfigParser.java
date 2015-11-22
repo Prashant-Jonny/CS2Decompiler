@@ -9,12 +9,18 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.wycody.cs2d.rev.Revision;
+import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.base.CallMethodInstruction;
+import com.wycody.cs2d.script.inst.base.EventBindInstruction;
+import com.wycody.cs2d.script.inst.impl.ActiveWidget;
+import com.wycody.cs2d.script.inst.impl.Config;
+import com.wycody.cs2d.script.inst.impl.Widget;
 import com.wycody.cs2d.script.inst.types.StackType;
 
 /**
@@ -105,23 +111,24 @@ public class ConfigParser {
                 
                 
                 if(opcode >= 0){
-                    final StackType[] stack_in = parseArguments(opcode_in);
-                    final StackType[] stack_out = parseArguments(opcode_out);
-                    final Function<Object, Object>[] formatters = parseFormatters(formats);
-                    
-                    //CallMethodInstruction cm = new CallMethodInstruction(InstructionType.METHOD_CALL);
-                    
-                    
-                    target.registerInstruction(opcode, () -> {
-                        return 
-                                (new CallMethodInstruction(InstructionType.METHOD_CALL))
+
+
+                    if(specials.containsKey(opcode_name)){
+                        target.registerInstruction(opcode, specials.get(opcode_name));
+                    }else if(formats == null || !formats.toUpperCase().startsWith("BIND_EVENT")) {
+                        final StackType[] stack_in = parseArguments(opcode_in);
+                        final StackType[] stack_out = parseArguments(opcode_out);
+                        final Function<Object, Object>[] formatters = parseFormatters(formats);
+                        target.registerInstruction(opcode, () -> (new CallMethodInstruction(InstructionType.METHOD_CALL))
                                 .setName(null).setFormattedName(name_format)
                                 .setArgumentTypes(stack_in)
                                 .setPushTypes(stack_out)
                                 .setDebugName(opcode_name)
                                 .setPrefixFormatters(formatters)
-                                .fixDefaultType();
-                    });
+                                .fixDefaultType());
+                    } else if(formats.equalsIgnoreCase("BIND_EVENT") || formats.equalsIgnoreCase("BIND_EVENT_ACTIVE")) {
+                        target.registerInstruction(opcode, () -> (new EventBindInstruction(InstructionType.COMP_SET_HANDLER,name_format,formats.equalsIgnoreCase("BIND_EVENT_ACTIVE"))));
+                    }
                     
                     /*
                     cm.setName(null)
@@ -201,8 +208,16 @@ public class ConfigParser {
 		}
         throw new RuntimeException("Invalid formatter type in config.");
     }
-    
 
-    
-    
+
+
+    private static final Map<String,Supplier<? extends Instruction>> specials;
+
+    static{
+        specials = new HashMap<>();
+        specials.put("CC_PUSH_PARAM", ActiveWidget.PUSH_PARAM);
+        specials.put("GET_OBJ_PARAM_BY_DEFAULT_VAL", Config.PUSH_OBJ_PARAM);
+
+
+    }
 }

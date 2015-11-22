@@ -8,12 +8,12 @@ package com.wycody.cs2d.script.inst.walker;
 public enum WalkState {
 
 	/**
-	 * 
+	 * Continue walking normally
 	 */
 	NONE,
 
 	/**
-	 * 
+	 * Stop walking (Stop the walker)
 	 */
 	STOP_WALKING,
 

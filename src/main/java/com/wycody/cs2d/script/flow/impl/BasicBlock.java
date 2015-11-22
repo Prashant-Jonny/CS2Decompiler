@@ -8,6 +8,7 @@ import com.wycody.cs2d.script.flow.Block;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionBaseType;
 import com.wycody.cs2d.script.inst.InstructionType;
+import com.wycody.cs2d.script.inst.base.branch.ConditionalInstruction;
 import com.wycody.cs2d.script.inst.base.branch.JumpInstruction;
 import com.wycody.cs2d.script.inst.walker.InstructionWalker;
 import com.wycody.cs2d.script.inst.walker.WalkState;
@@ -118,6 +119,7 @@ public class BasicBlock extends Block {
 				index = 0;
 			}
 		}
+		
 		return block;
 	}
 
@@ -195,6 +197,31 @@ public class BasicBlock extends Block {
 		targetWalker.startWalking();
 		return match;
 
+	}
+
+	public JumpInstruction detectNearestWhileJump(ConditionalInstruction cond) {
+		Instruction instr = instructions.last();
+		
+		while((instr instanceof JumpInstruction)) {
+			JumpInstruction jumpInstr = (JumpInstruction) instr;
+			// We don't want to perform the other way since it's gonna loop over while
+			BasicBlock target = jumpInstr.getTarget();
+			if(target == null)
+			 {
+				return jumpInstr;// temporary patch
+			}
+			Instruction last = target.getInstructions().last();
+			if(last instanceof JumpInstruction) {
+				JumpInstruction lastJump = (JumpInstruction) last;
+				if(lastJump.getJumpTarget() <= cond.getAddress()) {
+					return lastJump;
+				}
+				instr = last;
+			} else {
+				instr = null;
+			}
+		}
+		return null;
 	}
 
 

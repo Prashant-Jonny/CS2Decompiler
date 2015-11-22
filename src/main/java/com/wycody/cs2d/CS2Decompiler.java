@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.function.Function;
 
 import com.wycody.cs2d.analyze.Analyzer;
 import com.wycody.cs2d.analyze.AnalyzerManager;
-import com.wycody.cs2d.analyze.impl.NaturalFlow;
+import com.wycody.cs2d.analyze.impl.WhileLoopDetect;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.flow.impl.BasicBlockGenerator;
 
@@ -31,10 +33,11 @@ public class CS2Decompiler {
 	public static final ArrayList<Class<? extends Analyzer>> ANALYZER_GROUP = new ArrayList<Class<? extends Analyzer>>();
 
 	static {
-		ANALYZER_GROUP.add(NaturalFlow.class);
+		//ANALYZER_GROUP.add(NaturalFlow.class);
 //		ANALYZER_GROUP.add(SwitchOptimization.class);
 //		
-//		///ANALYZER_GROUP.add(WhileLoopDetect.class);
+		ANALYZER_GROUP.add(WhileLoopDetect.class);
+		
 //		
 	//	ANALYZER_GROUP.add(ConditionalElseDetect.class);
 //		ANALYZER_GROUP.add(MathOEDetect.class);
@@ -49,6 +52,8 @@ public class CS2Decompiler {
 	 */
 	private Context context;
 
+	private SortedMap<Integer, CS2Script> decompiledScripts;
+	
 	/**
 	 * Construct a new {@link CS2Decompiler}
 	 * 
@@ -56,7 +61,8 @@ public class CS2Decompiler {
 	 */
 	public CS2Decompiler(Context context) {
 		this.context = context;
-
+		this.decompiledScripts = new TreeMap<Integer, CS2Script>();
+		
 	}
 
 	/**
@@ -67,6 +73,9 @@ public class CS2Decompiler {
 	 * @return the decompiled script
 	 */
 	public CS2Script decompile(int scriptId) {
+		if(decompiledScripts.containsKey(scriptId)) {
+			return decompiledScripts.get(scriptId);
+		}
 		return decompile(disassemble(scriptId));
 	}
 
@@ -80,6 +89,9 @@ public class CS2Decompiler {
 	 * @return the decompiled script
 	 */
 	public CS2Script decompile(int scriptId, File file) {
+		if(decompiledScripts.containsKey(scriptId)) {
+			return decompiledScripts.get(scriptId);
+		}
 		return decompile(disassemble(scriptId, file));
 	}
 
@@ -100,7 +112,7 @@ public class CS2Decompiler {
 		});
 	
 		new AnalyzerManager(script, ANALYZER_GROUP).run();
-
+		decompiledScripts.put(script.getId(), script);
 		return script;
 	}
 

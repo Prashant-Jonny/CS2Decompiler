@@ -308,6 +308,8 @@ public enum InstructionType {
 	COMP_SET_VARGROUP_HANDLER("COMP_SET_VARGROUP_HANDLER", InstructionBaseType.EXECUTE),
 	COMP_CLEAR_HANDLERS("COMP_CLEAR_HANDLERS", InstructionBaseType.EXECUTE),
 
+	COMP_SET_HANDLER("SET_HANDLER", InstructionBaseType.EXECUTE),
+
 	// Component layout getters
 	PUSH_COMP_POSX("PUSH_COMP_POSX", InstructionBaseType.PUSH),
 	PUSH_COMP_POSY("PUSH_COMP_POSY", InstructionBaseType.PUSH),
@@ -675,7 +677,9 @@ public enum InstructionType {
 	METHOD_CALL("METHOD_CALL", InstructionBaseType.EXECUTE),
 
 	// INPUT
-	PUSH_MOUSE_BUTTONS_STATE("PUSH_MOUSE_BUTTONS_STATE", InstructionBaseType.PUSH),
+	PUSH_MOUSE_BUTTONS_STATE("PUSH_MOUSE_BUTTONS_STATE", InstructionBaseType.PUSH), 
+	
+	QUESTS_PUSH_REWRD_POINTS("QUESTS_PUSH_REWRD_POINTS", InstructionBaseType.PUSH),
 
 	;
 

@@ -447,7 +447,7 @@ public class Revision850 extends RS3Revision {
         21x ?
         GET_ACC_CREATION_STATUS
         */
-        registerInstruction(1006, Unsorted.GET_UNKNOWN_GAME_PREFERENCE);
+        registerInstruction(1006, Unsorted.GET_CURRENT_TOOLKIT_PREFERENCE);
         /*
         75x ?
         GET_ROOT_INTERFACE
@@ -554,23 +554,23 @@ Unknown opcode: 342
 
             System.out.flush();
             System.err.flush();
-
+/*
             System.err.println(" ------ CRITICAL DEBUG INFO ------ ");
             System.err.println("VAR_DOMAIN_ID = " + var_domain_id);
             System.err.println("VAR_TYPE      = " + var_type);
             System.err.println("OPERAND       = " + operand);
-
+*/
             VarDomainType varDomainType = SerialEnum.forID(VarDomainType.values(), var_domain_id);
             instr.setObjectOperand(varTypeDomain.get(varDomainType).list(var_type));
             instr.setIntegerOperand(operand);
 
-
+/*
             Object obj = varTypeDomain.get(varDomainType).list(var_type);
             System.err.println("VAR_DOMAIN_TYPE = " + varDomainType);
             System.err.println("OBJECT_OP      = " + obj);
             System.err.println("POSITION       = " + address);
             System.err.println(" ------ CRITICAL DEBUG INFO ------ ");
-
+*/
         } else if (instr.getType() == InstructionType.PUSH_OBJ) {
             int idx = buffer.getUnsignedByte();
             BaseVarType baseVarType = SerialEnum.forID(BaseVarType.values(), idx);

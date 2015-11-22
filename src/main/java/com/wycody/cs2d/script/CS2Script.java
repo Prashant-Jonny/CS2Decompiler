@@ -413,9 +413,12 @@ public class CS2Script {
 	 * HEADER INSTRUCTIONS FOOTER
 	 */
 	public void print(Context context) {
+		ScriptPrinter printer = context.getPrinter();
+		printer.initializeForScript(this);
 		printHeader(context);
 		printBody(context);
 		printFooter(context);
+		printer.finalizeForScript(this);
 
 	}
 

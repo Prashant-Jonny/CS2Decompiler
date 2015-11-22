@@ -97,7 +97,8 @@ public class BasicBlockGenerator {
 				BranchInstruction branch = (BranchInstruction) instr;
 				BasicBlock target = generatedBlocks.get(branch.getJumpTarget());
 				if(target == null) {
-					logger.warn("Could not find target at: " + branch.getJumpTarget());
+					// Those errors are  just whiles lmao
+					//	logger.warn("Could not find target at: " + branch.getJumpTarget());
 					continue;
 				}
 				target.getPredecessors().add(branch.getHolder());

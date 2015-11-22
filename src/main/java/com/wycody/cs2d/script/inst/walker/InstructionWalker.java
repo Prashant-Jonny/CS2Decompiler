@@ -33,6 +33,8 @@ public class InstructionWalker {
 	 */
 	public static final int RESOLVE_ELSE_BLOCKS = 0x4;
 
+	public static final int ALL = RESOLVE_JUMPS | RESOLVE_ELSE_BLOCKS |RESOLVE_TARGET_BLOCKS;
+
 	/**
 	 * The visit action
 	 */

@@ -99,7 +99,7 @@ public class Exchange {
     
     
     /**
-     * Returns whether the specified grand exchange offer is being submitted.
+     * Returns whether the specified grand exchange offer is being submitted to the exchange server.
      */
     public static Supplier<CallMethodInstruction> PUSH_ISSUBMITTING = () ->
             new CallMethodInstruction(InstructionType.PUSH_EXCHANGE_OFFER_ISSUBMITTING)

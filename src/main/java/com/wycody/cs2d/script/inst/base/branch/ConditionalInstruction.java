@@ -108,7 +108,7 @@ public class ConditionalInstruction extends BranchInstruction {
 	 */
 	@Override
 	public void print(Context context, ScriptPrinter printer) {
-		printer.println("if (" + getCondition() + " ) {");
+		printer.println((whileLoop ? "while" : "if") + " (" + getCondition() + " ) {");
 		printer.tab();
 
 		BasicBlock block = getTarget();

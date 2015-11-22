@@ -1,5 +1,7 @@
 package com.wycody.cs2d.print;
 
+import com.wycody.cs2d.script.CS2Script;
+
 /**
  * Handles the output of the decompile process and send it to the printer to
  * print it out
@@ -26,6 +28,11 @@ public abstract class ScriptPrinter {
      */
     public abstract void print(Object object);
 
+    
+    public abstract void initializeForScript(CS2Script script);
+    
+    public abstract void finalizeForScript(CS2Script script);
+    
     /**
      * Printing by invoking method {@link #print(Object)} then insert new method
      * by invoking method {@link #newLine()}

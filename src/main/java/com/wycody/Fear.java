@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 import com.thedoge.Blocks.DummyBlock;
@@ -58,18 +59,34 @@ public class Fear {
 	 *            the arguments of the application that we're going to start.
 	 * @throws FileNotFoundException
 	 */
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws IOException {
+
+        //689
+        //472
+
+
+		//findSHIT(894,1102,913,62,455,597);
+
 
         //test();
         // 686 605
 //396
-//		findSHIT(564);//
-
+//		findSHIT(351,
+//				369,
+//				1031,
+//				1170,
+//				243,
+//				83);
+	//	findSHIT(572);
         Revision850.debug_instructions=true;
         Revision850.print_unknowns=true;
-        test850(new String[]{"10118"});
+   //     test850(new String[]{"7958"});
+       //test850(new String[]{"9915"});
 
-
+/*
+Unknown opcode: 648
+Unknown opcode: 956
+ */
 
         /*
         script: 10118
@@ -78,6 +95,30 @@ script: 10154           -- connection
 script: 3103
 script: 3106
          */
+
+
+		if(args.length > 1 && args[0].equalsIgnoreCase("dec")) {
+			test850(new String[]{args[1]});
+		}else if(args.length > 1 && args[0].equalsIgnoreCase("find")){
+			Revision850.debug_instructions=false;
+			Revision850.print_unknowns=false;
+			int[] ids = new int[args.length-1];
+			for(int i=0; i < ids.length; i++)
+				ids[i] = -1;
+
+			int pos = 0;
+			for(int i=1; i < args.length; i++)
+				try{
+					ids[pos] = Integer.parseUnsignedInt(args[i]);
+					pos++;
+				}catch (Exception e){
+
+				}
+			findSHIT(ids);
+		}else{
+			;
+			test850(args);
+		}
 
 		//test742(args);
 	}
@@ -164,12 +205,12 @@ script: 3106
 		return scripts;
 	}
 
-	private static void findSHIT(int ... ids) throws FileNotFoundException {
-		FileStore s = FileStore.open(new File("F:\\LIVE\\"));
+	private static void findSHIT(int ... ids) throws IOException {
+		FileStore s = FileStore.open(new File("F:\\CACHES\\850\\"));
 		Cache c = new Cache(s);
 		ConfigParser config = new ConfigParser();
 		Revision revision = new Revision850(c);
-		config.download("850");
+//		config.download("850");
 		config.loadRevision("850", revision);
 
 		Main.paramTypeList = new ParamTypeList(c);
@@ -180,43 +221,28 @@ script: 3106
 		CS2Decompiler decompiler = new CS2Decompiler(context);
 		context.withBlockEditing(true).withDebug(false).withCache(c).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 
-		CS2Decompiler.scriptLoader = scriptId -> {
-			try{
-				File fSrc = new File("F:\\LIVE\\IMPORT\\" + scriptId + ".rs2");
-				FileInputStream in = new FileInputStream(fSrc);
-				byte[] buffer = new byte[in.available()];
-				in.read(buffer);
-				return WrappedByteBuffer.wrap(buffer);
-			}catch(Exception e){
-				throw new Error(e);
-			}
-		};
-
 		HashSet<Integer> wantedIds = new HashSet<>();
 		for(int id: ids)
 				wantedIds.add(id);
-		/*
-		wantedIds.add(716);
-		wantedIds.add(571);
-		wantedIds.add(745);
-		wantedIds.add(96);
-		wantedIds.add(1051);
-		wantedIds.add(738);
-		wantedIds.add(147);
-		wantedIds.add(183);
-		wantedIds.add(950);
-		wantedIds.add(781);
-		wantedIds.add(135);
-		wantedIds.add(495);*/
-		wantedIds.add(617);
-		wantedIds.add(5);
+//
+//		wantedIds.clear();
+//		wantedIds.add(716);
+//		wantedIds.add(571);
+//		wantedIds.add(745);
+//		wantedIds.add(96);
+//		wantedIds.add(1051);
+//		wantedIds.add(738);
+//		wantedIds.add(147);
+//		wantedIds.add(183);
+//		wantedIds.add(950);
+//		wantedIds.add(781);
+//		wantedIds.add(135);
+//		wantedIds.add(495);
+//		wantedIds.add(617);
+//		wantedIds.add(5);
 
-		File base = new File("F:\\LIVE\\IMPORT\\");
-		for(File scriptFile : base.listFiles()) {
-			String fileName = scriptFile.getName();
-			if(!fileName.contains(".rs2"))
-				continue;
-			int id = Integer.parseInt(fileName.replace(".rs2",""));
+        for(int scriptId = 0; scriptId < decompiler.getContext().getCache().getFileCount(12); scriptId++) {
+            int id = scriptId;
 			try {
 				CS2Script script = decompiler.disassemble(id);
 
@@ -228,7 +254,7 @@ script: 3106
 				}
 			}catch(Throwable t){
 				System.err.println("Error in script: " + id);
-				//t.printStackTrace();
+			//	t.printStackTrace();
 			}
 
 
@@ -239,7 +265,7 @@ script: 3106
     
     private static void test850(String[] args) throws FileNotFoundException{
         if (new File("F:\\LIVE\\").exists()) {
-			FileStore s = FileStore.open(new File("F:\\LIVE\\"));
+			FileStore s = FileStore.open(new File("F:\\CACHES\\850"));
 			Cache c = new Cache(s);
 			Revision revision = new Revision850(c);
             
@@ -254,20 +280,8 @@ script: 3106
 			Context context = new Context().withCache(c).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 			CS2Decompiler decompiler = new CS2Decompiler(context);
             context.withBlockEditing(true).withDebug(false).withCache(c).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
-			
-            CS2Decompiler.scriptLoader = scriptId -> {
-                try{
-                    File fSrc = new File("F:\\LIVE\\IMPORT\\" + scriptId + ".rs2");
-                    FileInputStream in = new FileInputStream(fSrc);
-                    byte[] buffer = new byte[in.available()];
-                    in.read(buffer);
-                    return WrappedByteBuffer.wrap(buffer);
-                }catch(Exception e){
-                    throw new Error(e);
-                }
-            };
 
-			//int scriptId = 534;
+         			//int scriptId = 534;
             //1013 - wtf
 			//int scriptId = 1434;////1895; //47;
 
@@ -280,8 +294,7 @@ script: 3106
     				scriptId = Integer.parseInt(args[0]);
                 }catch(NumberFormatException nfe){}
 			}
-			File fSrc = new File("F:\\LIVE\\IMPORT\\" + scriptId + ".rs2");
-			CS2Script script = decompiler.decompile(scriptId, fSrc);// 3220);
+			CS2Script script = decompiler.decompile(scriptId);
 			script.print(context);
 		}
     }

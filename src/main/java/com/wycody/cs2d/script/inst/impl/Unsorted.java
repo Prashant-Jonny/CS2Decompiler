@@ -7,7 +7,6 @@ import com.wycody.cs2d.script.inst.base.CallScriptInstruction;
 import com.wycody.cs2d.script.inst.base.ConcatStringsInstruction;
 import com.wycody.cs2d.script.inst.base.EmptyInstruction;
 import com.wycody.cs2d.script.inst.base.MissingInstruction;
-import com.wycody.cs2d.script.inst.base.PushParamInstruction;
 import com.wycody.cs2d.script.inst.base.ReturnInstruction;
 import com.wycody.cs2d.script.inst.types.StackType;
 import java.util.function.Supplier;
@@ -38,7 +37,7 @@ public class Unsorted {
     public static final Supplier<Instruction> CONCAT_STRS = () -> new ConcatStringsInstruction();
     
     // TODO: InstructionType once the correct name is known.
-    public static final Supplier<CallMethodInstruction> GET_UNKNOWN_GAME_PREFERENCE = () ->
+    public static final Supplier<CallMethodInstruction> GET_CURRENT_TOOLKIT_PREFERENCE = () ->
             new CallMethodInstruction(InstructionType.MIN)
                     .setName("getUnknownGamePreference")
                     .setPushType(StackType.INT);

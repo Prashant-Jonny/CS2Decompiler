@@ -5,6 +5,7 @@
 /repo
 .dropbox
 .project
+/data/dumps
 nb-configuration.xml
 nbactions.xml
 install-to-project-repo.py

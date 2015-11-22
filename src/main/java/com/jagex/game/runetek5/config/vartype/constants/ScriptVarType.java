@@ -199,8 +199,9 @@ public enum ScriptVarType implements SerialEnum {
 	}
 	
 	static void createScriptCharMap(ScriptVarType scriptVar) {
-		if (varByLegacyChar == null)
+		if (varByLegacyChar == null) {
 			varByLegacyChar = new ScriptVarType[256];
+		}
 		varByLegacyChar[StringTools.getByteFromCharacter(scriptVar.legacyChar) & 0xff] = scriptVar;
 	}
 
@@ -237,7 +238,10 @@ public enum ScriptVarType implements SerialEnum {
 				return value;
 			}
 		}
-		System.out.println("Invalid charactor code passed to ScriptVarType getByChar(): " + id + " (" + ((int) id) + ")");
+		System.err.println("Invalid charactor code passed to ScriptVarType getByChar(): " + id + " (" + ((int) id) + ")");
+		for(StackTraceElement element : Thread.getAllStackTraces().get(0)) {
+			System.out.println(element);
+		}
 		return null;
 	}
 

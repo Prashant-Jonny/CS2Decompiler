@@ -36,9 +36,9 @@ public class Var {
     // Store
     
     public static Supplier<StoreVarInstruction> STORE_VARC = () ->
-            new StoreVarInstruction(InstructionType.STORE_VARC, StackType.INT, "varc");
+            new StoreVarInstruction(InstructionType.STORE_VARC, StackType.INT, "varc_int");
     public static Supplier<StoreVarInstruction> STORE_VARC_STR = () ->
-            new StoreVarInstruction(InstructionType.STORE_VARC_STR, StackType.OBJECT, "varc");
+            new StoreVarInstruction(InstructionType.STORE_VARC_STR, StackType.OBJECT, "varc_str");
     public static Supplier<StoreVarInstruction> STORE_VARP = () ->
             new StoreVarInstruction(InstructionType.STORE_VARP, StackType.INT, "varp");
     public static Supplier<StoreVarInstruction> STORE_VARP_BIT = () ->

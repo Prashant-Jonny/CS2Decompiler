@@ -23,6 +23,7 @@ import com.wycody.cs2d.script.inst.impl.Math;
 import com.wycody.cs2d.script.inst.impl.Player;
 import com.wycody.cs2d.script.inst.impl.Pop;
 import com.wycody.cs2d.script.inst.impl.Push;
+import com.wycody.cs2d.script.inst.impl.Quests;
 import com.wycody.cs2d.script.inst.impl.ScriptEnum;
 import com.wycody.cs2d.script.inst.impl.Store;
 import com.wycody.cs2d.script.inst.impl.Text;
@@ -689,6 +690,9 @@ public class Revision742 extends Revision {
         registerInstruction(236, Camera.GET_CAMERA_ROT_Y);
         registerInstruction(524, Camera.CAMERA_IS_ANINT1621_EQUALS_4);
         registerInstruction(209, Camera.UNKNOWN_METHOD);
+        
+        // Quests
+        registerInstruction(832, Quests.PUSH_REWARD_POINTS);
         System.out.println("Registered " + getRegisteredInstructions().size() + " instruction.");
         
     }

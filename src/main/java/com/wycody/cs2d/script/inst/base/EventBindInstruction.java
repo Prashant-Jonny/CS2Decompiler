@@ -66,7 +66,7 @@ public class EventBindInstruction extends Instruction {
         if (signature.startsWith("\"") && signature.endsWith("\"") && signature.length() >= 2) {
             signature = signature.substring(1, signature.length()-1);//Strip the quote marks off.
         }  
-        
+       // signature = signature.substring(0, signature.length()-1);
         logger.debug("Event argument signature: "+signature);
 
         if (signature.length() > 0 && signature.charAt(signature.length() - 1) == 'Y') {
@@ -84,6 +84,7 @@ public class EventBindInstruction extends Instruction {
         byte[] DBG = signature.getBytes();
         
         for (int i = args.length - 1; i >= 0; i--) {
+        	
         	ScriptVarType varType = ScriptVarType.getByChar(signature.charAt(i));
             if (varType == ScriptVarType.STRING) {
                 args[i] = pop(StackType.OBJECT);
@@ -99,6 +100,7 @@ public class EventBindInstruction extends Instruction {
         }
         scriptId = pop(StackType.INT);
     }
+
 
     @Override
     public void print(Context context, ScriptPrinter printer) {
@@ -142,6 +144,6 @@ public class EventBindInstruction extends Instruction {
 
     @Override
     public String toString() {
-        return String.format("%4d:(%d) => %s<%s>",this.address, this.id,"EVENT_BIND",this.type);
+        return String.format("%4d:(%d) => %s<%s> (Active: %d)",this.address, this.id,"EVENT_BIND",this.type,this.isActiveComponent ? 1 : 0);
     }
 }

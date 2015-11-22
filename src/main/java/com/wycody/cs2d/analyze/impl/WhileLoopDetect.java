@@ -1,16 +1,24 @@
 package com.wycody.cs2d.analyze.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.wycody.cs2d.analyze.Analyzer;
 import com.wycody.cs2d.script.CS2Script;
+import com.wycody.cs2d.script.flow.impl.BasicBlock;
 //import com.wycody.cs2d.script.flow.Old_BasicBlock;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.base.branch.ConditionalInstruction;
 import com.wycody.cs2d.script.inst.base.branch.JumpInstruction;
-import com.wycody.utils.DynamicArray;
+import com.wycody.cs2d.script.inst.walker.InstructionWalker;
+import com.wycody.cs2d.script.inst.walker.WalkState;
+import com.wycody.cs2d.script.inst.walker.WalkerAction;
+import java.util.List;
 
 public class WhileLoopDetect extends Analyzer {
 
-	private DynamicArray<ConditionalInstruction> instructions;
+	private HashMap<Integer, List<ConditionalInstruction>> instructions;
+	private int biggestDepth;
 
 	public WhileLoopDetect(CS2Script script) {
 		super(script);
@@ -18,36 +26,44 @@ public class WhileLoopDetect extends Analyzer {
 
 	@Override
 	public void initialize() {
-//		instructions = new DynamicArray<>(ConditionalInstruction.class);
-//		for (Old_BasicBlock block : script.getBlocks().values()) {
-//			for (Instruction instruction : block.getInstructions()) {
-//				if (instruction instanceof ConditionalInstruction) {
-//					instructions.add((ConditionalInstruction) instruction);
-//				}
-//			}
-//		}
+		instructions = new HashMap<Integer, List<ConditionalInstruction>>();
+
+		InstructionWalker walker = new InstructionWalker(script.getStartBlock(), InstructionWalker.ALL, new WalkerAction() {
+
+			@Override
+			public WalkState visitInstr(int depth, Instruction instruction) {
+				if (instruction instanceof ConditionalInstruction) {
+					if (depth > biggestDepth) {
+						biggestDepth = depth;
+					}
+					if (!instructions.keySet().contains(depth)) {
+						instructions.put(depth, new ArrayList<ConditionalInstruction>());
+					}
+					instructions.get(depth).add((ConditionalInstruction) instruction);
+				}
+				return WalkState.NONE;
+			}
+		});
+		walker.startWalking();
 	}
 
 	@Override
 	public void process() {
-//		for (int index = 0; index < instructions.size(); index++) {
-//			ConditionalInstruction instruction = instructions.get(index);
-//
-//			Old_BasicBlock content = instruction.getTarget();
-//			Instruction last = content.tryReachLast();
-//
-//			if (last instanceof JumpInstruction) {
-//				JumpInstruction lastJump = (JumpInstruction) last;
-//
-//				if (lastJump.getJumpTarget() <= instruction.getAddress()) {
-//					// TODO Better way to determine the jump is for while
-//
-//					// We got a while loop.
-//					instruction.setWhileLoop(true);
-//					last.getHolder().removeInstruction(lastJump);
-//				}
-//			}
-//		}
+		for (int depth = biggestDepth; depth >= 0; depth--) {
+			List<ConditionalInstruction> instructions = this.instructions.get(depth);
+			if (instructions == null) {
+				continue;
+			}
+			for (ConditionalInstruction instruction : instructions) {
+				BasicBlock content = instruction.getTarget();
+				JumpInstruction whileJump = content.detectNearestWhileJump(instruction);
+
+				if (whileJump != null) {
+					instruction.setWhileLoop(true);
+					whileJump.getHolder().removeInstruction(whileJump);
+				}
+			}
+		}
 	}
 
 	@Override
