@@ -23,7 +23,7 @@ import com.wycody.cs2d.script.inst.impl.Math;
 import com.wycody.cs2d.script.inst.impl.Player;
 import com.wycody.cs2d.script.inst.impl.Pop;
 import com.wycody.cs2d.script.inst.impl.Push;
-import com.wycody.cs2d.script.inst.impl.Quests;
+import com.wycody.cs2d.script.inst.impl.Quest;
 import com.wycody.cs2d.script.inst.impl.ScriptEnum;
 import com.wycody.cs2d.script.inst.impl.Store;
 import com.wycody.cs2d.script.inst.impl.Text;
@@ -681,7 +681,6 @@ public class Revision742 extends Revision {
         registerInstruction(675, WorldList.SETFETCHPING);
         registerInstruction(710, WorldList.PUSH_ACTIVEFLAGS);
         
-        
         // Input
         registerInstruction(847, Input.PUSH_PRESSED_MOUSE_BUTTONS);
         // Camera
@@ -691,8 +690,32 @@ public class Revision742 extends Revision {
         registerInstruction(524, Camera.CAMERA_IS_ANINT1621_EQUALS_4);
         registerInstruction(209, Camera.UNKNOWN_METHOD);
         
-        // Quests
-        registerInstruction(832, Quests.PUSH_REWARD_POINTS);
+        // Quest instructions
+        registerInstruction(618, Quest.PUSH_NAME);
+        //1x unknown
+        registerInstruction(253, Quest.PUSH_CATEGORY);
+        registerInstruction(552, Quest.PUSH_DIFFICULTY);
+        registerInstruction(782, Quest.PUSH_MEMBERS);
+        registerInstruction(832, Quest.PUSH_REWARD_POINTS);
+        registerInstruction(945, Quest.PUSH_QUESTREQ_COUNT);
+        registerInstruction(66, Quest.PUSH_QUESTREQ);
+        registerInstruction(583, Quest.PUSH_MEETS_QUESTREQ);
+        registerInstruction(822, Quest.PUSH_POINTSREQ);
+        registerInstruction(724, Quest.PUSH_MEETS_POINTSREQ);
+        registerInstruction(971, Quest.PUSH_STATREQ_COUNT);
+        registerInstruction(570, Quest.PUSH_STATREQ);
+        registerInstruction(291, Quest.PUSH_STATREQ_LEVEL);
+        registerInstruction(444, Quest.PUSH_MEETS_STATREQ);
+        registerInstruction(86, Quest.PUSH_VARPREQ_COUNT);
+        registerInstruction(119, Quest.PUSH_VARPREQ_NAME);
+        registerInstruction(400, Quest.PUSH_MEETS_VARPREQ);
+        registerInstruction(743, Quest.PUSH_VARBITREQ_COUNT);
+        registerInstruction(650, Quest.PUSH_VARBITREQ_NAME);
+        registerInstruction(625, Quest.PUSH_MEETS_VARBITREQ);
+        registerInstruction(793, Quest.PUSH_MEETS_REQS);
+        registerInstruction(1017, Quest.PUSH_STARTED);
+        registerInstruction(578, Quest.PUSH_COMPLETED);
+        registerInstruction(853, Quest.PUSH_PARAM);
         System.out.println("Registered " + getRegisteredInstructions().size() + " instruction.");
         
     }
