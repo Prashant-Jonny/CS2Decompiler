@@ -5,14 +5,14 @@ import com.wycody.cs2d.script.inst.base.CallMethodInstruction;
 import com.wycody.cs2d.script.inst.types.StackType;
 import java.util.function.Supplier;
 
-public class WorldList {
+public interface WorldList {
     
-    private static final String PREFIX = "getWorldList().";
+    String PREFIX = "getWorldList().";
     
     /**
      * Sends a request to fetch the world list from the server. Returns 1 if the request could not be sent, 0 if the request was successful.
      */
-    public static Supplier<CallMethodInstruction> FETCH = () ->
+    Supplier<CallMethodInstruction> FETCH = () ->
             new CallMethodInstruction(InstructionType.WORLDLIST_FETCH)
                     .setName(PREFIX+"fetch")
                     .setPushType(StackType.INT);
@@ -21,7 +21,7 @@ public class WorldList {
      * Returns the first sorted world list entry and increases the entry position by one.
      * Format: nodeId, flags, activity, countryId, countryName, playerCount, ping, hostname
      */
-    public static Supplier<CallMethodInstruction> PUSH_FIRSTENTRY = () ->
+    Supplier<CallMethodInstruction> PUSH_FIRSTENTRY = () ->
             new CallMethodInstruction(InstructionType.PUSH_WORLDLIST_FIRSTENTRY)
                     .setName(PREFIX+"getFirstEntry")
                     .setPushTypes(StackType.INT, StackType.INT, StackType.OBJECT, StackType.INT, StackType.OBJECT, StackType.INT, StackType.INT, StackType.OBJECT);
@@ -30,7 +30,7 @@ public class WorldList {
      * Returns the next sorted world list entry and increases the entry position by one. 
      * Format: nodeId, flags, activity, countryId, countryName, playerCount, ping, hostname
      */
-    public static Supplier<CallMethodInstruction> PUSH_NEXTENTRY = () ->
+    Supplier<CallMethodInstruction> PUSH_NEXTENTRY = () ->
             new CallMethodInstruction(InstructionType.PUSH_WORLDLIST_NEXTENTRY)
                     .setName(PREFIX+"getNextEntry")
                     .setPushTypes(StackType.INT, StackType.INT, StackType.OBJECT, StackType.INT, StackType.OBJECT, StackType.INT, StackType.INT, StackType.OBJECT);
@@ -38,7 +38,7 @@ public class WorldList {
     /**
      * Sets the specified world as the current active world. Returns 1 if the world was set, 0 otherwise. Format: (nodeId, hostname)
      */
-    public static Supplier<CallMethodInstruction> SETACTIVE = () ->
+    Supplier<CallMethodInstruction> SETACTIVE = () ->
             new CallMethodInstruction(InstructionType.WORLDLIST_SETACTIVE)
                     .setFormattedName(PREFIX+"setSelectedWorld(%1, %2)")
                     .setArgumentTypes(StackType.INT, StackType.OBJECT)
@@ -47,7 +47,7 @@ public class WorldList {
      * Returns the specified sorted world list entry. 
      * Format: nodeId, flags, activity, countryId, countryName, playerCount, ping, hostname
      */
-    public static Supplier<CallMethodInstruction> PUSH_ENTRY = () ->
+    Supplier<CallMethodInstruction> PUSH_ENTRY = () ->
             new CallMethodInstruction(InstructionType.PUSH_WORLDLIST_ENTRY)
                     .setFormattedName(PREFIX+"getEntry(%1)")
                     .setArgumentTypes(StackType.INT)
@@ -66,7 +66,7 @@ public class WorldList {
      * 8 = Ping
      * Default = Node ID (world ID)
      */
-    public static Supplier<CallMethodInstruction> SORT = () ->
+    Supplier<CallMethodInstruction> SORT = () ->
             new CallMethodInstruction(InstructionType.WORLDLIST_SORT)
                     .setFormattedName(PREFIX+"sort(%1, %2b, %3, %4b)")
                     .setArgumentTypes(StackType.INT, StackType.INT, StackType.INT, StackType.INT);
@@ -74,14 +74,14 @@ public class WorldList {
     /**
      * Resets the active world to the default (sent with the lobby login)
      */
-    public static Supplier<CallMethodInstruction> RESETACTIVE = () ->
+    Supplier<CallMethodInstruction> RESETACTIVE = () ->
             new CallMethodInstruction(InstructionType.WORLDLIST_RESETACTIVE)
                     .setName(PREFIX+"resetActiveWorld");
     
     /**
      * Sets whether ping should be fetched for worlds on the world list (1=fetch ping, 0=don't fetch ping)
      */
-    public static Supplier<CallMethodInstruction> SETFETCHPING = () ->
+    Supplier<CallMethodInstruction> SETFETCHPING = () ->
             new CallMethodInstruction(InstructionType.WORLDLIST_SETFETCHPING)
                     .setName(PREFIX+"setFetchPing(%1b)")
                     .setArgumentTypes(StackType.INT);
@@ -96,9 +96,8 @@ public class WorldList {
      * Bit 16 (0x10000) = Beta world
      * Bit 20 (0x100000) = VIP world
      */
-    public static Supplier<CallMethodInstruction> PUSH_ACTIVEFLAGS = () ->
+    Supplier<CallMethodInstruction> PUSH_ACTIVEFLAGS = () ->
             new CallMethodInstruction(InstructionType.PUSH_ACTIVEWORLD_FLAGS)
                     .setName("getActiveWorld().getFlags()")
                     .setPushType(StackType.INT);
-    
 }

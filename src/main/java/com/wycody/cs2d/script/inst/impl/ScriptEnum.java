@@ -6,12 +6,12 @@ import com.wycody.cs2d.script.inst.base.PushEnumValueInstruction;
 import com.wycody.cs2d.script.inst.types.StackType;
 import java.util.function.Supplier;
 
-public class ScriptEnum {
+public interface ScriptEnum {
     
     /**
      * Gets a string value out of the specified enumeration
      */
-    public static Supplier<CallMethodInstruction> PUSH_VALUE_STR = () ->
+    Supplier<CallMethodInstruction> PUSH_VALUE_STR = () ->
             new CallMethodInstruction(InstructionType.PUSH_ENUM_VAL_STR)
                     .setName("enum")
                     .setArgumentTypes(StackType.INT, StackType.INT)
@@ -21,18 +21,18 @@ public class ScriptEnum {
      * Gets a value out of the specified enumeration. Returns either a string or an int, depending on the value type specified.
      * Uses legacy chars to identify variable types (pre-RS3)
      */
-    public static Supplier<PushEnumValueInstruction> LEGACY_PUSH_VALUE = () -> new PushEnumValueInstruction(true);
+    Supplier<PushEnumValueInstruction> LEGACY_PUSH_VALUE = () -> new PushEnumValueInstruction(true);
     
     /**
      * Gets a value out of the specified enumeration. Returns either a string or an int, depending on the value type specified.
      * Uses script var type IDs identify variable types (RS3)
      */
-    public static Supplier<PushEnumValueInstruction> PUSH_VALUE = () -> new PushEnumValueInstruction(false);
+    Supplier<PushEnumValueInstruction> PUSH_VALUE = () -> new PushEnumValueInstruction(false);
     
     /**
      * Checks whether the enum contains the given int value. Returns 1 if the value exists, 0 otherwise
      */
-    public static Supplier<CallMethodInstruction> PUSH_CONTAINS_INT = () ->
+    Supplier<CallMethodInstruction> PUSH_CONTAINS_INT = () ->
             new CallMethodInstruction(InstructionType.PUSH_ENUM_CONTAINS_INT)
                     .setName("enumContains")
                     .setArgumentTypes(StackType.INT, StackType.INT, StackType.INT)
@@ -41,7 +41,7 @@ public class ScriptEnum {
     /**
      * Checks whether the enum contains the given string value. Returns 1 if the value exists, 0 otherwise
      */
-    public static Supplier<CallMethodInstruction> PUSH_CONTAINS_STR = () ->
+    Supplier<CallMethodInstruction> PUSH_CONTAINS_STR = () ->
             new CallMethodInstruction(InstructionType.PUSH_ENUM_CONTAINS_STR)
                     .setName("enumContains")
                     .setArgumentTypes(StackType.INT, StackType.OBJECT)
@@ -50,7 +50,7 @@ public class ScriptEnum {
     /**
      * Gets the size of the specified enum
      */
-    public static Supplier<CallMethodInstruction> PUSH_SIZE = () ->
+    Supplier<CallMethodInstruction> PUSH_SIZE = () ->
             new CallMethodInstruction(InstructionType.PUSH_ENUM_SIZE)
                     .setName("enumSize")
                     .setArgumentTypes(StackType.INT)
@@ -59,7 +59,7 @@ public class ScriptEnum {
     /**
      * Gets the number of keys which link to the given integer value
      */
-    public static Supplier<CallMethodInstruction> PUSH_INTVALKEYS_COUNT = () ->
+    Supplier<CallMethodInstruction> PUSH_INTVALKEYS_COUNT = () ->
             new CallMethodInstruction(InstructionType.PUSH_ENUM_INTVALKEYS_COUNT)
                     .setName("enumKeysCount")
                     .setArgumentTypes(StackType.INT, StackType.INT, StackType.INT)
@@ -68,7 +68,7 @@ public class ScriptEnum {
     /**
      * Gets the number of keys which link to the given string value
      */
-    public static Supplier<CallMethodInstruction> PUSH_STRVALKEYS_COUNT = () ->
+    Supplier<CallMethodInstruction> PUSH_STRVALKEYS_COUNT = () ->
             new CallMethodInstruction(InstructionType.PUSH_ENUM_STRVALKEYS_COUNT)
                     .setName("enumKeysCount")
                     .setArgumentTypes(StackType.INT, StackType.OBJECT)
@@ -77,7 +77,7 @@ public class ScriptEnum {
     /**
      * Gets the key at the given slot which links to the given int value
      */
-    public static Supplier<CallMethodInstruction> PUSH_INTVALKEY = () ->
+    Supplier<CallMethodInstruction> PUSH_INTVALKEY = () ->
             new CallMethodInstruction(InstructionType.PUSH_ENUM_INTVALKEY)
                     .setName("enumKey")
                     .setArgumentTypes(StackType.INT, StackType.INT, StackType.INT, StackType.INT, StackType.INT)
@@ -86,7 +86,7 @@ public class ScriptEnum {
     /**
      * Gets the key at the given slot which links to the given string value
      */
-    public static Supplier<CallMethodInstruction> PUSH_STRVALKEY = () ->
+    Supplier<CallMethodInstruction> PUSH_STRVALKEY = () ->
             new CallMethodInstruction(InstructionType.PUSH_ENUM_STRVALKEY)
                     .setName("enumKey")
                     .setArgumentTypes(StackType.INT, StackType.INT, StackType.OBJECT, StackType.INT)

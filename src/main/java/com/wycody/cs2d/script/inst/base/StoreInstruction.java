@@ -1,7 +1,5 @@
 package com.wycody.cs2d.script.inst.base;
 
-import java.util.function.Function;
-
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
 import com.wycody.cs2d.script.inst.Instruction;
@@ -9,7 +7,7 @@ import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.types.StackType;
 
 public class StoreInstruction extends Instruction {
-	private final Function<StoreInstruction, Object> processer;
+	private final StackType valueType;
 	private Object variable;
 	public Object value;
 	private StackType field_type;
@@ -19,13 +17,13 @@ public class StoreInstruction extends Instruction {
 	private boolean oe;
 	private Object oeo, oev;
     
-    public StoreInstruction(InstructionType type, StackType field_type, Function<StoreInstruction, Object> processer) {
-        this(type, field_type, processer, false);
+    public StoreInstruction(InstructionType type, StackType field_type, StackType valueType) {
+        this(type, field_type, valueType, false);
     }
     
-	public StoreInstruction(InstructionType type, StackType field_type, Function<StoreInstruction, Object> processer, boolean isArray) {
+	public StoreInstruction(InstructionType type, StackType field_type, StackType valueType, boolean isArray) {
 		super(type);
-		this.processer = processer;
+		this.valueType = valueType;
 		this.field_type = field_type;
         this.isArray = isArray;
 	}
@@ -47,7 +45,7 @@ public class StoreInstruction extends Instruction {
                 break;
             }
         }
-		value = processer.apply(this);
+		value = this.pop(valueType);
 	}
 
 	@Override
@@ -61,12 +59,12 @@ public class StoreInstruction extends Instruction {
 
 	@Override
 	public int getPushCount(StackType type) {
-		return -1;
+		return 0;
 	}
 
 	@Override
 	public int getPopCount(StackType type) {
-		return -1;
+		return (type.equals(valueType) ? 1 : 0) + (this.isArray && type.equals(StackType.INT) ? 1 : 0);
 	}
 
 	@Override

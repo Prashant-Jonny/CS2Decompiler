@@ -1,137 +1,137 @@
 Opcode	opcode_debug_name	Input	Output	output_format	formats	comment			
-109	PUSH_INT								
-964	PUSH_VAR								
-537	STORE_VAR								
-403	PUSH_VAR_BIT								
-687	STORE_VAR_BIT								
-226	PUSH_OBJ								
-375	GOTO								
-1064	INT_NE								
-569	INT_EQ								
-281	INT_LT								
-835	INT_GT								
-206	INT_LE								
-131	INT_GE								
-17	LOAD_INT								
-165	STORE_INT								
-244	LOAD_OBJ								
-641	STORE_OBJ								
-26	MERGE_STRS								
-286	POP_INT								
-122	POP_OBJ								
-444	CALL_SCRIPT								
-702	NEW_ARRAY								
-48	ARRAY_LOAD								
-933	ARRAY_STORE								
-342	SWITCH								
-563	PUSH_LONG								
-84	POP_LONG								
-483	LOAD_LONG								
-685	STORE_LONG								
-0	LONG_NE								
-1131	LONG_EQ								
-324	LONG_LT								
-544	LONG_GT								
-445	LONG_LE								
-129	LONG_GE								
+109	PUSH_INT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+964	PUSH_VAR	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+537	STORE_VAR	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+403	PUSH_VAR_BIT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+687	STORE_VAR_BIT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+226	PUSH_OBJ	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+375	GOTO	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+1064	INT_NE	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+569	INT_EQ	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+281	INT_LT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+835	INT_GT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+206	INT_LE	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+131	INT_GE	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+17	LOAD_INT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+165	STORE_INT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+244	LOAD_OBJ	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+641	STORE_OBJ	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+26	MERGE_STRS	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+286	POP_INT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+122	POP_OBJ	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+444	CALL_SCRIPT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+702	NEW_ARRAY	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+48	ARRAY_LOAD	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+933	ARRAY_STORE	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+342	SWITCH	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+563	PUSH_LONG	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+84	POP_LONG	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+483	LOAD_LONG	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+685	STORE_LONG	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+0	LONG_NE	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+1131	LONG_EQ	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+324	LONG_LT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+544	LONG_GT	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+445	LONG_LE	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
+129	LONG_GE	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
 191	ARRAY_LOAD_PUSH_INDEX_BEFORE								
 809	ARRAY_LOAD_PUSH_INDEX_AFTER								
 979	ARRAY_STORE_PUSH_INDEX								
-166	TRUE_INT								
-865	FALSE_INT								
-1123	CC_CREATE	III		%3.createSlot(%2,%1)	RRC	widget(widgetId).createSlot(typeId,slot)			
-887	CC_DELETE	V	V	CurrentCC.delete()		0			
+166	TRUE_INT	V	I	1	R	-			
+865	FALSE_INT	V	I	0	R	-			
+1123	CC_CREATE	III	V	%3.createSlot(%2,%1)	RRC	widget(widgetId).createSlot(typeId,slot)			
+887	CC_DELETE	V	V	CurrentCC.delete()	R	-			
 936	CC_CLEAR	I	V	%1.clear()	C	Clears children			
-195	NOT_EXISTING_1	V	V	IF_YOU_SEE_THIS_TELL_THE_DOGE_FEAR		Also does not exist in 823 deob!?			
+195	NOT_EXISTING_1	V	V	IF_YOU_SEE_THIS_TELL_THE_DOGE_FEAR	R	Also does not exist in 823 deob!?	NO_EXIST		
 34	aScriptInstruction_5512	I	V	%1.unknown_34()	C	-			
-130	aScriptInstruction_5513	I	V	%1.unknown_130()		-			
-1113	aScriptInstruction_5514	V	V	currentComponent().unknown_1113()		-			
-689	aScriptInstruction_5515	V	V	currentComponent().unknown_689()		-			
+130	aScriptInstruction_5513	I	V	%1.unknown_130()	R	-			
+1113	aScriptInstruction_5514	V	V	currentComponent().unknown_1113()	R	-			
+689	aScriptInstruction_5515	V	V	currentComponent().unknown_689()	R	-			
 372	aScriptInstruction_5496	I	V	%1.unknown_372()	C	-			
-50	aScriptInstruction_5517	V	V	currentComponent().unknown_50()		-			
-875	PLAYER_SET_STYLE	II	V	Player.setStyle(%2,%1)		-			
+50	aScriptInstruction_5517	V	V	currentComponent().unknown_50()	R	-			
+875	PLAYER_SET_STYLE	II	V	Player.setStyle(%2,%1)	R	-			
 358	PLAYER_SET_COLOR	II	V	Player.setColor(%2,%1)	Rc	slot,color			
-1112	PLAYER_SET_GENDER	I	V	Player.setGender(%1)		-			
-112	PLAYER_SET_EQUIPPED	II	V	Player.setEquipped(%2,%1)		slot,objId			
-945	SET_CURRENT_COMP_POSITION	IIII	V	currentComponent().setPosition(%4,%3,%2,%1)		-			
-932	SET_CURRENT_COMP_SIZE	IIII	V	currentComponent().setSize(%4,%3,%2,%1)		-			
+1112	PLAYER_SET_GENDER	I	V	Player.setGender(%1)	R	-			
+112	PLAYER_SET_EQUIPPED	II	V	Player.setEquipped(%2,%1)	R	slot,objId			
+945	SET_CURRENT_COMP_POSITION	IIII	V	currentComponent().setPosition(%4,%3,%2,%1)	R	-			
+932	SET_CURRENT_COMP_SIZE	IIII	V	currentComponent().setSize(%4,%3,%2,%1)	R	-			
 404	SET_CURRENT_COMP_HIDDEN	I	V	currentComponent().setHidden(%1)	B	-			
-99	SET_CUR_INTER_ASPECT_RATIO	II	V	currentComponent().setAspectRatio(%2,%1)		-			
+99	SET_CUR_INTER_ASPECT_RATIO	II	V	currentComponent().setAspectRatio(%2,%1)	R	-			
 259	SET_CURRENT_COMP_SOLID	I	V	currentComponent().setSolid(%1)	B	-			
-922	SET_CURRENT_COMP_SCROLL_POS	II	V	currentComponent().setScrollPosition(%2,%1)		-			
-64	SET_CURRENT_COMP_COLOR	I	V	currentComponent().setColor(%1)		-			
+922	SET_CURRENT_COMP_SCROLL_POS	II	V	currentComponent().setScrollPosition(%2,%1)	R	-			
+64	SET_CURRENT_COMP_COLOR	I	V	currentComponent().setColor(%1)	R	-			
 577	SET_CURRENT_COMP_FILLED	I	V	currentComponent().setFilled(%1)	B	-			
-457	SET_CURRENT_COMP_ALPHA	I	V	currentComponent().setAlpha(%1)		-			
-832	SET_CURRENT_COMP_LINE_WEIGHT	I	V	currentComponent().setLineWidth(%1)		-			
-488	SET_CURRENT_COMP_SPRITE	I	V	currentComponent().setSpriteId(%1)		-			
-318	SET_CURRENT_COMP_SPRITE_ROTATION	I	V	currentComponent().setSpriteRotation(%1)		-			
+457	SET_CURRENT_COMP_ALPHA	I	V	currentComponent().setAlpha(%1)	R	-			
+832	SET_CURRENT_COMP_LINE_WEIGHT	I	V	currentComponent().setLineWidth(%1)	R	-			
+488	SET_CURRENT_COMP_SPRITE	I	V	currentComponent().setSpriteId(%1)	R	-			
+318	SET_CURRENT_COMP_SPRITE_ROTATION	I	V	currentComponent().setSpriteRotation(%1)	R	-			
 694	SET_CURRENT_COMP_SPRITE_REPEAT	I	V	currentComponent().setSpriteRepeats(%1)	B	-			
-1178	SET_CURRENT_COMP_MODEL	I	V	currentComponent().setModel(%1)		-			
-965	SET_CURRENT_COMP_MODEL_CONSTRAINTS	IIIIIII	V	currentComponent().setModelConstraints(%6,%5,%4,%3,%2,%1)		-			
-179	SET_CURRENT_COMP_ANIMATION	I	V	currentComponent().setAnimationId(%1)		-			
+1178	SET_CURRENT_COMP_MODEL	I	V	currentComponent().setModel(%1)	R	-			
+965	SET_CURRENT_COMP_MODEL_CONSTRAINTS	IIIIIII	V	currentComponent().setModelConstraints(%6,%5,%4,%3,%2,%1)	R	-			
+179	SET_CURRENT_COMP_ANIMATION	I	V	currentComponent().setAnimationId(%1)	R	-			
 573	aScriptInstruction_5945	I	V	currentComponent().setUnknown573(%1)	B	-			
-727	aScriptInstruction_5539	IIII	V	currentComponent().setUnknown727(%4,%3,%2,%1)		-			
-248	aScriptInstruction_5540	IIIIIIIIIII	V	currentComponent().setUnknown248(%10,%9,%8,%7,%6,%5,%4,%3,%2,%1)		-			
-169	SET_CURRENT_COMP_NO_ATMOSPHERE	V	V	currentComponent().setHasAtmosphere(false)		-			
-683	SET_CURRENT_COMP_TEXT	O	V	currentComponent().setText(%1)		-			
-656	SET_CURRENT_COMP_FONT	I	V	currentComponent().setFont(%)		-			
-585	SET_CURRENT_COMP_TEXT_ALLIGNMENT	III	V	currentComponent().setAlignment(%3,%2,%1)		-			
+727	aScriptInstruction_5539	IIII	V	currentComponent().setUnknown727(%4,%3,%2,%1)	R	-			
+248	aScriptInstruction_5540	IIIIIIIIIII	V	currentComponent().setUnknown248(%10,%9,%8,%7,%6,%5,%4,%3,%2,%1)	R	-			
+169	SET_CURRENT_COMP_NO_ATMOSPHERE	V	V	currentComponent().setHasAtmosphere(false)	R	-			
+683	SET_CURRENT_COMP_TEXT	O	V	currentComponent().setText(%1)	R	-			
+656	SET_CURRENT_COMP_FONT	I	V	currentComponent().setFont(%)	R	-			
+585	SET_CURRENT_COMP_TEXT_ALLIGNMENT	III	V	currentComponent().setAlignment(%3,%2,%1)	R	-			
 615	SET_CURRENT_COMP_SHADED	I	V	currentComponent().setShaded(%1)	B	-			
 868	SET_CURRENT_COMP_??	I	V	currentComponent().setUnknown868(%1)	B				
-335	SET_CURRENT_COMP_ROTATION	I	V	currentComponent().setRotation(%1)		-			
-392	SET_CURRENT_COMP_BGCOLOR	I	V	currentComponent().setBackgroundColor(%1)		-			
+335	SET_CURRENT_COMP_ROTATION	I	V	currentComponent().setRotation(%1)	R	-			
+392	SET_CURRENT_COMP_BGCOLOR	I	V	currentComponent().setBackgroundColor(%1)	R	-			
 758	SET_CURRENT_COMP_FLIPV	I	V	currentComponent().setIsVerticallyFlipped(%1)	B	-			
 773	SET_CURRENT_COMP_FLIPH	I	V	currentComponent().setIsHorizontallyFlipped(%1)	B	-			
-442	SET_CURRENT_COMP_SCROLL_MAX	II	V	currentComponent().setScrollMax(%2,%1)		-			
+442	SET_CURRENT_COMP_SCROLL_MAX	II	V	currentComponent().setScrollMax(%2,%1)	R	-			
 194	SET_CURRENT_COMP_SPRITE_REPEAT	I	V	currentComponent().setSpriteRepeat(%1)	B	-			
-919	SET_CURRENT_COMP_ZOOM	I	V	currentComponent().setZoom(%1)		-			
+919	SET_CURRENT_COMP_ZOOM	I	V	currentComponent().setZoom(%1)	R	-			
 750	SET_CURRENT_COMP_LINE_MIRRORED	I	V	currentComponent().setLineMirrored(%1)	B	-			
-859	SET_CURRENT_COMP_VIEWPORT	II	V	currentComponent().setViewport((%2.%1)		-			
-266	SET_CURRENT_COMP_LINE_COUNT	I	V	currentComponent().setLineCount(%1)		-			
-894	SET_CURRENT_COMP_PARAM_INT	II	V	currentComponent().setParam(%2,%1)		TODO: format for type %2?		currentComponent()	
-1102	SET_CURRENT_COMP_PARAM_STR	IO	V	currentComponent().setParam(%2,%1)		Must not equal default str			
-665	aScriptInstruction_5559	III	V	currentComponent().setUnknown1102(%3,%2,%1)		-			
-151	aScriptInstruction_5560	III	V	currentComponent().setUnknown151(%3,%2,%1)		-			
-704	SET_CURRENT_COMP_FONT_MONOCHROME	I	V	currentComponent().setFontIsMonochrome(%1)		-			
-913	aScriptInstruction_5562	II	V	currentComponent().setParam(%2,%1)		-			
+859	SET_CURRENT_COMP_VIEWPORT	II	V	currentComponent().setViewport((%2.%1)	R	-			
+266	SET_CURRENT_COMP_LINE_COUNT	I	V	currentComponent().setLineCount(%1)	R	-			
+894	SET_CURRENT_COMP_PARAM_INT	II	V	currentComponent().setParam(%2,%1)	R	TODO: format for type %2?		currentComponent()	
+1102	SET_CURRENT_COMP_PARAM_STR	IO	V	currentComponent().setParam(%2,%1)	R	Must not equal default str			
+665	aScriptInstruction_5559	III	V	currentComponent().setUnknown1102(%3,%2,%1)	R	-			
+151	aScriptInstruction_5560	III	V	currentComponent().setUnknown151(%3,%2,%1)	R	-			
+704	SET_CURRENT_COMP_FONT_MONOCHROME	I	V	currentComponent().setFontIsMonochrome(%1)	R	-			
+913	aScriptInstruction_5562	II	V	currentComponent().setParam(%2,%1)	R	-			
 999	aScriptInstruction_5563	I	V	currentComponent().setUnknown999(%1)	B	-			
-631	SET_CURRENT_COMP_OBJ_ID	II	V	currentComponent().setObjId(%2,%1)		-			
-582	SET_CURRENT_COMP_NPC_HEAD	I	V	currentComponent().setNpcHeadId(%1)		-			
-192	aScriptInstruction_5566	V	V	currentComponent().setMediaType(MEDIA_RECTANGLE)		-			
-897	SET_CURRENT_COMP_MEDIA_NPC	I	V	currentComponent().setNPC(%1)		-			
-673	SET_CURRENT_COMP_SPRITE	I	V	currentComponent().setSpriteId(%1)		-			
-1074	aScriptInstruction_5569	II	V	currentComponent().unknown1074(%2,%1)		-			
-42	aScriptInstruction_5470	I	V	currentComponent().unknown_42(%1)		-			
-1136	SET_CURRENT_COMP_USER_DATA	I	V	currentComponent().setUserData(%1)		row id			
+631	SET_CURRENT_COMP_OBJ_ID	II	V	currentComponent().setObjId(%2,%1)	R	-			
+582	SET_CURRENT_COMP_NPC_HEAD	I	V	currentComponent().setNpcHeadId(%1)	R	-			
+192	aScriptInstruction_5566	V	V	currentComponent().setMediaType(MEDIA_RECTANGLE)	R	-			
+897	SET_CURRENT_COMP_MEDIA_NPC	I	V	currentComponent().setNPC(%1)	R	-			
+673	SET_CURRENT_COMP_SPRITE	I	V	currentComponent().setSpriteId(%1)	R	-			
+1074	aScriptInstruction_5569	II	V	currentComponent().unknown1074(%2,%1)	R	-			
+42	aScriptInstruction_5470	I	V	currentComponent().unknown_42(%1)	R	-			
+1136	SET_CURRENT_COMP_USER_DATA	I	V	currentComponent().setUserData(%1)	R	row id			
 399	SET_CURRENT_COMP_USER_DATA_WITH_BANS	II	V	currentComponent().setUserData(%2,%1)	B	1166@823, slot (0=normal,1=banned), row_id			
-397	aScriptInstruction_5573	I	V	currentComponent().unknown_397(%1)		-			
-916	aScriptInstruction_5574	V	V	currentComponent().unknown_916()		-			
-525	aScriptInstruction_5575	II	V	currentComponent().unknown_525()		-			
-364	aScriptInstruction_5576	II	V	currentComponent().unknown_364()		-			
-729	aScriptInstruction_5577	V	V	currentComponent().setMediaType5()		-			
-1094	aScriptInstruction_6314	II	V	currentComponent().unknown_1094(%2,%1)\		-			
-142	aScriptInstruction_5579	II	V	currentComponent().unknown_142(%2,%1)		-			
-472	SET_CURRENT_COMP_OPTION	IO	V	currentComponent().setOption(%1,%2)		-			
-492	SET_CURRENT_COMP_DEFAULT_SLOT	II	V	currentComponent().setDefaultSlot(%2,%1)		-			
-636	SET_CURRENT_COMP_CONTENT_TYPE	I	V	currentComponent().setContentType(%1)		-			
-937	aScriptInstruction_5583	I	V	currentComponent().setUnknown_937(%1)		-			
-223	aScriptInstruction_5584	I	V	currentComponent().setUnknown_223(%1)		-			
-558	SET_CURRENT_COMP_APPLY_TEXT	O	V	currentComponent().setText(%1)		-			
-123	SET_CURRENT_COMP_TARGET_OP	O	V	currentComponent().setTargetOption(%2)		-			
-201	CURRENT_COMP_CLEAR_OPTIONS	V	V	currentComponent().clearOptions()		-			
-639	SET_CURRENT_COMP_USE_ON_CURSOR	II	V	currentComponent().setUseOnCursors(%2,%1)		-			
-213	SET_CURRENT_COMP_OPTION_CURSOR	II	V	currentComponent().setOptionCursor(%2,%1)		-			
-294	SET_CURRENT_COMP_DEFAULT_OPTION	O	V	currentComponent().setDefaultOption(%1)		-			
-568	SET_CURRENT_COMP_OP_CURSOR	I	V	currentComponent().setOPCursor(%1)		-			
-234	aScriptInstruction_5995	II	V	currentComponent().unknown234(%2,%1)		-			
-498	aScriptInstruction_5593	I	V	currentComponent().setKeyModifier(10,{%1},null)		-			
-178	aScriptInstruction_5594	IIIIIIIIIII	V	currentComponent().setKeyModifiers(%11, {%1,%3,%5,%7,%9},{%2,%4,%6,%8,%19}		what the fuck, those arguments...			
-327	aScriptInstruction_5595	II	V	currentComponent().setKeyModifier(10,{%2},{%1})		-			
-469	aScriptInstruction_5596	III	V	currentComponent().setUnknown469(%3,%2,%1)		Key repeat and ???			
-423	aScriptInstruction_6586	II	V	currentComponent().setKeyRepeat(10,%1,%2)		-			
-867	aScriptInstruction_5598	I	V	currentComponent().unknown_867(%1)		Something with keycodes			
-246	aScriptInstruction_5599	V	V	currentComponent().unknown246()		-			
-795	SET_CURRENT_COMP_CURSOR	I	V	currentComponent().setCursor(%1)		-			
+397	aScriptInstruction_5573	I	V	currentComponent().unknown_397(%1)	R	-			
+916	aScriptInstruction_5574	V	V	currentComponent().unknown_916()	R	-			
+525	aScriptInstruction_5575	II	V	currentComponent().unknown_525()	R	-			
+364	aScriptInstruction_5576	II	V	currentComponent().unknown_364()	R	-			
+729	aScriptInstruction_5577	V	V	currentComponent().setMediaType5()	R	-			
+1094	aScriptInstruction_6314	II	V	currentComponent().unknown_1094(%2,%1)\	R	-			
+142	aScriptInstruction_5579	II	V	currentComponent().unknown_142(%2,%1)	R	-			
+472	SET_CURRENT_COMP_OPTION	IO	V	currentComponent().setOption(%1,%2)	R	-			
+492	SET_CURRENT_COMP_DEFAULT_SLOT	II	V	currentComponent().setDefaultSlot(%2,%1)	R	-			
+636	SET_CURRENT_COMP_CONTENT_TYPE	I	V	currentComponent().setContentType(%1)	R	-			
+937	aScriptInstruction_5583	I	V	currentComponent().setUnknown_937(%1)	R	-			
+223	aScriptInstruction_5584	I	V	currentComponent().setUnknown_223(%1)	R	-			
+558	SET_CURRENT_COMP_APPLY_TEXT	O	V	currentComponent().setText(%1)	R	-			
+123	SET_CURRENT_COMP_TARGET_OP	O	V	currentComponent().setTargetOption(%2)	R	-			
+201	CURRENT_COMP_CLEAR_OPTIONS	V	V	currentComponent().clearOptions()	R	-			
+639	SET_CURRENT_COMP_USE_ON_CURSOR	II	V	currentComponent().setUseOnCursors(%2,%1)	R	-			
+213	SET_CURRENT_COMP_OPTION_CURSOR	II	V	currentComponent().setOptionCursor(%2,%1)	R	-			
+294	SET_CURRENT_COMP_DEFAULT_OPTION	O	V	currentComponent().setDefaultOption(%1)	R	-			
+568	SET_CURRENT_COMP_OP_CURSOR	I	V	currentComponent().setOPCursor(%1)	R	-			
+234	aScriptInstruction_5995	II	V	currentComponent().unknown234(%2,%1)	R	-			
+498	aScriptInstruction_5593	I	V	currentComponent().setKeyModifier(10,{%1},null)	R	-			
+178	aScriptInstruction_5594	IIIIIIIIIII	V	currentComponent().setKeyModifiers(%11, {%1,%3,%5,%7,%9},{%2,%4,%6,%8,%19}	R	what the fuck, those arguments...			
+327	aScriptInstruction_5595	II	V	currentComponent().setKeyModifier(10,{%2},{%1})	R	-			
+469	aScriptInstruction_5596	III	V	currentComponent().setUnknown469(%3,%2,%1)	R	Key repeat and ???			
+423	aScriptInstruction_6586	II	V	currentComponent().setKeyRepeat(10,%1,%2)	R	-			
+867	aScriptInstruction_5598	I	V	currentComponent().unknown_867(%1)	R	Something with keycodes			
+246	aScriptInstruction_5599	V	V	currentComponent().unknown246()	R	-			
+795	SET_CURRENT_COMP_CURSOR	I	V	currentComponent().setCursor(%1)	R	-			
 818	SET_CURRENT_COMP_MOUSE_PRESS_EVENT_HANDLER	-	-	MousePressed	BIND_EVENT_ACTIVE	-			
 590	SET_CURRENT_COMP_MOUSE_DRAGGED_PAST_EVENT_HANDLER	-	-	MouseDraggedPast	BIND_EVENT_ACTIVE	-			
 1011	SET_CURRENT_COMP_MOUSE_RELEASED_EVENT_HANDLER	-	-	MouseReleased	BIND_EVENT_ACTIVE	-			
@@ -172,8 +172,8 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 939	SET_CURRENT_COMP_GROUP_EVENT_HANDLER	-	-	Group	BIND_EVENT_ACTIVE	-			
 792	SET_CURRENT_COMP_VARGROUP_EVENT_HANDLER	-	-	VarGroup	BIND_EVENT_ACTIVE	-			
 222	SET_CURRENT_COMP_UNKNOWN6_EVENT_HANDLER	-	-	Unknown6	BIND_EVENT_ACTIVE	-			
-322	RESET_CURRENT_COMP_EVENT_HANDLERS	V	V	currentComponent().resetHandlers()		-			
-1173	FIRE_CURRENT_COMP_RESIZE	V	V	currentComponent().fireResizeEvent()		-			
+322	RESET_CURRENT_COMP_EVENT_HANDLERS	V	V	currentComponent().resetHandlers()	R	-			
+1173	FIRE_CURRENT_COMP_RESIZE	V	V	currentComponent().fireResizeEvent()	R	-			
 6	SET_COMP_POSITION	III	V	%1.setPosition(%2,%3)	C	Sets the position of the specified component, in the format (xoff, yoff, xPosMode, yPosMode)			
 126	SET_COMP_SIZE	IIIII	V	%1.setSize(%2,%3,%4,%5)	C	Sets the size of the specified component, in the format (width, height, xSizeMode, ySizeMode)			
 579	TOGGLE_SHOW_INTERFACE_COMPONENT	II	V	%1.setVisible(%2)	C	-			
@@ -295,17 +295,17 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 11	COMP_RESET_EVENT_HANDLERS	I	V	%1.resetEventHandlers()	C	-			
 833	COMP_FIRE_RESIZE_EVENT	I	V	%1.fireResizeEvent()	C	-			
 1103	aScriptInstruction_5763	III	V	%1.unknown1103(%3,%2)	C	Recolor npc?			
-1213	aScriptInstruction_5764								
-307	aScriptInstruction_5549								
-957	aScriptInstruction_5766								
-462	RECOLOR_COMP_NPC								
-896	aScriptInstruction_5768								
-1108	aScriptInstruction_6208								
-168	aScriptInstruction_6454								
-572	SEND_GAME_MESSAGE	O	V	sendGameMessage(%1)		-			
-278	RETI								
+1213	aScriptInstruction_5764	II	V	currentComponent().unknown_1213(%2,%1)	R	Recolor npc?			
+307	aScriptInstruction_5549	III	V	%1.unknown_307(%3,%2)	C	-			
+957	aScriptInstruction_5766	II	V	currentComponent.unknown_957(%2,%1)	R	-			
+462	RECOLOR_COMP_NPC	III	V	%1.getNPC().recolor[%3] = %2	R	TODO: recolor color display? HSV/HSL			
+896	aScriptInstruction_5768	V	I	unknown_896()	R	Script.Entity.??			
+1108	aScriptInstruction_6208	III	V	%1.unknown_1108(%3,%2)	R	-			
+168	aScriptInstruction_6454	II	V	unknown_168(%2,%1)	R	-			
+572	SEND_GAME_MESSAGE	O	V	sendGameMessage(%1)	R	-			
+278	RETI	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--	--SPECIAL--			
 1042	aScriptInstruction_5773								
-176	aScriptInstruction_5774	O	V	sendPacket(UNKNOWN_176,%1)		arg is a string.			
+176	aScriptInstruction_5774	O	V	sendPacket(UNKNOWN_176,%1)	R	arg is a string.			
 92	aScriptInstruction_5775								
 797	aScriptInstruction_5776								
 473	aScriptInstruction_5777								
@@ -313,10 +313,10 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 1166	aScriptInstruction_6415								
 1201	aScriptInstruction_5780								
 413	aScriptInstruction_6182								
-406	aScriptInstruction_5782	II	V	???(%1,%2)		??			
+406	aScriptInstruction_5782	II	V	???(%1,%2)	R	??			
 449	aScriptInstruction_5783								
 402	aScriptInstruction_5784								
-98	SEND_DEBUG_MESSAGE	IIO	V	debug(%2,%1,%3)		debug(type,unknown,text), 99 writes to console, 98 sets current console text, any other value writes to chat with type of the first argument and sets an unknown value, only used by scripts based on the second value.			
+98	SEND_DEBUG_MESSAGE	IIO	V	debug(%2,%1,%3)	R	debug(type,unknown,text), 99 writes to console, 98 sets current console text, any other value writes to chat with type of the first argument and sets an unknown value, only used by scripts based on the second value.			
 157	aScriptInstruction_5786								
 297	aScriptInstruction_6026								
 667	aScriptInstruction_5788								
@@ -326,7 +326,7 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 219	aScriptInstruction_5663								
 603	aScriptInstruction_5793								
 920	aScriptInstruction_5794								
-906	aScriptInstruction_5795	IIII	V	unknown_cs_906(%4,%3,%2,%1)		??			
+906	aScriptInstruction_5795	IIII	V	unknown_cs_906(%4,%3,%2,%1)	R	??			
 224	aScriptInstruction_5796								
 705	aScriptInstruction_5797								
 1182	aScriptInstruction_6130								
@@ -348,8 +348,8 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 796	aScriptInstruction_5974								
 529	aScriptInstruction_5965								
 627	aScriptInstruction_5929								
-262	aScriptInstruction_5817	III	V	sendPacket(UNKNOWN_262,%3,%2,%1)		-			
-220	aScriptInstruction_5552	I	V	currentComponent().unknown_220(%1)		-			
+262	aScriptInstruction_5817	III	V	sendPacket(UNKNOWN_262,%3,%2,%1)	R	-			
+220	aScriptInstruction_5552	I	V	currentComponent().unknown_220(%1)	R	-			
 574	aScriptInstruction_5819								
 334	aScriptInstruction_5990								
 1101	aScriptInstruction_5821								
@@ -388,10 +388,10 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 1089	aScriptInstruction_5597								
 903	aScriptInstruction_5855								
 655	aScriptInstruction_5856								
-963	aScriptInstruction_5857	O	V	System.out.println(%1)		Prints an line to the console.			661?
-890	aScriptInstruction_5890								
-1211	aScriptInstruction_5859								
-895	aScriptInstruction_5860								
+963	aScriptInstruction_5857	O	V	System.out.println(%1)	R	Prints an line to the console.			661?
+890	aScriptInstruction_5890	IIIIIIIIIIII	V	unknown_890(%12,%11,%10,%9,%8,%7,%6,%5,%4,%3,%2,%1)	R	-			
+1211	aScriptInstruction_5859	V	V	unknown_1211()	R	-			
+895	aScriptInstruction_5860	II	V	unknown_895(%2,%1)	R	-			
 988	aScriptInstruction_6612								
 630	aScriptInstruction_6307								
 58	CALL_JS_3								
@@ -401,7 +401,7 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 504	aScriptInstruction_5980								
 549	aScriptInstruction_5868								
 190	aScriptInstruction_5869								
-651	aScriptInstruction_5870	V	V	doSomething()		???????			
+651	aScriptInstruction_5870	V	V	doSomething()	R	???????			
 1168	aScriptInstruction_5871								
 102	aScriptInstruction_5872								
 270	aScriptInstruction_6351								
@@ -458,16 +458,16 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 393	aScriptInstruction_5572								
 812	aScriptInstruction_6688								
 352	aScriptInstruction_5926								
-1199	aScriptInstruction_5927					Something with a string?			
+1199	aScriptInstruction_5927	O	V	sendPacket(UNK_1199,%1)		Something with a string?			
 778	aScriptInstruction_6400								
 1091	aScriptInstruction_5564								
-1040	aScriptInstruction_5930	OIIOO	V	unknown_1040(%5,%4,%3,%2,%1)		-			
+1040	aScriptInstruction_5930	OIIOO	V	unknown_1040(%5,%4,%3,%2,%1)	R	-			
 1007	aScriptInstruction_6513								
 1152	aScriptInstruction_5932								
 677	aScriptInstruction_6163								
 521	aScriptInstruction_6595								
 421	aScriptInstruction_5935								
-493	aScriptInstruction_5936	V	V	setCookie()		-			
+493	aScriptInstruction_5936	V	V	setCookie()	R	-			
 1061	aScriptInstruction_5937								
 394	aScriptInstruction_5484								
 41	aScriptInstruction_5939								
@@ -487,7 +487,7 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 1090	aScriptInstruction_5953								
 1196	aScriptInstruction_5954								
 289	aScriptInstruction_5955								
-198	CCOMP_GET_RENDERHEIGHT	V	I	currentComponent().getRenderHeight()					
+198	CCOMP_GET_RENDERHEIGHT	V	I	currentComponent().getRenderHeight()	R	-			
 659	aScriptInstruction_5957								
 1097	aScriptInstruction_6025								
 267	aScriptInstruction_5959								
@@ -505,10 +505,10 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 586	aScriptInstruction_5511								
 136	aScriptInstruction_5529								
 227	aScriptInstruction_5973								
-8	aScriptInstruction_6006	I	V	Preferences.SetSkyBoxPreference(%1)		Int value			
+8	aScriptInstruction_6006	I	V	Preferences.SetSkyBoxPreference(%1)	R	Int value			
 44	aScriptInstruction_5958								
 275	aScriptInstruction_5703								
-1034	aScriptInstruction_5977	II	V	setCameraZoom(%2,%1)		setCameraZoom(?,?)			
+1034	aScriptInstruction_5977	II	V	setCameraZoom(%2,%1)	R	setCameraZoom(?,?)			
 1205	aScriptInstruction_5978								
 143	aScriptInstruction_5979								
 535	aScriptInstruction_6606								
@@ -541,43 +541,43 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 451	aScriptInstruction_6007								
 1187	aScriptInstruction_6008								
 153	aScriptInstruction_6490								
-1068	SET_SELECTED_INTERFACE_SLOT	II	I	setCurrentComponent(%2,%1)		-			
+1068	SET_SELECTED_INTERFACE_SLOT	II	I	setCurrentComponent(%2,%1)	R	-			
 104	SET_SELECTED_INTERFACE	I	I	setCurrentComponent(%1)	C	-			
-189	GET_CURRENT_COMP_RENDER_X	V	I	currentComponent().getRenderX()		-			
-648	GET_CURRENT_COMP_RENDER_Y	V	I	currentComponent().getRenderY()		-			
-265	GET_CURENT_COMP_RENDER_HEIGHT	V	I	currentComponent().getRenderWidth()		-			
-956	GET_CURRENT_COMP_RENDER_HEIGHT	V	I	currentComponent().getRenderHeight()		-			
-367	GET_CURRENT_COMP_IS_HIDDEN	V	I	currentComponent().isHidden()		-			
-389	GET_CURRENT_COMP_DEFAULT_PARENT_HASH	V	I	currentComponent().getParentHash()		-			
-522	GET_CURRENT_COMP_PARENT_HASH	V	I	currentComponent().getParent().getHash()					
+189	GET_CURRENT_COMP_RENDER_X	V	I	currentComponent().getRenderX()	R	-			
+648	GET_CURRENT_COMP_RENDER_Y	V	I	currentComponent().getRenderY()	R	-			
+265	GET_CURENT_COMP_RENDER_HEIGHT	V	I	currentComponent().getRenderWidth()	R	-			
+956	GET_CURRENT_COMP_RENDER_HEIGHT	V	I	currentComponent().getRenderHeight()	R	-			
+367	GET_CURRENT_COMP_IS_HIDDEN	V	I	currentComponent().isHidden()	R	-			
+389	GET_CURRENT_COMP_DEFAULT_PARENT_HASH	V	I	currentComponent().getParentHash()	R	-			
+522	GET_CURRENT_COMP_PARENT_HASH	V	I	currentComponent().getParent().getHash()	R				
 637	aScriptInstruction_6019								
 100	aScriptInstruction_6115								
-597	CURRENT_COMP_SET_PARAM	II	V	currentComponent.setParam(%2,%1)		-			
-1128	GET_CURRENT_COMP_TEXT	V	O	currentComponent().getText()		-			
+597	CURRENT_COMP_SET_PARAM	II	V	currentComponent.setParam(%2,%1)	R	-			
+1128	GET_CURRENT_COMP_TEXT	V	O	currentComponent().getText()	R	-			
 1045	aScriptInstruction_6023								
 589	aScriptInstruction_6024								
 1111	aScriptInstruction_6439								
 164	aScriptInstruction_5684								
 788	aScriptInstruction_6027								
 145	aScriptInstruction_6028								
-928	CC_GET_ALPHA	V	I	currentComponent().getAlpha()		-			
+928	CC_GET_ALPHA	V	I	currentComponent().getAlpha()	R	-			
 911	aScriptInstruction_5659								
 742	aScriptInstruction_6562								
 128	GET_CURRENT_COMP_SPRITE_ID	V	I	currentComponent().getSpriteId()		-			
 851	CC_PUSH_PARAM	-	-	-	-	Handled specially.			
-671	CC_GET_SPRITE_ROTATION	V	I	currentComponent().getSpriteRotation()		-			
-154	CC_GET_MEDIA_TYPE	V	I	currentComponent().isMediaType(1)		-			
-691	CC_GET_FONT_ID	V	I	currentComponent().getFontId()		-			
-167	CC_GET_SPRITE_DIMENSIONS	V	II	currentComponent().getSpriteDimensions()		-			
-602	CC_GET_FONT_ID_2	V	I	currentComponent().getFontId2()		Same as 691			
-997	CC_GET_OBJ_ID	V	I	currentComponent().getObjId()		Returns the Object id (Or, also known as ITEM id)			
-635	aScriptInstruction_6253	V	I	currentComponent().unknown_635()		-			
-753	aScriptInstruction_5711	V	I	currentComponent().unknown_753()		Something with slot			
-325	aScriptInstruction_5820	V	I	currentComponent().getEvents()		-			
-1163	GET_CURRENT_COMP_OPTION	I	O	currentComponent().getOption(%1)		-			
-970	GET_CURRENT_COMP_TEXT	V	O	currentComponent().getText(%1)		-			
-86	aScriptInstruction_5489	II	I	currentComponent().unknown_86(%2,%1)		-			
-69	aScriptInstruction_6046	I	II	currentComponent().unknown_69(%2,%1)		-			
+671	CC_GET_SPRITE_ROTATION	V	I	currentComponent().getSpriteRotation()	R	-			
+154	CC_GET_MEDIA_TYPE	V	I	currentComponent().isMediaType(1)	R	-			
+691	CC_GET_FONT_ID	V	I	currentComponent().getFontId()	R	-			
+167	CC_GET_SPRITE_DIMENSIONS	V	II	currentComponent().getSpriteDimensions()	R	-			
+602	CC_GET_FONT_ID_2	V	I	currentComponent().getFontId2()	R	Same as 691			
+997	CC_GET_OBJ_ID	V	I	currentComponent().getObjId()	R	Returns the Object id (Or, also known as ITEM id)			
+635	aScriptInstruction_6253	V	I	currentComponent().unknown_635()	R	-			
+753	aScriptInstruction_5711	V	I	currentComponent().unknown_753()	R	Something with slot			
+325	aScriptInstruction_5820	V	I	currentComponent().getEvents()	R	-			
+1163	GET_CURRENT_COMP_OPTION	I	O	currentComponent().getOption(%1)	R	-			
+970	GET_CURRENT_COMP_TEXT	V	O	currentComponent().getText(%1)	R	-			
+86	aScriptInstruction_5489	II	I	currentComponent().unknown_86(%2,%1)	R	-			
+69	aScriptInstruction_6046	I	II	currentComponent().unknown_69(%2,%1)	R	-			
 292	GET_COMP_RENDER_X	I	I	%1.getRenderX()	C	n/a			
 626	GET_COMP_RENDER_Y	I	I	%1.getRenderY()	C	n/a			
 121	GET_COMP_RENDER_WIDTH	I	I	%1.getRenderWidth()	C	n/a			
@@ -606,39 +606,39 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 70	COMP_GET_FONT_2	I	I	%1.getFont()	C	Returns fontid			
 16	COMP_GET_OBJ	I	I	%1.getObjId()	C	Returns the Object id (Or, also known as ITEM id)			
 12	aScriptInstruction_6074	I	I	%1.getUnknown_16()	C	Gets an unknown int, related to opcode above			
-501	aScriptInstruction_6075	I	I	getUnknown_501(%1)		??? something with a hashtable, looks like it checks if something exists as key			
+501	aScriptInstruction_6075	I	I	getUnknown_501(%1)	R	??? something with a hashtable, looks like it checks if something exists as key			
 949	GET_FREE_COMP_INDEX	I	I	%1.getFreeComponentIndex()	C	-			
-417	aScriptInstruction_6399	II	I	unknown_417(%1,%2)		Related to getUnknown -.-, boolean return type			
-107	aScriptInstruction_6078	II	I	unknown_107(%1,%2)		Same as above. Exactly			
+417	aScriptInstruction_6399	II	I	unknown_417(%1,%2)	R	Related to getUnknown -.-, boolean return type			
+107	aScriptInstruction_6078	II	I	unknown_107(%1,%2)	R	Same as above. Exactly			
 235	GET_COMP_INTERFACE_EVENTS	I	I	%1.getInterfaceEvents()	C	-			
 1147	GET_COMP_ACTION	II	O	%1.getAction(%2)	C	-			
 980	GET_COMP_TEXT	I	O	%1.getText()	C	-			
 101	aScriptInstruction_6082	III	I	%1.unknown_101(%3,%2)	C	-			
 576	aScriptInstruction_6083	II	II	%1.unknown_576(%2)	C	-			
-1030	GET_UPDATE_TICK	V	I	getUpdateTick()		-			
-966	INVENTORY_GET_ID	II	I	getInventory(%2).getSlot(%1).getItemId()		-			
-1088	INVENTORY_GET_COUNT	II	I	getInventory(%2).getSlot(%1).getStackCount()		-			
-115	GET_INV_ITEM_COUNT	II	I	getInventory(%2).getItemCount(%1)		-			
-443	GET_INV_ITEM_COUNT_BY_CAT	II	I	getInventory(%2).getItemCountByCategory(%1)		-			
-735	GET_INV_CAPACITY	I	I	getInventory(%1).getCapacity()		-			
-65	GET_INV_STOCK_COUNT	II	I	getInventory(%2).getStockCount(%1)		-			
-1175	GET_SKILL_LEVEL	I	I	getSkill(%1).getCurrentLevel()		-			
-146	GET_SKILL_BASE_LEVEL	I	I	getSkill(%1).getBaseLevel()		-			
-276	GET_SKILL_XP	I	I	getSkill(%1).getExperience()		-			
-1036	GET_SKILL_BASE_LEVEL_NON_CAPPED	I	I	getSkill(%1).getNonCappedBaseLevel()		-			
-886	GET_SKILL_XP_NO_CAP	I	I	getSkill(%1).getNonCappedExperience()		-			
-989	aScriptInstruction_5538	V	I	unknown_989()		-			
-907	aScriptInstruction_6097	V	I	unknown_907()		-			
-583	aScriptInstruction_6098	I	I	getWorldmapSegment(%1).getX()		i_0_ >> 14 & 0x3fff, TODO: X or Z????			
-614	aScriptInstruction_6099	I	I	getWorldmapSegment(%1).getDimension()		i_2_ >> 28			
-19	aScriptInstruction_6100	I	I	getWorldmapSegment(%1).getY()		i_1_ & 0x3fff			
-823	aScriptInstruction_6101	V	O	unknown_823()		-			
-1215	aScriptInstruction_6102	O	I	unknown_1215(%1)		-			
-23	aScriptInstruction_5607	O	I	unknown_23(%1)		-			
-38	aScriptInstruction_6104	O	I	unknown_38(%1)		-			
-515	aScriptInstruction_6105	O	I	unknown_515(%1)		-			
-751	aScriptInstruction_6228								
-1085	aScriptInstruction_5614								
+1030	GET_UPDATE_TICK	V	I	getUpdateTick()	R	-			
+966	INVENTORY_GET_ID	II	I	getInventory(%2).getSlot(%1).getItemId()	R	-			
+1088	INVENTORY_GET_COUNT	II	I	getInventory(%2).getSlot(%1).getStackCount()	R	-			
+115	GET_INV_ITEM_COUNT	II	I	getInventory(%2).getItemCount(%1)	R	-			
+443	GET_INV_ITEM_COUNT_BY_CAT	II	I	getInventory(%2).getItemCountByCategory(%1)	R	-			
+735	GET_INV_CAPACITY	I	I	getInventory(%1).getCapacity()	R	-			
+65	GET_INV_STOCK_COUNT	II	I	getInventory(%2).getStockCount(%1)	R	-			
+1175	GET_SKILL_LEVEL	I	I	getSkill(%1).getCurrentLevel()	R	-			
+146	GET_SKILL_BASE_LEVEL	I	I	getSkill(%1).getBaseLevel()	R	-			
+276	GET_SKILL_XP	I	I	getSkill(%1).getExperience()	R	-			
+1036	GET_SKILL_BASE_LEVEL_NON_CAPPED	I	I	getSkill(%1).getNonCappedBaseLevel()	R	-			
+886	GET_SKILL_XP_NO_CAP	I	I	getSkill(%1).getNonCappedExperience()	R	-			
+989	aScriptInstruction_5538	V	I	unknown_989()	R	-			
+907	aScriptInstruction_6097	V	I	unknown_907()	R	-			
+583	aScriptInstruction_6098	I	I	getWorldmapSegment(%1).getX()	R	i_0_ >> 14 & 0x3fff, TODO: X or Z????			
+614	aScriptInstruction_6099	I	I	getWorldmapSegment(%1).getDimension()	R	i_2_ >> 28			
+19	aScriptInstruction_6100	I	I	getWorldmapSegment(%1).getY()	R	i_1_ & 0x3fff			
+823	aScriptInstruction_6101	V	O	unknown_823()	R	-			
+1215	aScriptInstruction_6102	O	I	unknown_1215(%1)	R	-			
+23	aScriptInstruction_5607	O	I	unknown_23(%1)	R	-			
+38	aScriptInstruction_6104	O	I	unknown_38(%1)	R	-			
+515	aScriptInstruction_6105	O	I	unknown_515(%1)	R	-			
+751	aScriptInstruction_6228	OIIII	O	%1.unknown_751(%5,%4,%3,%2)	R	-			
+1085	aScriptInstruction_5614	II	O	unknown_1085(%2,%1)	R	-			
 771	aScriptInstruction_6108								
 418	ARE_MEM_ITEMS_ALLOWED	V	I	isMembers()		Are members items allowed => is p2p?			
 260	aScriptInstruction_6110								
@@ -772,11 +772,11 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 108	WOT								
 132	SET_BIT								
 1161	CLEAR_BIT								
-287	TEST_BIT	II	I	testbit(%2,%1)		-			
+287	TEST_BIT	II	I	testbit(%2,%1)	R	-			
 1186	MOD								
 236	POW								
 1143	ROOT								
-81	AND								
+81	AND	II	I	and(%2,%1)	R	-			
 313	OR								
 952	MIN								
 241	MAX								
@@ -785,21 +785,21 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 268	aScriptInstruction_6685								
 46	aScriptInstruction_6252								
 935	aScriptInstruction_6460								
-814	aScriptInstruction_6254	OO	O	concat(%2,%1)		-			
-546	aScriptInstruction_5535								
+814	aScriptInstruction_6254	OO	O	concat(%2,%1)	R	-			
+546	aScriptInstruction_5535	OI	O	%2 + %1	R	-			
 554	GET_COLOR_HTML	I	O	toColorTag(%1)	c	to <col=...>			
-61	aScriptInstruction_6257								
-454	aScriptInstruction_6625								
-91	aScriptInstruction_6593								
-560	INT_TO_STRING								
-72	COMPARE_STRINGS	OO	I	strcmp(%2,%1)		strcmp(a,b)			
-247	GET_LINE_COUNT	OII	I	getLineCount(%3,%2,%1)		?????			
-1209	aScriptInstruction_6263	OII	I	getTextRenderWidth(%3,%2,%1)		Hmm			
-1058	aScriptInstruction_6264								
-43	aScriptInstruction_6077								
-1206	aScriptInstruction_6266								
-510	aScriptInstruction_6267								
-941	aScriptInstruction_6268								
+61	STR_TO_LOWER	O	O	strtolower(%1)	R	-			
+454	RUNEDATE_TO_DATE	I	O	toReadableDate(%1)	R	DD-MM-YYYY , or american? notation based on language			
+91	aScriptInstruction_6593	OO	O	unknown_91(%2,%1)	R	chooses one out of 2			
+560	INT_TO_STRING	I	O	itoa(%1)	R	-			
+72	COMPARE_STRINGS	OO	I	strcmp(%2,%1)	R	strcmp(a,b)			
+247	GET_LINE_COUNT	OII	I	getLineCount(%3,%2,%1)	R	?????			
+1209	TEXT_GET_RENDER_WIDTH	OII	I	getTextRenderWidth(%3,%2,%1)	R	Hmm			
+1058	aScriptInstruction_6264	OIII	O	unknown_1058(%4,%3,%2,%1)	R	-			
+43	BOOL_STR_STR	IOO	O	(%1 ? %3 : %2)	B	-			
+1206	HTML_TRIANGLES	O	O	htmlify_triangles(%1)	R	-			
+510	STR_CONCAT_CHAR	OI	O	concat(%1,(char)%2)	R	-			
+941	aScriptInstruction_6268	I	I	isUnknown941((char)%1)	R	-			
 33	aScriptInstruction_6269								
 676	aScriptInstruction_6270								
 395	aScriptInstruction_6271								
@@ -874,35 +874,35 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 1072	aScriptInstruction_5914								
 616	aScriptInstruction_6341								
 1009	aScriptInstruction_6165	V	I						
-351	PUSH_ZERO	V	I	0		-			
-369	DO_CRASH	V	O	throw new RuntimeException()		-			
-1031	PUSH_MINUS_1	V	I	-1		-			
-1170	PUSH_ZERO_2	V	I	0		-			
-243	PUSH_MINUS_1_2	I	I	-1		-			
-83	PUSH_MINUS_1_X2	II	II	{-1,-1}		-			
-422	aScriptInstruction_6578	I	I	unknown_422(%1)		-			
-541	aScriptInstruction_6675	I	I	unknown_541(%1)		-			
-187	aScriptInstruction_6135	V	I	unknown_187()		-			
-460	aScriptInstruction_6352								
-793	aScriptInstruction_6060								
-533	aScriptInstruction_6354								
-570	aScriptInstruction_5887								
-181	aScriptInstruction_6356								
-794	aScriptInstruction_6663								
-849	aScriptInstruction_6358								
-739	aScriptInstruction_6359								
-1023	aScriptInstruction_6360								
-772	aScriptInstruction_6227								
-225	aScriptInstruction_5825								
-1010	aScriptInstruction_6468	V	I	unknown_1010()		-			
-240	aScriptInstruction_5708								
-80	GET_MAP_SEGMENT_COORDS	I	II	getMapSegmentCoords()		i_9_ >> 28 & 0x3,i_9_ >> 14 & 0x3fff, i_9_ & 0x3fff			
-36	aScriptInstruction_5765								
-468	aScriptInstruction_6367	V	I	unknown_468()		-			
-434	aScriptInstruction_5508								
-904	aScriptInstruction_6369								
-120	aScriptInstruction_5998	V	I	unknown_120()		-			
-228	aScriptInstruction_5717								
+351	PUSH_ZERO	V	I	0	R	-			
+369	DO_CRASH	V	O	throw new RuntimeException()	R	-			
+1031	PUSH_MINUS_1	V	I	-1	R	-			
+1170	PUSH_ZERO_2	V	I	0	R	-			
+243	PUSH_MINUS_1_2	I	I	PUSH_MINUS_ONE(%1)	R	-			
+83	PUSH_MINUS_1_X2	II	II	{-1,-1}	R	-			
+422	aScriptInstruction_6578	I	I	unknown_422(%1)	R	-			
+541	aScriptInstruction_6675	I	I	unknown_541(%1)	R	-			
+187	aScriptInstruction_6135	V	I	unknown_187()	R	-			
+460	aScriptInstruction_6352	I	I	unknown_460(%1)	R	-			
+793	aScriptInstruction_6060	I	O	unknown_793(%1)	R	-			
+533	aScriptInstruction_6354	V	II	unknown_533()	R	-			
+570	aScriptInstruction_5887	V	II	unknown_570()	R	-			
+181	aScriptInstruction_6356	I	I	unknown_181(%1)	R	-			
+794	aScriptInstruction_6663	I	II	unknown_794(%1)	R	-			
+849	aScriptInstruction_6358	I	IIII	unknown_849(%1)	R	-			
+739	aScriptInstruction_6359	V	II	unknown_739()	R	-			
+1023	aScriptInstruction_6360	I	I	unknown_1023(%1)	R	-			
+772	aScriptInstruction_6227	II	I	unknown_772(%2,%1)	R	-			
+225	aScriptInstruction_5825	I	I	unknown_225(%1)	R	-			
+1010	aScriptInstruction_6468	V	I	unknown_1010()	R	-			
+240	aScriptInstruction_5708	V	II	unknown_240()	R	-			
+80	GET_MAP_SEGMENT_COORDS	I	II	getMapSegmentCoords(%1)	R	i_9_ >> 28 & 0x3,i_9_ >> 14 & 0x3fff, i_9_ & 0x3fff			
+36	aScriptInstruction_5765	I	II	unknown_36(%1)	R	-			
+468	aScriptInstruction_6367	V	I	unknown_468()	R	-			
+434	aScriptInstruction_5508	I	I	unknown_434(%1)	R	-			
+904	aScriptInstruction_6369	I	I	unknown_904(%1)	R	-			
+120	aScriptInstruction_5998	V	I	unknown_120()	R	-			
+228	aScriptInstruction_5717	II	I	unknown_228(%2,%1)	R	-			
 347	aScriptInstruction_6372								
 370	aScriptInstruction_6479								
 1142	aScriptInstruction_6374								
@@ -989,7 +989,7 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 117	aScriptInstruction_6455	V	I	unknown_117()		-			
 1120	aScriptInstruction_5667	V	I	unknown_1120()		-			
 1106	aScriptInstruction_6118	V	I	unknown_1106()		-			
-1124	aScriptInstruction_6458	III	I	MultiIntegerTables[%3].getTableFromIndex(%2).isValueSet(%1)					
+1124	aScriptInstruction_6458	V	I	unknown_1124()					
 459	aScriptInstruction_6459	V	I	0		-			
 698	aScriptInstruction_6137	V	I	0		-			
 688	aScriptInstruction_6524	V	I	0		-			
@@ -1004,7 +1004,7 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 150	aScriptInstruction_6470	V	I	Calendar.getYear()		-			
 553	aScriptInstruction_5739	I	I	Calendar.isLeapYear(%1)		-			
 647	aScriptInstruction_6472	I	III	RuneDate.toDMY(%1)		Pushes: day,month,year calculated from the runedate			
-1162	aScriptInstruction_6473	I	I	RuneDate.toMinuteEpoch()		Pushes epoch in minutes since 1970			
+1162	aScriptInstruction_6473	I	I	RuneDate.toMinuteEpoch(%1)		Pushes epoch in minutes since 1970			
 24	aScriptInstruction_5713	V	I	unknown_24()		Weird stuff..			
 733	aScriptInstruction_6383	V	IIOIOIIO	unknown_733()		-			
 905	aScriptInstruction_6476	V	IIOIOIIO	unknown_905()		-			
@@ -1014,8 +1014,8 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 18	GET_ROOT_INTERFACE	V	I	getRootInterfaceId()		Gets the root interface id.			
 433	aScriptInstruction_6481	V	I	unknown_433()		-			
 921	aScriptInstruction_6188	I	I	unknown_921(%1)		-			
-465	aScriptInstruction_6483								
-258	aScriptInstruction_5892								
+465	aScriptInstruction_6483	I	O	unknown_465(%1)		-			
+258	aScriptInstruction_5892	I	I						
 416	aScriptInstruction_6485								
 593	aScriptInstruction_6486								
 839	aScriptInstruction_6487								
@@ -1024,21 +1024,21 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 405	aScriptInstruction_6331								
 852	aScriptInstruction_6491								
 4	aScriptInstruction_6492								
-686	aScriptInstruction_6493	V	I	getSomeUnknownBoolAndNotOtherBool		-			
-312	aScriptInstruction_6494								
-976	aScriptInstruction_6495								
-821	aScriptInstruction_6496								
-54	aScriptInstruction_5900								
-466	aScriptInstruction_6498								
-1171	aScriptInstruction_6499								
-1155	aScriptInstruction_6500								
-960	aScriptInstruction_6484								
-930	aScriptInstruction_6401								
-1194	aScriptInstruction_5718								
-1144	aScriptInstruction_5582								
-798	aScriptInstruction_6505								
-1134	aScriptInstruction_6506								
-774	aScriptInstruction_6116								
+686	aScriptInstruction_6493	V	I	unknown_686()		-			
+312	aScriptInstruction_6494	V	III	unknown_312()		-			
+976	aScriptInstruction_6495	V	I	unknown_976()		-			
+821	aScriptInstruction_6496	V	V	unknown_821()		-			
+54	aScriptInstruction_5900	V	I	unknown_54()		-			
+466	aScriptInstruction_6498	V	O	unknown_466()		-			
+1171	aScriptInstruction_6499	V	I	unknown_1171()		-			
+1155	aScriptInstruction_6500	V	I	unknown_1155()		-			
+960	aScriptInstruction_6484	V	I	unknown_960()		-			
+930	aScriptInstruction_6401	V	I	unknown_930_bool()		-			
+1194	aScriptInstruction_5718	V	I	SelectedInterface.unknown_1194()		-			
+1144	aScriptInstruction_5582	V	I	unknown_1144()		-			
+798	aScriptInstruction_6505	V	I	unknown_798()		-			
+1134	aScriptInstruction_6506	V	I	unknown_1134()		-			
+774	aScriptInstruction_6116	V	I	unknown_774()		-			
 1104	aScriptInstruction_6508	V	II	unknown_1104()		-			
 45	aScriptInstruction_6509	V	I	unknown_45()		-			
 1077	aScriptInstruction_6510	I	I	unknown_1077(%1)		-			
@@ -1050,22 +1050,22 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 623	aScriptInstruction_6540	V	I	unknown_623()		-			
 57	aScriptInstruction_6517	V	I	unknown_57()		-			
 346	aScriptInstruction_6639								
-464	aScriptInstruction_5778								
-360	aScriptInstruction_6520								
-840	aScriptInstruction_6521								
-298	aScriptInstruction_6522								
-1197	aScriptInstruction_5720								
-10	aScriptInstruction_5818								
-344	aScriptInstruction_6525								
-1133	aScriptInstruction_6526								
-847	aScriptInstruction_6527								
-719	aScriptInstruction_6599								
-47	aScriptInstruction_6529								
-256	aScriptInstruction_6530								
-160	aScriptInstruction_6020								
-692	aScriptInstruction_6532								
-1071	aScriptInstruction_6533								
-414	aScriptInstruction_6534								
+464	aScriptInstruction_5778	V	I	unknown_464()		-			
+360	aScriptInstruction_6520	V	I	unknown_360()		-			
+840	aScriptInstruction_6521	V	I	unknown_840()		-			
+298	aScriptInstruction_6522	V	I	unknown_298()		-			
+1197	aScriptInstruction_5720	V	I	unknown_1197()		-			
+10	aScriptInstruction_5818	V	I	unknown_10()		-			
+344	aScriptInstruction_6525	V	I	unknown_344()		-			
+1133	aScriptInstruction_6526	V	I	unknown_1133()		-			
+847	aScriptInstruction_6527	V	I	unknown_847()		-			
+719	aScriptInstruction_6599	V	I	unknown_719()		-			
+47	aScriptInstruction_6529	V	I	unknown_47()		-			
+256	aScriptInstruction_6530	I	I	unknown_256(%1)		-			
+160	aScriptInstruction_6020	I	I	unknown_160(%1)		-			
+692	aScriptInstruction_6532	I	I	unknown_692(%1)		-			
+1071	aScriptInstruction_6533	I	I	unknown_1071(%1)		-			
+414	aScriptInstruction_6534	I	I	unknown_414(%1)		-			
 961	aScriptInstruction_6535								
 1212	aScriptInstruction_5874								
 898	aScriptInstruction_6537								
@@ -1096,12 +1096,12 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 78	aScriptInstruction_6313								
 552	aScriptInstruction_6563								
 592	aScriptInstruction_6519								
-825	aScriptInstruction_6565								
-658	aScriptInstruction_6566								
-221	aScriptInstruction_6567								
-1160	aScriptInstruction_6568								
-424	aScriptInstruction_6569								
-446	aScriptInstruction_5812								
+825	aScriptInstruction_6565	V	IIIII	unknown_825()					
+658	aScriptInstruction_6566	V	IIIII	unknown_658()					
+221	aScriptInstruction_6567	V	IIIII	ScriptEntity.unknown_221()		-			
+1160	aScriptInstruction_6568	I	O	unknown_1160(%1)					
+424	aScriptInstruction_6569	I	O	unknown_424(%1)					
+446	aScriptInstruction_5812	I	I	unknown_446(%1)					
 30	aScriptInstruction_5630								
 470	aScriptInstruction_5609								
 320	aScriptInstruction_5580								
@@ -1123,44 +1123,44 @@ Opcode	opcode_debug_name	Input	Output	output_format	formats	comment
 703	aScriptInstruction_5853								
 672	aScriptInstruction_6590								
 141	aScriptInstruction_6591								
-599	aScriptInstruction_6592								
-384	aScriptInstruction_6503								
-361	aScriptInstruction_6594								
-517	aScriptInstruction_5873								
-726	aScriptInstruction_5949								
-629	aScriptInstruction_6597								
-1203	aScriptInstruction_6598								
-308	aScriptInstruction_6259								
-542	aScriptInstruction_6600								
-439	aScriptInstruction_6601								
-242	aScriptInstruction_6602								
-721	aScriptInstruction_5838								
-290	aScriptInstruction_6604								
-885	aScriptInstruction_5668								
-415	aScriptInstruction_5676								
-1115	NOP	V	V	NOP()					
-1151	aScriptInstruction_6608	I	V	unknown_1151(%1)		-			
-161	aScriptInstruction_6361	I	V	unknown_161(%1)		Seems to set location? / region			
-503	aScriptInstruction_6610	I	V	unknown_503(%1)		-			
-93	aScriptInstruction_6611	V	V	unknown_93()		-			
-317	aScriptInstruction_5612	I	V	unknown_317(1)		-			
-822	aScriptInstruction_6613	V	V	unknown_822()		-			
+599	QUEST_GET_PARAM	II	-	PARAM:getQuest	R	-			
+384	OP_384_PUSH_ONE	V	I	1	R	-			
+361	aScriptInstruction_6594	V	V	unknown_361()	R	-			
+517	aScriptInstruction_5873	I	V	unknown_517(%1)	R	-			
+726	aScriptInstruction_5949	I	V	unknown_726(%1)	R	-			
+629	aScriptInstruction_6597	IIIIII	V	unknown_629(%6,%5,%4,%3,%2,%1)	R	-			
+1203	aScriptInstruction_6598	II	V	unknown_1203(%2,%1)	R	-			
+308	aScriptInstruction_6259	II	V	unknown_308(%1)	R	-			
+542	POP_5I	IIIII	V	POP_5i(%5,%4,%3,%2,%1)	R	-			
+439	aScriptInstruction_6601	V	I	unknown_439()	R	-			
+242	NOP_242	I	V	NOP_242(%1)	R	-			
+721	PUSH_ONEHUNDERD	V	I	100	R	-			
+290	NOP_1138	V	I	-1	R	-			
+885	PUSH_ONE_885	V	I	1	R	-			
+415	aScriptInstruction_5676	V	III	unknown_415()	R	-			
+1115	NOP_1115	V	V	NOP_1115()	R	-			
+1151	aScriptInstruction_6608	I	V	unknown_1151(%1)	R	-			
+161	aScriptInstruction_6361	I	V	unknown_161(%1)	R	Seems to set location? / region			
+503	aScriptInstruction_6610	I	V	unknown_503(%1)	R	-			
+93	aScriptInstruction_6611	V	V	unknown_93()	R	-			
+317	aScriptInstruction_5612	I	V	unknown_317(%1)	R	-			
+822	aScriptInstruction_6613	V	V	unknown_822()	R	-			
 1210	aScriptInstruction_5665	I	V	unknown_1210(%1)	B	-			
-113	aScriptInstruction_6615	V	V	unknown_113()		-			
-819	aScriptInstruction_6058	V	I	unknown_819()		-			
-431	aScriptInstruction_6251	V	I	unknown_431()		-			
-878	aScriptInstruction_6618								
-182	aScriptInstruction_6619								
-203	aScriptInstruction_6626								
-1017	aScriptInstruction_6665								
-13	aScriptInstruction_6622								
-940	aScriptInstruction_6623								
-383	aScriptInstruction_6363								
-817	aScriptInstruction_6377								
-901	aScriptInstruction_5492	III	I	unknown_901(%3,%2,%1)		-			
-391	aScriptInstruction_6627	I	I	unknown_391(%1)		-			
-1001	aScriptInstruction_6556	V	I	unknown_1001()		-			
-463	aScriptInstruction_6633	I	O	unknown_463(%1)		-			
+113	aScriptInstruction_6615	V	V	unknown_113()	R	-			
+819	aScriptInstruction_6058	V	I	unknown_819()	R	-			
+431	aScriptInstruction_6251	V	I	unknown_431()	R	-			
+878	aScriptInstruction_6618				R				
+182	GROUPCHANNEL_GET_MEMBER_RANK	I	I	GroupChannel.getPlayerByIndex(%1).getRank()	R	Group-channel related			
+203	aScriptInstruction_6626	I	I	GroupChannel.getPlayerByIndex(%1).getUnknown_203()	R	Group-channel related			
+1017	aScriptInstruction_6665	I	I	GroupChannel.getPlayerByIndex(%1).getUnknown_1017()	R	Group-channel related			
+13	aScriptInstruction_6622	I	I	GroupChannel.getPlayerByIndex(%1).getUnknown_13()	R	Group-channel related			
+940	aScriptInstruction_6623	I	I	GroupChannel.getPlayerByIndex(%1).getUnknown_940()	R	Group-channel related			
+383	aScriptInstruction_6363	I	I	GroupChannel.getPlayerByIndex(%1).getUnknown_383()	R	Group-channel related			
+817	GROUPCHANNEL_GET_MEMBER_DISPLAY_NAME	I	O	GroupChannel.getPlayerByIndex(%1).getDisplayName()	R	Group-channel related			
+901	GROUPCHANNEL_GET_SKILL_DATA	III	I	GroupChannel.getPlayerByIndex(%3).getSkillData(%2,%1)	$sR	level or experience. %1 = type/bool			
+391	aScriptInstruction_6627	I	I	GroupChannel.isUnknown391EqualTo(%1)	R	-			
+1001	GROUPCHANNEL_GET_NUM_BANS	V	I	GroupChannel.getBanCount()	R	-			
+463	GROUPCHANNEL_GET_BAN_NAME	I	O	GroupChannel.getBan(%1).getDisplayName()	R	-			
 163	aScriptInstruction_6630	V	O	unknown_163()		-			
 619	aScriptInstruction_6631	V	I	unknown_619()		-			
 85	aScriptInstruction_5792	V	I	unknown_85()		-			

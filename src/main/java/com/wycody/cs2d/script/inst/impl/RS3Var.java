@@ -1,10 +1,10 @@
 package com.wycody.cs2d.script.inst.impl;
 
 import com.wycody.cs2d.script.inst.Instruction;
-import com.wycody.cs2d.script.inst.impl.var.rs3.PushVar;
-import com.wycody.cs2d.script.inst.impl.var.rs3.PushVarBit;
-import com.wycody.cs2d.script.inst.impl.var.rs3.StoreVar;
-import com.wycody.cs2d.script.inst.impl.var.rs3.StoreVarBit;
+import com.wycody.cs2d.script.inst.base.rs3.PushVar;
+import com.wycody.cs2d.script.inst.base.rs3.PushVarBit;
+import com.wycody.cs2d.script.inst.base.rs3.StoreVar;
+import com.wycody.cs2d.script.inst.base.rs3.StoreVarBit;
 import java.util.function.Supplier;
 
 public interface RS3Var {

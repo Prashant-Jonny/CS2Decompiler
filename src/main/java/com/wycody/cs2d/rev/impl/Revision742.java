@@ -667,8 +667,8 @@ public class Revision742 extends Revision {
         registerInstruction(756, Chat.AQC_SENDGUESTCLANCHANNEL);
         
         //Window mode instructions
-        registerInstruction(729, WindowMode.FS_SETDIMENSIONS);
-        registerInstruction(514, WindowMode.PUSHMODE);
+        registerInstruction(729, WindowMode.FS_SET_DIMENSIONS);
+        registerInstruction(514, WindowMode.PUSH_MODE);
         
         //World list instructions
         registerInstruction(70, WorldList.FETCH);

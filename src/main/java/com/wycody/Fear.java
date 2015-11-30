@@ -8,10 +8,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import com.jagex.core.constants.SerialEnum;
+import com.jagex.game.runetek5.config.vartype.constants.ScriptVarType;
 import com.thedoge.Blocks.DummyBlock;
 import com.thedoge.Blocks.MultiBlock;
 import com.thedoge.funky.Factory;
 import com.wycody.cs2d.script.inst.Instruction;
+import com.wycody.cs2d.script.inst.InstructionType;
+import com.wycody.cs2d.script.inst.base.PushEnumValueInstruction;
+import com.wycody.cs2d.script.inst.base.PushInstruction;
 import org.apache.commons.collections4.list.TreeList;
 
 import com.jagex.game.runetek5.config.enumtype.EnumTypeList;
@@ -63,10 +68,19 @@ public class Fear {
 
         //689
         //472
-
+	//	findE();
 
 		//findSHIT(894,1102,913,62,455,597);
 
+//		for(ScriptVarType type : ScriptVarType.values()){
+//			System.out.println(type.getSerialId() + "\t" + type.name());
+//		}
+
+//
+//		ScriptVarType type = SerialEnum.forID(ScriptVarType.values(), 73);
+//		System.out.println(type);
+//		if("".equalsIgnoreCase(""))
+//			return;
 
         //test();
         // 686 605
@@ -210,7 +224,6 @@ script: 3106
 		Cache c = new Cache(s);
 		ConfigParser config = new ConfigParser();
 		Revision revision = new Revision850(c);
-//		config.download("850");
 		config.loadRevision("850", revision);
 
 		Main.paramTypeList = new ParamTypeList(c);
@@ -261,9 +274,62 @@ script: 3106
 		}
 
 	}
-    
-    
-    private static void test850(String[] args) throws FileNotFoundException{
+
+
+	private static void findE(int ... ids) throws IOException {
+		FileStore s = FileStore.open(new File("c:\\850\\"));
+		Cache c = new Cache(s);
+		ConfigParser config = new ConfigParser();
+		Revision revision = new Revision850(c);
+		config.loadRevision("850", revision);
+
+		Main.paramTypeList = new ParamTypeList(c);
+		Main.enumTypeList = new EnumTypeList(c);
+		Main.structTypeList = new StructTypeList(c);
+
+		Context context = new Context().withCache(c).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
+		CS2Decompiler decompiler = new CS2Decompiler(context);
+		context.withBlockEditing(true).withDebug(false).withCache(c).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
+
+		for(int scriptId = 0; scriptId < decompiler.getContext().getCache().getFileCount(12); scriptId++) {
+			int id = scriptId;
+			try {
+				CS2Script script = decompiler.disassemble(id);
+
+				Instruction[] inss = script.getInstructions();
+				for (int i=0; i < inss.length; i++) {
+					Instruction instruction = (Instruction)inss[i];
+					if(instruction.getType() == InstructionType.PUSH_ENUM_VAL){
+						PushEnumValueInstruction ins = (PushEnumValueInstruction)instruction;
+						/*
+						        Object slot = pop(StackType.INT); [ins-1]
+								Object enumId = pop(StackType.INT); [ins-2]
+								int valueType = (Integer) pop(StackType.INT); [ins-3]
+								int keyType = (Integer) pop(StackType.INT);
+						 */
+						if(inss[i-3] instanceof PushInstruction){
+                            PushInstruction push = (PushInstruction) inss[i-3];
+                            if(push.getFieldType() == PushInstruction.Type.OPERAND){
+                                if(Integer.valueOf(21).equals(push.getStackValue())){
+                                    System.out.println("Script: " + scriptId);
+                                    break;
+                                }
+                            }
+                        }
+					}
+				}
+			}catch(Throwable t){
+				System.err.println("Error in script: " + id);
+				//	t.printStackTrace();
+			}
+
+
+		}
+
+	}
+
+
+	private static void test850(String[] args) throws FileNotFoundException{
         if (new File("F:\\LIVE\\").exists()) {
 			FileStore s = FileStore.open(new File("F:\\CACHES\\850"));
 			Cache c = new Cache(s);
@@ -286,8 +352,7 @@ script: 3106
 			//int scriptId = 1434;////1895; //47;
 
 
-
-			int scriptId = 11494; //11497 or 11494
+			int scriptId = 291; //11497 or 11494
 			if (args.length > 0) {
                 try{
                     System.err.println("Loading script: " + args[0]);

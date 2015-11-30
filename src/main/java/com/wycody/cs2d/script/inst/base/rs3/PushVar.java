@@ -1,22 +1,23 @@
-package com.wycody.cs2d.script.inst.impl.var.rs3;
+package com.wycody.cs2d.script.inst.base.rs3;
 
 import com.jagex.game.runetek5.config.vartype.VarType;
 import com.jagex.game.runetek5.config.vartype.constants.BaseVarType;
 import com.jagex.game.runetek5.config.vartype.constants.VarDomainType;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
-import com.wycody.cs2d.script.CS2Field;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.types.StackType;
 
-public class StoreVar extends Instruction {//TODO is this being done correct?
+/**
+ * Specifically for 745+ var system
+ * pushes specific var onto stack.
+ * for example it could push 'varc[1020]'
+ */
+public class PushVar extends Instruction {
 
-	String variable;
-	Object value;
-	
-	public StoreVar(int id, int address) {
-		super(id, address, InstructionType.STORE_VAR);
+	public PushVar(int id, int address) {
+		super(id, address, InstructionType.PUSH_VAR);
 	}
 
 	@Override
@@ -24,6 +25,11 @@ public class StoreVar extends Instruction {//TODO is this being done correct?
 		VarType type = (VarType) objectOperand;
 		boolean usePlayerMap = integerOperand == 1;
 		BaseVarType baseVar = type.dataType.baseType;
+
+		System.out.flush();
+		System.err.flush();
+		System.err.println(address + " => " + baseVar);
+
 		VarDomainType domain = type.getDomain();
         String outcome = "";
         //this stuff was in a class becuse it gets used for other instructsions
@@ -56,14 +62,13 @@ public class StoreVar extends Instruction {//TODO is this being done correct?
         }
         
         outcome += "[" + type.getId() + "]";
-        variable = outcome;
         
 		if(baseVar == BaseVarType.INTEGER) {
-			value = pop(StackType.INT);
+			push(StackType.INT, outcome);
 		} else if(baseVar == BaseVarType.LONG) {
-			value = pop(StackType.LONG);
+			push(StackType.LONG, outcome);
 		} else if(baseVar == BaseVarType.STRING) {
-			value = pop(StackType.OBJECT);
+            push(StackType.OBJECT, outcome);
 		} else {
 			throw new RuntimeException("Invalid BaseVarType found in PUSH_VAR: " + baseVar);
 		}
@@ -72,16 +77,16 @@ public class StoreVar extends Instruction {//TODO is this being done correct?
 
 	@Override
 	public void print(Context context, ScriptPrinter printer) {
-		printer.println(variable + " = " + value + ";");
+		
 	}
 
 	@Override
 	public int getPushCount(StackType type) {
-		return -1;
+		return 0;
 	}
 
 	@Override
 	public int getPopCount(StackType type) {
-		return -1;
+		return 0;
 	}
 }

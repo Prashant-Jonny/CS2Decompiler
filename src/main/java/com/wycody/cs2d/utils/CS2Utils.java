@@ -65,6 +65,20 @@ public class CS2Utils {
 		return result;
 	}
 
+	//FIXME: HSL colors?
+	public static String getSkillDataType(Object value) {
+		if (value instanceof Number) {
+			int check = ((Number) value).intValue();
+			if(check==0)
+				return "EXPERIENCE";
+			else if(check==1)
+				return "LEVEL";
+			else
+				return "UNKNOWN_SKILL_TYPE_" + value;
+		}
+		return value != null ? value.toString() : "null";
+	}
+
 	/**
 	 * Try parse the color format of value
 	 * 
@@ -73,6 +87,7 @@ public class CS2Utils {
 	 * @return the formatted color
 	 */
 	public static String getColor(Object value) {
+		//FIXME: how about constants like BLACK,RED,YELLOW,BLUE...
 		value = fixIntegerField(value);
 		String s = "";
 		if (value instanceof Number) {
@@ -153,4 +168,24 @@ public class CS2Utils {
 		return params;
 	}
 
+	public static Object getSkill(Object o) {
+		if(o instanceof Number){
+			int id = ((Number) o).intValue();
+			if(id >= 0 && id < skills.length)
+				return skills[id];
+			return "UNKNOWN_SKILL("+o+")";
+		}
+		return o;
+	}
+
+
+
+	private final static String[] skills = new String[]{
+		"ATTACK","STRENGTH","RANGED","MAGIC","DEFENCE",
+		"CONSTITUTION","PRAYER","AGILITY","HERBLORE","THIEVING",
+		"CRAFTING","RUNECRAFTING","MINING","SMITHING","FISHING",
+		"COOKING","FIREMAKING","WOODCUTTING","FLETCHING","SLAYER",
+		"FARMING","CONSTRUCTION","HUNTER","SUMMONING","DUNGEONEERING",
+		"DIVINATION","INVENTION","UNKNOWN_1","UNKNOWN_2","UNKNOWN_3",
+	};
 }

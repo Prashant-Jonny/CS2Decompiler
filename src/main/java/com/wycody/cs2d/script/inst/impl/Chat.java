@@ -6,15 +6,15 @@ import com.wycody.cs2d.script.inst.types.StackType;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class Chat {
-    private static final Function<Object,Object> chatFormatter = o -> "getChatLine("+o+")";
-    private static final Function<Object,Object> quickChatCategoryFormatter = o -> "getQuickChatCategory("+o+")";
-    private static final Function<Object,Object> quickChatPhraseFormatter = o -> "getQuickChatPhrase("+o+")";
+public interface Chat {
+    Function<Object,Object> chatFormatter = o -> "getChatLine("+o+")";
+    Function<Object,Object> quickChatCategoryFormatter = o -> "getQuickChatCategory("+o+")";
+    Function<Object,Object> quickChatPhraseFormatter = o -> "getQuickChatPhrase("+o+")";
     
     /**
      * Returns current public chat filter status. 
      */
-    public static Supplier<CallMethodInstruction> PUSH_PUBLICFILTERSTATUS = () ->
+    Supplier<CallMethodInstruction> PUSH_PUBLICFILTERSTATUS = () ->
             new CallMethodInstruction(InstructionType.PUSH_PUBLICFILTERSTATUS)
                     .setName("getPublicChatStatus")
                     .setPushType(StackType.INT);
@@ -22,7 +22,7 @@ public class Chat {
     /**
      * Sets the current chat filter status (format: public, private, trade)
      */
-    public static Supplier<CallMethodInstruction> SET_CHATFILTERSTATUS = () ->
+    Supplier<CallMethodInstruction> SET_CHATFILTERSTATUS = () ->
             new CallMethodInstruction(InstructionType.SET_CHATFILTERSTATUS)
                     .setFormattedName("setChatFilterStatus(%1, %2, %3)")
                     .setArgumentTypes(StackType.INT, StackType.INT, StackType.INT);
@@ -30,7 +30,7 @@ public class Chat {
     /**
      * Sends a snapshot (player abuse report) to the server (format: name, rule, mute, unknown)
      */
-    public static Supplier<CallMethodInstruction> SEND_SNAPSHOT = () ->
+    Supplier<CallMethodInstruction> SEND_SNAPSHOT = () ->
             new CallMethodInstruction(InstructionType.SEND_SNAPSHOT)
                     .setFormattedName("setChatFilterStatus(%1, %2, %3, %4)")
                     .setArgumentTypes(StackType.OBJECT, StackType.INT, StackType.INT, StackType.OBJECT);
@@ -38,7 +38,7 @@ public class Chat {
     /**
      * Gets the message of the specified chat line
      */
-    public static Supplier<CallMethodInstruction> PUSH_MESSAGE = () ->
+    Supplier<CallMethodInstruction> PUSH_MESSAGE = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_MESSAGE)
                     .setName("getMessage")
                     .setArgumentTypes(StackType.INT)
@@ -48,7 +48,7 @@ public class Chat {
     /**
      * Gets the message type of the specified chat line
      */
-    public static Supplier<CallMethodInstruction> PUSH_TYPE = () ->
+    Supplier<CallMethodInstruction> PUSH_TYPE = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_TYPE)
                     .setName("getType")
                     .setArgumentTypes(StackType.INT)
@@ -58,7 +58,7 @@ public class Chat {
     /**
      * Returns current private chat filter status (aka online status). 
      */
-    public static Supplier<CallMethodInstruction> PUSH_PRIVATEFILTERSTATUS = () ->
+    Supplier<CallMethodInstruction> PUSH_PRIVATEFILTERSTATUS = () ->
             new CallMethodInstruction(InstructionType.PUSH_PRIVATEFILTERSTATUS)
                     .setName("getPrivateChatStatus")
                     .setPushType(StackType.INT);
@@ -66,7 +66,7 @@ public class Chat {
     /**
      * Sets the current chat mode (0=public, 1=friend, 2=clan, 3=guest clan, 4=group, 5=group(team))
      */
-    public static Supplier<CallMethodInstruction> SETMODE = () ->
+    Supplier<CallMethodInstruction> SETMODE = () ->
             new CallMethodInstruction(InstructionType.CHAT_SETMODE)
                     .setFormattedName("setChatMode(%1)")
                     .setArgumentTypes(StackType.INT);
@@ -74,7 +74,7 @@ public class Chat {
     /**
      * Sends the specified message (the channel depends on the previously set chat mode)
      */
-    public static Supplier<CallMethodInstruction> MESSAGE_PUBLIC = () ->
+    Supplier<CallMethodInstruction> MESSAGE_PUBLIC = () ->
             new CallMethodInstruction(InstructionType.SEND_MES_PUBLIC)
                     .setFormattedName("sendPublicMessage(%1)")
                     .setArgumentTypes(StackType.OBJECT);
@@ -82,7 +82,7 @@ public class Chat {
     /**
      * Sends the specified private message to the specified player
      */
-    public static Supplier<CallMethodInstruction> MESSAGE_PRIVATE = () ->
+    Supplier<CallMethodInstruction> MESSAGE_PRIVATE = () ->
             new CallMethodInstruction(InstructionType.SEND_MES_PRIVATE)
                     .setFormattedName("sendPrivateMessage(%1, %2)")
                     .setArgumentTypes(StackType.OBJECT, StackType.OBJECT);
@@ -90,7 +90,7 @@ public class Chat {
     /**
      * Gets the name of the user who sent the specified chat line
      */
-    public static Supplier<CallMethodInstruction> PUSH_NAME = () ->
+    Supplier<CallMethodInstruction> PUSH_NAME = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_NAME)
                     .setName("getName")
                     .setArgumentTypes(StackType.INT)
@@ -100,7 +100,7 @@ public class Chat {
     /**
      * Gets the clan prefix of the specified chat line
      */
-    public static Supplier<CallMethodInstruction> PUSH_CLAN = () ->
+    Supplier<CallMethodInstruction> PUSH_CLAN = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_CLAN)
                     .setName("getClan")
                     .setArgumentTypes(StackType.INT)
@@ -110,7 +110,7 @@ public class Chat {
     /**
      * Gets the id of the quick chat message represented by the specified chat line
      */
-    public static Supplier<CallMethodInstruction> PUSH_QUICKCHATID = () ->
+    Supplier<CallMethodInstruction> PUSH_QUICKCHATID = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_QUICKCHATID)
                     .setName("getQuickChatID")
                     .setArgumentTypes(StackType.INT)
@@ -120,7 +120,7 @@ public class Chat {
     /**
      * Returns formatted name (including prefix and suffix titles) of the active player. 
      */
-    public static Supplier<CallMethodInstruction> PUSH_PLAYER_NAME = () ->
+    Supplier<CallMethodInstruction> PUSH_PLAYER_NAME = () ->
             new CallMethodInstruction(InstructionType.PUSH_PLAYER_NAME)
                     .setName("getActivePlayer().getName")
                     .setPushType(StackType.OBJECT);
@@ -128,7 +128,7 @@ public class Chat {
     /**
      * Returns current private chat filter status (aka online status). 
      */
-    public static Supplier<CallMethodInstruction> PUSH_TRADEFILTERSTATUS = () ->
+    Supplier<CallMethodInstruction> PUSH_TRADEFILTERSTATUS = () ->
             new CallMethodInstruction(InstructionType.PUSH_TRADEFILTERSTATUS)
                     .setName("getTradeFilterStatus")
                     .setPushType(StackType.INT);
@@ -136,7 +136,7 @@ public class Chat {
     /**
      * Returns the number of chat lines currently stored in chat history. 
      */
-    public static Supplier<CallMethodInstruction> PUSH_HISTORYSIZE = () ->
+    Supplier<CallMethodInstruction> PUSH_HISTORYSIZE = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_HISTORYSIZE)
                     .setName("getChatHistorySize")
                     .setPushType(StackType.INT);
@@ -144,7 +144,7 @@ public class Chat {
     /**
      * Gets the arguments of the specified chat line
      */
-    public static Supplier<CallMethodInstruction> PUSH_ARGS = () ->
+    Supplier<CallMethodInstruction> PUSH_ARGS = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_ARGS)
                     .setName("getArgs")
                     .setArgumentTypes(StackType.INT)
@@ -154,7 +154,7 @@ public class Chat {
     /**
      * Gets the unfiltered name of the user who sent the specified chat line
      */
-    public static Supplier<CallMethodInstruction> PUSH_NAMEUNFILTERED = () ->
+    Supplier<CallMethodInstruction> PUSH_NAMEUNFILTERED = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_NAMEUNFILTERED)
                     .setName("getNameUnfiltered")
                     .setArgumentTypes(StackType.INT)
@@ -164,7 +164,7 @@ public class Chat {
     /**
      * Returns unformated unfiltered name of the active player. 
      */
-    public static Supplier<CallMethodInstruction> PUSH_PLAYER_NAMESIMPLE = () ->
+    Supplier<CallMethodInstruction> PUSH_PLAYER_NAMESIMPLE = () ->
             new CallMethodInstruction(InstructionType.PUSH_PLAYER_NAMESIMPLE)
                     .setName("getActivePlayer().getNameSimple")
                     .setPushType(StackType.OBJECT);
@@ -172,7 +172,7 @@ public class Chat {
     /**
      * Gets the id of the specified chat line
      */
-    public static Supplier<CallMethodInstruction> PUSH_ID = () ->
+    Supplier<CallMethodInstruction> PUSH_ID = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_ID)
                     .setName("getId")
                     .setArgumentTypes(StackType.INT)
@@ -182,7 +182,7 @@ public class Chat {
     /**
      * Gets the time the specified chat line was received
      */
-    public static Supplier<CallMethodInstruction> PUSH_TIME = () ->
+    Supplier<CallMethodInstruction> PUSH_TIME = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_TIME)
                     .setName("getTime")
                     .setArgumentTypes(StackType.INT)
@@ -192,7 +192,7 @@ public class Chat {
     /**
      * Gets the simple name of the user who sent the specified chat line
      */
-    public static Supplier<CallMethodInstruction> PUSH_NAMESIMPLE = () ->
+    Supplier<CallMethodInstruction> PUSH_NAMESIMPLE = () ->
             new CallMethodInstruction(InstructionType.PUSH_CHAT_NAMESIMPLE)
                     .setName("getNameSimple")
                     .setArgumentTypes(StackType.INT)
@@ -202,7 +202,7 @@ public class Chat {
     /**
      * Gets the name of the specified quick chat category
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_NAME = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_NAME = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_CATEGORY_NAME)
                     .setName("getName")
                     .setArgumentTypes(StackType.INT)
@@ -212,7 +212,7 @@ public class Chat {
     /**
      * Gets the number of subcategories within the specified quick chat category
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_SUBCATCOUNT = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_SUBCATCOUNT = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_CATEGORY_SUBCATCOUNT)
                     .setName("getSubcategoryCount")
                     .setArgumentTypes(StackType.INT)
@@ -222,7 +222,7 @@ public class Chat {
     /**
      * Gets the subcategory at the specified slot within the specified quick chat category
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_SUBCAT = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_SUBCAT = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_CATEGORY_SUBCAT)
                     .setFormattedName("%1.getSubcategory(%2)")
                     .setArgumentTypes(StackType.INT, StackType.INT)
@@ -232,7 +232,7 @@ public class Chat {
     /**
      * Gets the number of phrases within the specified quick chat category
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_PHRASECOUNT = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_PHRASECOUNT = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_CATEGORY_PHRASECOUNT)
                     .setName("getPhraseCount")
                     .setArgumentTypes(StackType.INT)
@@ -242,7 +242,7 @@ public class Chat {
     /**
      * Gets the phrase at the specified slot within the specified quick chat category
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_PHRASE = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_PHRASE = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_CATEGORY_PHRASE)
                     .setFormattedName("%1.getPhrase(%2)")
                     .setArgumentTypes(StackType.INT, StackType.INT)
@@ -252,7 +252,7 @@ public class Chat {
     /**
      * Gets the template for the specified quick chat phrase
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_PHRASE_TEMPLATE = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_PHRASE_TEMPLATE = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_PHRASE_TEMPLATE)
                     .setName("getTemplate")
                     .setArgumentTypes(StackType.INT)
@@ -262,7 +262,7 @@ public class Chat {
     /**
      * Gets the number of possible responses for the specified quick chat phrase
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_PHRASE_RESPONSECOUNT = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_PHRASE_RESPONSECOUNT = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_PHRASE_RESPONSECOUNT)
                     .setName("getResponseCount")
                     .setArgumentTypes(StackType.INT)
@@ -272,7 +272,7 @@ public class Chat {
     /**
      * Gets the response at the specified slot within the specified quick chat phrase
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_PHRASE_RESPONSE = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_PHRASE_RESPONSE = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_PHRASE_RESPONSE)
                     .setFormattedName("%1.getResponse(%2)")
                     .setArgumentTypes(StackType.INT)
@@ -282,7 +282,7 @@ public class Chat {
     /**
      * Sets the active quick chat phrase to the specified phrase
      */
-    public static Supplier<CallMethodInstruction> QC_PHRASE_SETACTIVE = () ->
+    Supplier<CallMethodInstruction> QC_PHRASE_SETACTIVE = () ->
             new CallMethodInstruction(InstructionType.QC_PHRASE_SETACTIVE)
                     .setName("setActive")
                     .setArgumentTypes(StackType.INT)
@@ -291,14 +291,14 @@ public class Chat {
     /**
      * Sends the active quick chat phrase as a public message
      */
-    public static Supplier<CallMethodInstruction> AQC_SENDPUBLIC = () ->
+    Supplier<CallMethodInstruction> AQC_SENDPUBLIC = () ->
             new CallMethodInstruction(InstructionType.AQC_SENDPUBLIC)
                     .setName("getActiveQuickChat().sendAsPublicMessage");
     
     /**
      * Sends the active quick chat phrase as a private message
      */
-    public static Supplier<CallMethodInstruction> AQC_SENDPRIVATE = () ->
+    Supplier<CallMethodInstruction> AQC_SENDPRIVATE = () ->
             new CallMethodInstruction(InstructionType.AQC_SENDPRIVATE)
                     .setFormattedName("getActiveQuickChat().sendAsPrivateMessage(%1)")
                     .setArgumentTypes(StackType.OBJECT);
@@ -306,14 +306,14 @@ public class Chat {
     /**
      * Sends the active quick chat phrase as a friend chat message
      */
-    public static Supplier<CallMethodInstruction> AQC_SENDFRIENDCHAT = () ->
+    Supplier<CallMethodInstruction> AQC_SENDFRIENDCHAT = () ->
             new CallMethodInstruction(InstructionType.AQC_SENDFRIENDCHAT)
                     .setName("getActiveQuickChat().sendAsFriendChatMessage");
     
     /**
      * Gets the key code for the subcategory at the specified slot within the quick chat category
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_SUBCAT_KEYCODE = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_SUBCAT_KEYCODE = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_CATEGORY_SUBCAT_KEYCODE)
                     .setFormattedName("%1.getSubCategoryKeyCode(%2)")
                     .setArgumentTypes(StackType.INT, StackType.INT)
@@ -323,7 +323,7 @@ public class Chat {
     /**
      * Gets the key code for the phrase at the specified slot within the quick chat category
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_PHRASE_KEYCODE = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_PHRASE_KEYCODE = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_CATEGORY_PHRASE_KEYCODE)
                     .setFormattedName("%1.getPhraseKeyCode(%2)")
                     .setArgumentTypes(StackType.INT, StackType.INT)
@@ -333,7 +333,7 @@ public class Chat {
     /**
      * Gets the subcategory for the specified character key code within the quick chat category
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_SUBCAT_FORKEYCODE = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_SUBCAT_FORKEYCODE = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_CATEGORY_SUBCAT_FORKEYCODE)
                     .setFormattedName("%1.getSubCategoryForKeyCode(%2)")
                     .setArgumentTypes(StackType.INT, StackType.INT)
@@ -343,7 +343,7 @@ public class Chat {
     /**
      * Gets the phrase for the specified character key code within the quick chat category
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_PHRASE_FORKEYCODE = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_CATEGORY_PHRASE_FORKEYCODE = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_CATEGORY_PHRASE_FORKEYCODE)
                     .setFormattedName("%1.getPhraseForKeyCode(%2)")
                     .setArgumentTypes(StackType.INT, StackType.INT)
@@ -353,7 +353,7 @@ public class Chat {
     /**
      * Gets the number of arguments for the specified quick chat phrase
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_PHRASE_ARGCOUNT = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_PHRASE_ARGCOUNT = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_PHRASE_ARGCOUNT)
                     .setName("getArgumentCount")
                     .setArgumentTypes(StackType.INT)
@@ -363,7 +363,7 @@ public class Chat {
     /**
      * Gets the argument type at the specified slot for the specified quick chat phrase
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_PHRASE_ARGTYPE = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_PHRASE_ARGTYPE = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_PHRASE_ARGTYPE)
                     .setFormattedName("%1.getArgumentType(%2)")
                     .setArgumentTypes(StackType.INT, StackType.INT)
@@ -373,7 +373,7 @@ public class Chat {
     /**
      * Sets the specified argument on the active quick chat phrase
      */
-    public static Supplier<CallMethodInstruction> AQC_SETARG = () ->
+    Supplier<CallMethodInstruction> AQC_SETARG = () ->
             new CallMethodInstruction(InstructionType.AQC_SETARG)
                     .setFormattedName("getActiveQuickChat().setArgument(%1, %2)")
                     .setArgumentTypes(StackType.INT, StackType.INT);
@@ -381,7 +381,7 @@ public class Chat {
     /**
      * Sets the specified object argument on the active quick chat phrase
      */
-    public static Supplier<CallMethodInstruction> AQC_SETARG_OBJ = () ->
+    Supplier<CallMethodInstruction> AQC_SETARG_OBJ = () ->
             new CallMethodInstruction(InstructionType.AQC_SETARG_OBJ)
                     .setFormattedName("getActiveQuickChat().setArgument(%1, %2)")
                     .setArgumentTypes(StackType.INT, StackType.INT);
@@ -389,7 +389,7 @@ public class Chat {
     /**
      * Gets the specified argument key at the specified slot for the specified quick chat phrase
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_PHRASE_ARGKEY = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_PHRASE_ARGKEY = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_PHRASE_ARGKEY)
                     .setFormattedName("%1.getArgumentKey(%2, %3)")
                     .setArgumentTypes(StackType.INT, StackType.INT, StackType.INT)
@@ -399,7 +399,7 @@ public class Chat {
     /**
      * Triggers a search for quick chat phrases containing the specified text (format: searchTerm, isGlobal)
      */
-    public static Supplier<CallMethodInstruction> QC_SEARCH = () ->
+    Supplier<CallMethodInstruction> QC_SEARCH = () ->
             new CallMethodInstruction(InstructionType.QC_SEARCH)
                     .setFormattedName("quickChatSearch(%1, %2b)")
                     .setArgumentTypes(StackType.OBJECT, StackType.INT)
@@ -408,7 +408,7 @@ public class Chat {
     /**
      * Returns the next result of the last quick chat search and increments the search result pointer
      */
-    public static Supplier<CallMethodInstruction> PUSH_QC_SEARCH_NEXTRESULT = () ->
+    Supplier<CallMethodInstruction> PUSH_QC_SEARCH_NEXTRESULT = () ->
             new CallMethodInstruction(InstructionType.PUSH_QC_SEARCH_NEXTRESULT)
                     .setName("nextQuickChatSearchResult")
                     .setPushType(StackType.INT);
@@ -417,14 +417,14 @@ public class Chat {
     /**
      * Returns the quick chat search result pointer to the start.
      */
-    public static Supplier<CallMethodInstruction> QC_SEARCH_RESET = () ->
+    Supplier<CallMethodInstruction> QC_SEARCH_RESET = () ->
             new CallMethodInstruction(InstructionType.QC_SEARCH_RESET)
                     .setName("resetQuickChatSearch");
     
     /**
      * Sends the active quick chat phrase as a clan channel message
      */
-    public static Supplier<CallMethodInstruction> AQC_SENDCLANCHANNEL = () ->
+    Supplier<CallMethodInstruction> AQC_SENDCLANCHANNEL = () ->
             new CallMethodInstruction(InstructionType.AQC_SENDCLANCHANNEL)
                     .setFormattedName("getActiveQuickChat().sendAsClanChannelMessage(%1)")
                     .setArgumentTypes(StackType.OBJECT);
@@ -432,7 +432,7 @@ public class Chat {
     /**
      * Sends the active quick chat phrase as a guest clan channel message
      */
-    public static Supplier<CallMethodInstruction> AQC_SENDGUESTCLANCHANNEL = () ->
+    Supplier<CallMethodInstruction> AQC_SENDGUESTCLANCHANNEL = () ->
             new CallMethodInstruction(InstructionType.AQC_SENDGUESTCLANCHANNEL)
                     .setFormattedName("getActiveQuickChat().sendAsGuestClanChannelMessage(%1)")
                     .setArgumentTypes(StackType.OBJECT);

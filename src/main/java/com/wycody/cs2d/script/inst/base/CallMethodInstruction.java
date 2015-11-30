@@ -70,8 +70,9 @@ public class CallMethodInstruction extends Instruction {
         return this;
     }
 
-    public CallMethodInstruction setPrefixFormatters(@SuppressWarnings("unchecked") Function<Object, Object>... formatters) {
-        this.prefixFormatter = formatters;
+    public CallMethodInstruction setPrefixFormatters(@SuppressWarnings("unchecked") Function ... formatters) {
+        //noinspection unchecked
+        this.prefixFormatter = (Function<Object, Object>[]) formatters;
         return this;
     }
 

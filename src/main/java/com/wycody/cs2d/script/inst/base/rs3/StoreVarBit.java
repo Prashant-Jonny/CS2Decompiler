@@ -1,30 +1,33 @@
-package com.wycody.cs2d.script.inst.impl.var.rs3;
+package com.wycody.cs2d.script.inst.base.rs3;
 
-import com.jagex.game.runetek5.config.vartype.VarType;
 import com.jagex.game.runetek5.config.vartype.bit.VarBitType;
-import com.jagex.game.runetek5.config.vartype.constants.BaseVarType;
-import com.jagex.game.runetek5.config.vartype.constants.VarDomainType;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.types.StackType;
 
-public class PushVarBit extends Instruction {
+public class StoreVarBit extends Instruction {//TODO is this being done correct?
 
-	public PushVarBit(int id, int address) {
-		super(id, address, InstructionType.PUSH_VAR_BIT);
+	String variable;
+	Object value;
+	
+	public StoreVarBit(int id, int address) {
+		super(id, address, InstructionType.STORE_VAR_BIT);
 	}
 
 	@Override
 	public void process(Context context) {
-		VarBitType varbitType = (VarBitType) objectOperand;
-		push(StackType.INT, "varbits[" + varbitType.id + "]");   
+		VarBitType type = (VarBitType) objectOperand;
+		boolean usePlayerMap = integerOperand == 1;
+        variable = "varbits[" + type.id + "]";
+        value = integerOperand;
+        
 	}
 
 	@Override
 	public void print(Context context, ScriptPrinter printer) {
-		
+		printer.println(variable + " = " + value + ";");
 	}
 
 	@Override

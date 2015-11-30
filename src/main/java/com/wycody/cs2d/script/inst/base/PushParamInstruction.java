@@ -1,8 +1,7 @@
 package com.wycody.cs2d.script.inst.base;
 
-import java.util.function.Function;
-
 import com.jagex.game.runetek5.config.paramtype.ParamType;
+import com.jagex.game.runetek5.config.vartype.constants.BaseVarType;
 import com.wycody.Main;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
@@ -15,20 +14,61 @@ import com.wycody.cs2d.script.inst.types.StackType;
  * Since this returns either string or int, depending on the param type, a separate instruction is needed.
  */
 public class PushParamInstruction extends Instruction {
-    private final Function<PushParamInstruction, Object> prefixFormatter;
-    private int paramId = -1;
+    private final String prefix_name;
+    private final StackType objectStackType;
+    private StackType resultType = null;
 
-    public PushParamInstruction(InstructionType type, Function<PushParamInstruction, Object> prefixFormatter) {
+    public PushParamInstruction(InstructionType type, String prefix_name, StackType objectStackType) {
         super(type);
-        this.prefixFormatter = prefixFormatter;
+        this.prefix_name = prefix_name;
+        this.objectStackType = objectStackType;
+    }
+
+    @Override
+    public void preprocess(Context ctx){
+        //Attempt to resolve the type statically.
+        for(int i=0; i < 5; i++){
+            int addr=this.address-1-i;
+            if(addr >= 0) {
+                Instruction ins = this.script.getInstruction(addr);
+                int pushCount = ins.getPushCount(StackType.INT);
+                int popCount = ins.getPopCount(StackType.INT);
+                if(pushCount == -1 || popCount == -1)
+                    return;
+
+                if(pushCount == 1){
+                    if(ins instanceof PushInstruction) {
+                        PushInstruction psh = (PushInstruction) ins;
+                        if(psh.isStatic()){
+                            Integer paramId = (Integer) psh.getStackValue();
+                            ParamType paramType = (ParamType) Main.paramTypeList.list(paramId);
+
+                            if(paramType.scriptVarType.baseType == BaseVarType.INTEGER)
+                                resultType = StackType.INT;
+                            else if(paramType.scriptVarType.baseType == BaseVarType.LONG)
+                                resultType = StackType.LONG;
+                            else if(paramType.scriptVarType.baseType == BaseVarType.STRING)
+                                resultType = StackType.OBJECT;
+                            else
+                                throw new Error("Unknown type: " + resultType);
+                        }
+                    }
+                }else if(pushCount > 1)
+                    return; // Resolve failed :<
+            }
+        }
     }
 
     @Override
     public void process(Context context) {
         int paramId = (Integer) pop(StackType.INT);
+
         ParamType paramType = (ParamType) Main.paramTypeList.list(paramId);
-        String call = prefixFormatter.apply(this)+"getParam("+paramId+")";        
-        
+        String call = ((prefix_name != null) ?
+                    (prefix_name+"("
+                        + (objectStackType != null ? pop(objectStackType) : "")
+                    + ").") : "")
+                + "getParam(" + paramId + ")";
         if (paramType.isStringVarType()) {
             push(StackType.OBJECT, call);
         } else {
@@ -43,12 +83,19 @@ public class PushParamInstruction extends Instruction {
 
     @Override
     public int getPushCount(StackType type) {
-        return 0;
+        if(resultType == null)
+            return -1;
+        return resultType.equals(type) ? 1 : 0;
     }
 
     @Override
     public int getPopCount(StackType type) {
         if(type == StackType.INT)
+            if(type == objectStackType)
+                return 2;
+            else
+                return 1;
+        else if(objectStackType == type)
             return 1;
         return 0;
     }

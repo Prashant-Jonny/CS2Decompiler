@@ -1,4 +1,4 @@
-package com.wycody.cs2d.script.inst.impl.var.rs3;
+package com.wycody.cs2d.script.inst.base.rs3;
 
 import com.jagex.game.runetek5.config.vartype.VarType;
 import com.jagex.game.runetek5.config.vartype.constants.BaseVarType;
@@ -9,15 +9,13 @@ import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.types.StackType;
 
-/**
- * Specifically for 745+ var system
- * pushes specific var onto stack.
- * for example it could push 'varc[1020]'
- */
-public class PushVar extends Instruction {
+public class StoreVar extends Instruction {//TODO is this being done correct?
 
-	public PushVar(int id, int address) {
-		super(id, address, InstructionType.PUSH_VAR);
+	String variable;
+	Object value;
+	
+	public StoreVar(int id, int address) {
+		super(id, address, InstructionType.STORE_VAR);
 	}
 
 	@Override
@@ -25,11 +23,6 @@ public class PushVar extends Instruction {
 		VarType type = (VarType) objectOperand;
 		boolean usePlayerMap = integerOperand == 1;
 		BaseVarType baseVar = type.dataType.baseType;
-
-		System.out.flush();
-		System.err.flush();
-		System.err.println(address + " => " + baseVar);
-
 		VarDomainType domain = type.getDomain();
         String outcome = "";
         //this stuff was in a class becuse it gets used for other instructsions
@@ -62,13 +55,14 @@ public class PushVar extends Instruction {
         }
         
         outcome += "[" + type.getId() + "]";
+        variable = outcome;
         
 		if(baseVar == BaseVarType.INTEGER) {
-			push(StackType.INT, outcome);
+			value = pop(StackType.INT);
 		} else if(baseVar == BaseVarType.LONG) {
-			push(StackType.LONG, outcome);
+			value = pop(StackType.LONG);
 		} else if(baseVar == BaseVarType.STRING) {
-            push(StackType.OBJECT, outcome);
+			value = pop(StackType.OBJECT);
 		} else {
 			throw new RuntimeException("Invalid BaseVarType found in PUSH_VAR: " + baseVar);
 		}
@@ -77,16 +71,16 @@ public class PushVar extends Instruction {
 
 	@Override
 	public void print(Context context, ScriptPrinter printer) {
-		
+		printer.println(variable + " = " + value + ";");
 	}
 
 	@Override
 	public int getPushCount(StackType type) {
-		return 0;
+		return -1;
 	}
 
 	@Override
 	public int getPopCount(StackType type) {
-		return 0;
+		return -1;
 	}
 }

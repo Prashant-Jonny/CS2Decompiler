@@ -8,7 +8,7 @@ import com.wycody.cs2d.script.inst.types.StackType;
 
 public class PushInstruction extends Instruction {
     
-    public static enum Type { OPERAND, FIELD, ARRAY };
+    public enum Type { OPERAND, FIELD, ARRAY };
 
     private final Type fieldType;
     private final StackType stackType;
@@ -23,6 +23,19 @@ public class PushInstruction extends Instruction {
 
     public PushInstruction(InstructionType type, Type fieldType, StackType pushType){
         this(type, fieldType, pushType, pushType);
+    }
+
+    public Type getFieldType(){
+        return this.fieldType;
+    }
+
+    public Object getStackValue() {
+        assert this.fieldType == Type.OPERAND;
+        return this.getOperand(this.srcType);
+    }
+
+    public boolean isStatic(){
+        return this.fieldType == Type.OPERAND;
     }
 
     @Override
