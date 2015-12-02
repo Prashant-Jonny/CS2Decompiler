@@ -39,7 +39,7 @@ public enum ScriptVarType implements SerialEnum {
 	LOCATION(30, 'l', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	MODEL(31, 'm', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	NPC(32, 'n', BaseVarType.INTEGER, Integer.valueOf(-1)),
-	OBJ(33, 'o', BaseVarType.INTEGER, Integer.valueOf(-1)),
+	OBJECT(33, 'o', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	PLAYER(34, 'p', BaseVarType.INTEGER, Integer.valueOf(-1)),
 	DESCRIPTION(35, 'r', BaseVarType.LONG, Long.valueOf(-1L)),
 	STRING(36, 's', BaseVarType.STRING, ""),
@@ -231,18 +231,14 @@ public enum ScriptVarType implements SerialEnum {
 	
 	public static ScriptVarType getByChar(char id) {
 		if(id == 'O') {
-			return OBJ;
+			return OBJECT;
         }
 		for (ScriptVarType value : values()) {
 			if (value.legacyChar == id) {
 				return value;
 			}
 		}
-		System.err.println("Invalid charactor code passed to ScriptVarType getByChar(): " + id + " (" + ((int) id) + ")");
-		for(StackTraceElement element : Thread.getAllStackTraces().get(0)) {
-			System.out.println(element);
-		}
-		return null;
+		throw new Error("Invalid charactor code passed to ScriptVarType getByChar(): " + id + " (" + ((int) id) + ")");
 	}
 
 }

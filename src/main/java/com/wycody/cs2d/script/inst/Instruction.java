@@ -5,9 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.node.Node;
-import com.wycody.cs2d.print.ScriptPrinter;
+import com.wycody.cs2d.print.Printable;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.flow.impl.BasicBlock;
+import com.wycody.cs2d.script.inst.base.BlockComment;
 import com.wycody.cs2d.script.inst.types.StackType;
 
 /**
@@ -17,9 +18,9 @@ import com.wycody.cs2d.script.inst.types.StackType;
  * @author Walied-Yassen
  * @date Nov 6, 2015
  */
-public abstract class Instruction extends Node {
-    
-    private static final Logger logger = LoggerFactory.getLogger(Instruction.class.getName());
+public abstract class Instruction extends Node implements Printable {
+
+	private static final Logger logger = LoggerFactory.getLogger(Instruction.class.getName());
 
 	/**
 	 * The id of this instruction
@@ -64,7 +65,10 @@ public abstract class Instruction extends Node {
 	/**
 	 * Are we going to print the instruction?
 	 */
-	private boolean printable;
+	private boolean printable = true;
+
+	private BlockComment afterComment;
+	private BlockComment beforeComment;
 
 	/**
 	 * Construct a new {@code Instruction}
@@ -81,7 +85,6 @@ public abstract class Instruction extends Node {
 		this.id = id;
 		this.address = address;
 		this.type = type;
-		printable = true;
 	}
 
 	public Instruction(InstructionType type) {
@@ -94,8 +97,6 @@ public abstract class Instruction extends Node {
 	}
 
 	public abstract void process(Context context);
-
-	public abstract void print(Context context, ScriptPrinter printer);
 
 	/**
 	 * @return the id
@@ -211,8 +212,9 @@ public abstract class Instruction extends Node {
 	 *            the value to push
 	 */
 	public void push(StackType type, Object value) {
-        logger.debug("PUSH => " + type + " // " + this.toString() + " @ " + this.address);
-      //  System.err.println("PUSH => " + type + " // " + this.toString() + " @ " + this.address);
+		logger.debug("PUSH => " + type + " // " + this.toString() + " @ " + this.address);
+		// System.err.println("PUSH => " + type + " // " + this.toString() + " @
+		// " + this.address);
 		switch (type) {
 		case INT:
 			this.script.pushInteger(value);
@@ -233,43 +235,43 @@ public abstract class Instruction extends Node {
 	 *            the type of the value to pop, Use {@link StackType}
 	 */
 	public Object pop(StackType type) {
-        logger.debug("POP => " + type + " // " + this.toString() + " @ " + this.address);
+		logger.debug("POP => " + type + " // " + this.toString() + " @ " + this.address);
 		switch (type) {
-            case INT:
-                return this.script.popInteger(this.address);
-            case LONG:
-                return this.script.popLong(this.address);
-            case OBJECT:
-                return this.script.popObject(this.address);
+		case INT:
+			return this.script.popInteger(this.address);
+		case LONG:
+			return this.script.popLong(this.address);
+		case OBJECT:
+			return this.script.popObject(this.address);
 		}
 		throw new RuntimeException("Unknown stack type!");
 	}
 
-    public Object getOperand(StackType type){
-        switch(type){
-            case INT:
-                return this.integerOperand;
-            case LONG:
-                return this.longOperand;
-            case OBJECT:
-                return this.objectOperand;
-            default:
-                throw new Error("Unknown operand type!");
-        }
-    }
+	public Object getOperand(StackType type) {
+		switch (type) {
+		case INT:
+			return this.integerOperand;
+		case LONG:
+			return this.longOperand;
+		case OBJECT:
+			return this.objectOperand;
+		default:
+			throw new Error("Unknown operand type!");
+		}
+	}
 
-    public Object[] getFields(StackType type){
-        switch(type){
-            case INT:
-                return this.script.getIntegerFields();
-            case LONG:
-                return this.script.getLongFields();
-            case OBJECT:
-                return this.script.getObjectFields();
-            default:
-                throw new Error("Unknown operand type!");
-        }
-    }
+	public Object[] getFields(StackType type) {
+		switch (type) {
+		case INT:
+			return this.script.getIntegerFields();
+		case LONG:
+			return this.script.getLongFields();
+		case OBJECT:
+			return this.script.getObjectFields();
+		default:
+			throw new Error("Unknown operand type!");
+		}
+	}
 
 	/**
 	 * @return the holder
@@ -301,24 +303,57 @@ public abstract class Instruction extends Node {
 		this.printable = printable;
 	}
 
-
 	/**
 	 * Returns the amount of elements pushed on the stack by this method.
 	 * Returns -1 in case the amount is unknown.
-	 * @param type the stack type.
+	 * 
+	 * @param type
+	 *            the stack type.
 	 * @return -1 or N >= 0.
 	 */
 	public abstract int getPushCount(StackType type);
 
 	/**
-	 * Returns the amount of elements popped from the stack by this method.
-	 * 	 * Returns -1 in case the amount is unknown.
-	 * @param type the stack type.
+	 * Returns the amount of elements popped from the stack by this method. *
+	 * Returns -1 in case the amount is unknown.
+	 * 
+	 * @param type
+	 *            the stack type.
 	 * @return -1 or N >= 0.
 	 */
 	public abstract int getPopCount(StackType type);
 
-    public void preprocess(Context context){}
-    
+	public void preprocess(Context context) {
+	}
+
+	/**
+	 * @return the afterComment
+	 */
+	public BlockComment getAfterComment() {
+		return afterComment;
+	}
+
+	/**
+	 * @param afterComment
+	 *            the afterComment to set
+	 */
+	public void setAfterComment(BlockComment afterComment) {
+		this.afterComment = afterComment;
+	}
+
+	/**
+	 * @return the beforeComment
+	 */
+	public BlockComment getBeforeComment() {
+		return beforeComment;
+	}
+
+	/**
+	 * @param beforeComment
+	 *            the beforeComment to set
+	 */
+	public void setBeforeComment(BlockComment beforeComment) {
+		this.beforeComment = beforeComment;
+	}
 
 }

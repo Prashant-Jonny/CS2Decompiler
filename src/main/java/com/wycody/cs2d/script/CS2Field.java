@@ -22,6 +22,11 @@ public class CS2Field<T> {
 	private String name;
 
 	/**
+	 * Is the field declared?
+	 */
+	private boolean declared;
+
+	/**
 	 * Construct a new {@link CS2Field}
 	 * 
 	 * @param address
@@ -63,9 +68,24 @@ public class CS2Field<T> {
 	public void setName(String name) {
 		this.name = name;
 	}
-        
-        @Override
-        public String toString() {
-            return this.getName();
-        }
+
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+
+	/**
+	 * @return the declared
+	 */
+	public boolean isDeclared() {
+		return declared;
+	}
+
+	/**
+	 * @param declared
+	 *            the declared to set
+	 */
+	public void setDeclared(boolean declared) {
+		this.declared = declared;
+	}
 }

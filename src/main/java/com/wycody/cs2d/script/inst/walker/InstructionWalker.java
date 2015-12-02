@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import com.wycody.cs2d.script.flow.impl.BasicBlock;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionBaseType;
+import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.base.branch.BranchInstruction;
 import com.wycody.cs2d.script.inst.base.branch.ConditionalInstruction;
+import com.wycody.cs2d.script.inst.base.branch.CustomJump;
 import com.wycody.cs2d.script.inst.base.branch.JumpInstruction;
+import com.wycody.cs2d.script.inst.base.branch.NaturalFlowJump;
+import com.wycody.cs2d.script.inst.swtch.SwitchInstruction;
 
 /**
  * Walk through the opcodes like it's executing, using <strike>depth first
@@ -19,21 +23,48 @@ import com.wycody.cs2d.script.inst.base.branch.JumpInstruction;
 public class InstructionWalker {
 
 	/**
-	 * Visit the jumps if found
+	 * Visit the normal jumps if found
 	 */
-	public static final int RESOLVE_JUMPS = 0x1;
+	public static final int RESOLVE_NOR_JUMP = 1 << 0;
+	/**
+	 * Visit the normal jumps if found
+	 */
+	public static final int RESOLVE_CUST_JUMP = 1 << 1;
+
+	/**
+	 * Visit the natural jumps if found
+	 */
+	public static final int RESOLVE_NAT_JUMP = 1 << 2;
 
 	/**
 	 * Visit the branch targets if found
 	 */
-	public static final int RESOLVE_TARGET_BLOCKS = 0x2;
+	public static final int RESOLVE_TARGET_BLOCKS = 1 << 3;
 
 	/**
 	 * Visit the else conditions if found
 	 */
-	public static final int RESOLVE_ELSE_BLOCKS = 0x4;
+	public static final int RESOLVE_FALSE_BLOCKS = 1 << 4;
 
-	public static final int ALL = RESOLVE_JUMPS | RESOLVE_ELSE_BLOCKS |RESOLVE_TARGET_BLOCKS;
+	/**
+	 * Visit the switch nodes if found
+	 */
+	public static final int RESOLVE_SWITCH_BLOCKS = 1 << 5;
+
+	/**
+	 * Visit the jumps if found
+	 */
+	public static final int RESOLVE_JUMPS = RESOLVE_NOR_JUMP | RESOLVE_CUST_JUMP | RESOLVE_NAT_JUMP;
+
+	/**
+	 * Visit all instructions
+	 */
+	public static final int ALL = RESOLVE_JUMPS | RESOLVE_TARGET_BLOCKS | RESOLVE_FALSE_BLOCKS | RESOLVE_SWITCH_BLOCKS;
+
+	/**
+	 * Visit the original instructions (Not customs nor natural)
+	 */
+	public static final int ALL_NORMAL = RESOLVE_SWITCH_BLOCKS | RESOLVE_NOR_JUMP | RESOLVE_FALSE_BLOCKS | RESOLVE_TARGET_BLOCKS;
 
 	/**
 	 * The visit action
@@ -60,6 +91,8 @@ public class InstructionWalker {
 	 */
 	private boolean stopped;
 
+	private boolean oneTimeWalk;
+
 	/**
 	 * Construct a new {@link InstructionWalker}
 	 * 
@@ -81,52 +114,104 @@ public class InstructionWalker {
 	 * Start the walking algorithm
 	 */
 	public void startWalking() {
-		ArrayList<BasicBlock> walkedList = new ArrayList<BasicBlock>();
+		ArrayList<Integer> walkedList = new ArrayList<Integer>();
 		walk(walkedList, startBlock);
 	}
 
-	private void walk(ArrayList<BasicBlock> walkedList, BasicBlock startBlock) {
-		if (startBlock == null || walkedList.contains(startBlock)) {
+	private void walk(ArrayList<Integer> walkedList, BasicBlock startBlock) {
+		if (startBlock == null) {
+			throw new NullPointerException("The start block is null");
+		}
+		if (stopped || walkedList.contains(startBlock.getAddress())) {
 			return;
 		}
-
+		walkedList.add(startBlock.getAddress());
+		Instruction prev = null;
 		for (Instruction instr : startBlock.getInstructions()) {
-			if (stopped) {
-				return;
-			}
 
 			WalkState state = action.visitInstr(depth, instr);
 			if (state == WalkState.STOP_WALKING) {
 				stopWalking();
 				return;
-			} else if(state == WalkState.DONT_WALK_BLOCKS) {
+			} else if (state == WalkState.DONT_WALK_BLOCKS) {
 				return;
 			}
-			if (instr.getType().getBaseType() == InstructionBaseType.BRANCH) {
-				depth++;
-				BranchInstruction branch = (BranchInstruction) instr;
-				BasicBlock target = branch.getTarget();
-				if (instr instanceof ConditionalInstruction) {
-					ConditionalInstruction cond = (ConditionalInstruction) instr;
-					if (cond.elseBlock != null && isMode(RESOLVE_ELSE_BLOCKS)) {
-						walk(walkedList, cond.elseBlock);
+			if (prev != null && prev.getType().getBaseType() == InstructionBaseType.BRANCH) {
+				if (instr.getType() == InstructionType.JUMP) {
+
+					JumpInstruction jump = (JumpInstruction) instr;
+					if (isMode(RESOLVE_FALSE_BLOCKS)) {
+
+						BasicBlock target = jump.getTarget();
+						if (target != null) {
+							depth++;
+
+							walk(walkedList, target);
+
+							depth--;
+
+						}
+
+					}
+
+				}
+
+			} else {
+				if (instr.getType().getBaseType() == InstructionBaseType.BRANCH) {
+					depth++;
+					BranchInstruction branch = (BranchInstruction) instr;
+					BasicBlock target = branch.getTarget();
+					if (instr instanceof ConditionalInstruction) {
+						ConditionalInstruction cond = (ConditionalInstruction) instr;
+						if (cond.getElse() != null && isMode(RESOLVE_FALSE_BLOCKS)) {
+							if (!walkedList.contains(cond.getElse().getAddress())) {
+								walk(walkedList, cond.getElse());
+							}
+						}
+					}
+					if (target != null && isMode(RESOLVE_TARGET_BLOCKS)) {
+						if (!walkedList.contains(target.getAddress())) {
+							walk(walkedList, target);
+						}
+					}
+					depth--;
+				} else if (instr.getType().getBaseType() == InstructionBaseType.JUMP) {
+					JumpInstruction jump = (JumpInstruction) instr;
+					BasicBlock target = jump.getTarget();
+
+					if (target != null) {
+						if (jump instanceof NaturalFlowJump && !isMode(RESOLVE_NAT_JUMP)) {
+
+							continue;
+						}
+						if (jump instanceof CustomJump && !isMode(RESOLVE_CUST_JUMP)) {
+							continue;
+						}
+						if (!isMode(RESOLVE_NOR_JUMP)) {
+							continue;
+						}
+
+						if (!walkedList.contains(target.getAddress())) {
+							walk(walkedList, target);
+						}
+					}
+				} else if (instr.getType().getBaseType() == InstructionBaseType.SWITCH) {
+					if (isMode(RESOLVE_SWITCH_BLOCKS)) {
+						SwitchInstruction instruction = (SwitchInstruction) instr;
+						for (BasicBlock tar : instruction.getTargets()) {
+							depth++;
+							if (!walkedList.contains(tar.getAddress())) {
+								walk(walkedList, tar);
+							}
+							depth--;
+						}
 					}
 				}
-				if (target != null && isMode(RESOLVE_TARGET_BLOCKS)) {
-					walk(walkedList, target);
-				}
-				depth--;
-			} else if (instr.getType().getBaseType() == InstructionBaseType.JUMP) {
-				JumpInstruction jump = (JumpInstruction) instr;
-				BasicBlock target = jump.getTarget();
-				if (target != null && isMode(RESOLVE_JUMPS)) {
-					walk(walkedList, target);
-				}
 			}
-
+			if (instr.isPrintable()) {
+				prev = instr;
+			}
 		}
-		walkedList.add(startBlock);
-
 	}
 
 	/**

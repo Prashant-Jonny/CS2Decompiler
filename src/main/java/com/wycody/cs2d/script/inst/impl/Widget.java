@@ -315,8 +315,8 @@ public interface Widget {
      */
     Supplier<CallMethodInstruction> SETOBJECT = () ->
             new CallMethodInstruction(InstructionType.COMP_SETOBJECT)
-                    .setFormattedName("%1w.setObject(%2)")
-                    .setArgumentTypes(StackType.INT, StackType.INT);
+                    .setFormattedName("%1w.setObject(%3, %2)")
+                    .setArgumentTypes(StackType.INT, StackType.INT, StackType.INT);
     
     /**
      * Sets the context menu option at the given slot for the specified component

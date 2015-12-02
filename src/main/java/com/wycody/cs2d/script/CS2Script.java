@@ -8,10 +8,14 @@ import com.google.common.collect.ImmutableMap;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
 import com.wycody.cs2d.script.flow.impl.BasicBlock;
+import com.wycody.cs2d.script.flow.impl.BasicBlockGenerator;
 import com.wycody.cs2d.script.inst.Instruction;
+import com.wycody.cs2d.script.inst.base.BlockComment;
 import com.wycody.cs2d.script.inst.swtch.SwitchBlock;
 import com.wycody.cs2d.script.inst.types.ReturnType;
 import com.wycody.cs2d.script.inst.types.StackType;
+import com.wycody.cs2d.script.name.FieldNameMapper;
+import com.wycody.cs2d.script.name.NameMap;
 import com.wycody.utils.DynamicArray;
 
 public class CS2Script {
@@ -97,11 +101,42 @@ public class CS2Script {
 	private String name;
 
 	/**
+	 * The name mapper
+	 */
+	private FieldNameMapper fieldNameMapper;
+
+	/**
+	 * The header comment
+	 */
+	private BlockComment headerComment;
+
+	/**
+	 * The footer comment
+	 */
+	private BlockComment footerComment;
+
+	/**
+	 * The generator that's used in this script
+	 */
+	private BasicBlockGenerator generator;
+
+	/**
+	 * The script refactor map
+	 */
+	private NameMap nameMap;
+
+	/**
 	 * Construct a new {@link CS2Script}
 	 */
 	public CS2Script() {
 		blocks = new TreeMap<>();
 		type = ReturnType.VOID;
+		fieldNameMapper = new FieldNameMapper();
+		BlockComment comment = new BlockComment();
+		comment.addLine("Thanks for using our decompiler");
+		comment.addLine("Authors: Walied-Yassen, Fear, Sundays911, Pea2nut");
+		setFooterComment(comment);
+		generator = new BasicBlockGenerator(this);
 	}
 
 	/**
@@ -319,9 +354,10 @@ public class CS2Script {
 	 * @return the object
 	 */
 	public Object popInteger(int address) {
-        if(integerStack.size() == 0) {
+		if (integerStack.size() == 0) {
 			throw new Error("Empty stack at script: " + this.id + " at adress: " + address);
 		}
+
 		return integerStack.pop();
 	}
 
@@ -356,10 +392,15 @@ public class CS2Script {
 	 * @return the object
 	 */
 	public Object popObject(int address) {
-        if(objectStack.size() == 0) {
+		if (objectStack.size() == 0) {
 			throw new Error("Empty stack at script: " + this.id + " at adress: " + address);
 		}
-		return objectStack.pop();
+		Object o = objectStack.pop();
+		// if(!(o instanceof CS2Field) && !o.toString().startsWith("\"") &&
+		// !o.toString().endsWith("\"")) {
+		// return "\"" + o.toString() + "\"";
+		// }
+		return o;
 	}
 
 	/**
@@ -401,7 +442,7 @@ public class CS2Script {
 	 * @return the object
 	 */
 	public Object popLong(int address) {
-        if(longStack.size() == 0) {
+		if (longStack.size() == 0) {
 			throw new Error("Empty stack at script: " + this.id + " at adress: " + address);
 		}
 		return longStack.pop();
@@ -415,9 +456,13 @@ public class CS2Script {
 	public void print(Context context) {
 		ScriptPrinter printer = context.getPrinter();
 		printer.initializeForScript(this);
+
 		printHeader(context);
 		printBody(context);
 		printFooter(context);
+		if (footerComment != null) {
+			footerComment.print(context, printer);
+		}
 		printer.finalizeForScript(this);
 
 	}
@@ -543,13 +588,13 @@ public class CS2Script {
 			}
 		}
 		for (int fieldAddr = 0; fieldAddr < objectFields.length; fieldAddr++) {
-			CS2Field<Object> field = objectFields[fieldAddr] = new CS2Field<>(fieldAddr, (fieldAddr >= objectParameters.length ? "aString" +fieldAddr: "arg" + argAddr++));
+			CS2Field<Object> field = objectFields[fieldAddr] = new CS2Field<>(fieldAddr, (fieldAddr >= objectParameters.length ? "aString" + fieldAddr : "arg" + argAddr++));
 			if (fieldAddr < objectParameters.length) {
 				objectParameters[fieldAddr] = objectFields[fieldAddr];
 			}
 		}
 		for (int fieldAddr = 0; fieldAddr < longFields.length; fieldAddr++) {
-			CS2Field<Long> field = longFields[fieldAddr] = new CS2Field<>(fieldAddr, (fieldAddr >= longParameters.length ? "aLong" +fieldAddr: "arg" + argAddr++));
+			CS2Field<Long> field = longFields[fieldAddr] = new CS2Field<>(fieldAddr, (fieldAddr >= longParameters.length ? "aLong" + fieldAddr : "arg" + argAddr++));
 			if (fieldAddr < longParameters.length) {
 				longParameters[fieldAddr] = longFields[fieldAddr];
 			}
@@ -569,8 +614,7 @@ public class CS2Script {
 				prev.setNext(current);
 				current.setPrevious(prev);
 			}
-			
-			
+
 		}
 		return true;
 	}
@@ -582,14 +626,13 @@ public class CS2Script {
 		return switchBlocks;
 	}
 
-    
-    /**
+	/**
 	 * @return the switchBlock
 	 */
 	public SwitchBlock getSwitchBlock(int id) {
 		return switchBlocks[id];
 	}
-    
+
 	/**
 	 * @param switchBlocks
 	 *            the switchBlocks to set
@@ -602,6 +645,19 @@ public class CS2Script {
 	 * @return the name
 	 */
 	public String getName() {
+		if (nameMap != null) {
+			if (!name.equals(nameMap.getName())) {
+				name = nameMap.getName();
+			}
+		}
+		return name;
+	}
+
+	public String getFullName() {
+		String name = getName();
+		if (nameMap != null) {
+			name = nameMap.getPackageName() + "." + name;
+		}
 		return name;
 	}
 
@@ -622,7 +678,7 @@ public class CS2Script {
 
 	public Instruction[] getAllInstructions() {
 		DynamicArray<Instruction> arr = new DynamicArray<>(Instruction.class);
-		for(BasicBlock block : blocks.values()) {
+		for (BasicBlock block : blocks.values()) {
 			arr.addAll(block.getInstructions());
 		}
 		return arr.getData();
@@ -630,6 +686,141 @@ public class CS2Script {
 
 	public BasicBlock getStartBlock() {
 		return getBlockAt(0);
+	}
+
+	/**
+	 * @return the mapper
+	 */
+	public FieldNameMapper getFieldNameMapper() {
+		return fieldNameMapper;
+	}
+
+	/**
+	 * @param mapper
+	 *            the mapper to set
+	 */
+	public void setFieldNameMapper(FieldNameMapper mapper) {
+		this.fieldNameMapper = mapper;
+	}
+
+	public CS2Field<?> getFieldByName(String arg) {
+		for (CS2Field<Integer> field : integerFields) {
+			if (field.getName().equalsIgnoreCase(arg)) {
+				return field;
+			}
+		}
+		for (CS2Field<Object> field : objectFields) {
+			if (field.getName().equalsIgnoreCase(arg)) {
+				return field;
+			}
+		}
+		for (CS2Field<Long> field : longFields) {
+			if (field.getName().equalsIgnoreCase(arg)) {
+				return field;
+			}
+		}
+		return null;
+	}
+
+	public void prepareProcess() {
+		integerStack.clear();
+		objectStack.clear();
+		longStack.clear();
+	}
+
+	/**
+	 * @return the headerComment
+	 */
+	public BlockComment getHeaderComment() {
+		return headerComment;
+	}
+
+	/**
+	 * @param headerComment
+	 *            the headerComment to set
+	 */
+	public void setHeaderComment(BlockComment headerComment) {
+		this.headerComment = headerComment;
+	}
+
+	/**
+	 * @return the footerComment
+	 */
+	public BlockComment getFooterComment() {
+		return footerComment;
+	}
+
+	/**
+	 * @param footerComment
+	 *            the footerComment to set
+	 */
+	public void setFooterComment(BlockComment footerComment) {
+		this.footerComment = footerComment;
+	}
+
+	/**
+	 * @return the generator
+	 */
+	public BasicBlockGenerator getGenerator() {
+		return generator;
+	}
+
+	/**
+	 * @param generator
+	 *            the generator to set
+	 */
+	public void setGenerator(BasicBlockGenerator generator) {
+		this.generator = generator;
+	}
+
+	/**
+	 * The total parameters
+	 * 
+	 * @return the number
+	 */
+	public int getTotalArgs() {
+		return integerParameters.length + objectParameters.length + longParameters.length;
+	}
+
+	public boolean matchParamTypes(StackType[] types) {
+		if (types.length != getTotalArgs()) {
+			return false;
+		}
+		int index = 0;
+		for (CS2Field<Integer> field : integerParameters) {
+			if (types[index++] != StackType.INT) {
+				return false;
+			}
+
+		}
+		for (CS2Field<Object> field : objectParameters) {
+			if (types[index++] != StackType.OBJECT) {
+				return false;
+			}
+
+		}
+		for (CS2Field<Long> field : longParameters) {
+			if (types[index++] != StackType.LONG) {
+				return false;
+			}
+
+		}
+		return true;
+	}
+
+	/**
+	 * @return the nameMap
+	 */
+	public NameMap getNameMap() {
+		return nameMap;
+	}
+
+	/**
+	 * @param nameMap
+	 *            the nameMap to set
+	 */
+	public void setNameMap(NameMap nameMap) {
+		this.nameMap = nameMap;
 	}
 
 }

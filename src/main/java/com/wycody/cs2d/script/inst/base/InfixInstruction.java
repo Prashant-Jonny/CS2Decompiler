@@ -31,7 +31,7 @@ public class InfixInstruction extends Instruction{
         Object right = pop(rightType);
         Object left = pop(leftType);
         
-        boolean brackets = (this.getType() != InstructionType.STRING_INT_CONCAT) &&
+        boolean brackets = false && (this.getType() != InstructionType.STRING_INT_CONCAT) &&
                 (this.getType() != InstructionType.MULTISTRING_CONCAT) &&
                 (this.getType() != InstructionType.STRING_CHAR_CONCAT) &&
                 (this.getType() != InstructionType.STRING_STRING_CONCAT) &&

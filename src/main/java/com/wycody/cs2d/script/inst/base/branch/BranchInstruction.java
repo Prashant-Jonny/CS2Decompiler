@@ -37,7 +37,8 @@ public abstract class BranchInstruction extends Instruction {
 	 * @return the block
 	 */
 	public BasicBlock getTarget() {
-		return script.getBlockAt(getJumpTarget(), false);
+		BasicBlock block = script.getBlockAt(getJumpTarget(), false);
+		return  block;
 	}
 
 	/**
@@ -55,6 +56,6 @@ public abstract class BranchInstruction extends Instruction {
 	 * @return the string
 	 */
 	public String getGotoString() {
-		return "GOTO\t blockAt(" + getJumpTarget() + ")";
+		return "GOTO\tblockAt(" + getJumpTarget() + ")";
 	}
 }

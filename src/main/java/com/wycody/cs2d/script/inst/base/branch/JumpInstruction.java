@@ -36,7 +36,7 @@ public class JumpInstruction extends BranchInstruction {
     
 	@Override
 	public void print(Context context, ScriptPrinter printer) {
-		if (context.isDebug()) {
+		if (context.isDebug() || getTarget() == null) {
 			
 			printer.println(getGotoString());
 		} else {

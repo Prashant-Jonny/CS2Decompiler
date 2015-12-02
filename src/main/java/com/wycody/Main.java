@@ -1,3 +1,4 @@
+
 package com.wycody;
 
 import java.io.File;
@@ -20,6 +21,7 @@ import com.wycody.cs2d.rev.impl.Revision850;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.utils.ConfigParser;
+import com.wycody.cs2d.utils.ScriptDumper;
 
 import net.openrs.cache.Cache;
 import net.openrs.cache.FileStore;
@@ -77,39 +79,38 @@ public class Main {
 			FileStore s = FileStore.open(f);// "E:\\Misc\\Runescape Private
 			Cache c = new Cache(s);
 			Revision revision = new Revision850(c);
-            
-            ConfigParser config = new ConfigParser();
-            //config.download("850");
-            Revision850.print_unknowns = true;
-            //Revision850.debug_instructions = true;
-            config.loadRevision("850", revision);
-            
+
+			ConfigParser config = new ConfigParser();
+			// config.download("850");
+			Revision850.print_unknowns = true;
+			// Revision850.debug_instructions = true;
+			config.loadRevision("850", revision);
+
 			Main.paramTypeList = new ParamTypeList(c);
 			Main.enumTypeList = new EnumTypeList(c);
 			Main.structTypeList = new StructTypeList(c);
 
 			Context context = new Context().withCache(c).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 			CS2Decompiler decompiler = new CS2Decompiler(context);
-            context.withBlockEditing(true).withDebug(false).withCache(c).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
-			
-         			//int scriptId = 534;
-            //1013 - wtf
-			//int scriptId = 1434;////1895; //47;
+			context.withBlockEditing(true).withDebug(true).withCache(c).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 
+			// int scriptId = 534;
+			// 1013 - wtf
+			// int scriptId = 1434;////1895; //47;
 
-
-			int scriptId = 11497; //11497 or 11494
+			int scriptId = 11497; // 11497 or 11494
 			if (args.length > 0) {
-                try{
-                    System.err.println("Loading script: " + args[0]);
-    				scriptId = Integer.parseInt(args[0]);
-                }catch(NumberFormatException nfe){}
+				try {
+					System.err.println("Loading script: " + args[0]);
+					scriptId = Integer.parseInt(args[0]);
+				} catch (NumberFormatException nfe) {
+				}
 			}
 			CS2Script script = decompiler.decompile(scriptId);
 			script.print(context);
 
 		} else {
-			int scriptId = 5350;
+			int scriptId = 4801;
 
 			if (args.length >= 1) {
 				try {
@@ -134,25 +135,16 @@ public class Main {
 			CS2Decompiler decompiler = new CS2Decompiler(context);
 
 			context.withBlockEditing(true).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
-			
-			 CS2Script script = decompiler.decompile(3680);//793
-			 script.print(context);
-//			context.withPrinter(new FilePrinter(new File("data/dumps/742/"), "%d.cs2"));
-//			a: for (scriptId = 0; scriptId < decompiler.getContext().getCache().getFileCount(12); scriptId++) {
-//
-//				try {
-//					CS2Script script = decompiler.decompile(scriptId);
-//					if(script == null) {
-//						continue a;
-//					}
-//					script.print(context);
-//				} catch (Error e) {
-//					continue;
-//				}
-//			}
-			// for(CS2Script script : findInstruction(decompiler, 350)) {
-			// System.out.println(script.getId());
-			// }
+			boolean dumpAll = true;
+			if (dumpAll) {
+				for (scriptId = 0; scriptId < decompiler.getContext().getCache().getFileCount(12); scriptId++) {
+					ScriptDumper.dump(context, scriptId, System.getProperty("user.home") + "/Desktop/742Dump", "cs2");
+				}
+			} else {
+				CS2Script script = decompiler.decompile(scriptId);// 793
+				script.print(context);
+			}
+
 		}
 	}
 

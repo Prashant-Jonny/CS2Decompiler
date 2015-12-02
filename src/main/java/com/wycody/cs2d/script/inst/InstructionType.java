@@ -15,19 +15,19 @@ public enum InstructionType {
 	PUSH_INT(true, "PUSH_INT: {operand}", InstructionBaseType.PUSH),
 	// New variables (post-745)
 	PUSH_VAR(true, "PUSH_VAR: {operand} {operand}", InstructionBaseType.PUSH),
-	STORE_VAR(true, "STORE_VAR: {operand} {operand}f", InstructionBaseType.POP),
+	STORE_VAR(true, "STORE_VAR: {operand} {operand}f", InstructionBaseType.STORE),
 	PUSH_VAR_BIT(true, "PUSH_VAR_BIT: {operand} {operand}", InstructionBaseType.PUSH),
-	STORE_VAR_BIT(true, "STORE_VAR_BIT: {operand} {operand}", InstructionBaseType.POP),
+	STORE_VAR_BIT(true, "STORE_VAR_BIT: {operand} {operand}", InstructionBaseType.STORE),
 	// End new variables
 	// Old variables (pre-745)
 	PUSH_VARP(true, "PUSH_VARP: {operand}", InstructionBaseType.PUSH),
-	STORE_VARP(true, "STORE_VARP: {operand}", InstructionBaseType.POP),
+	STORE_VARP(true, "STORE_VARP: {operand}", InstructionBaseType.STORE),
 	PUSH_VARPBIT(true, "PUSH_VARPBIT: {operand}", InstructionBaseType.PUSH),
-	STORE_VARPBIT(true, "STORE_VARPBIT: {operand}", InstructionBaseType.POP),
+	STORE_VARPBIT(true, "STORE_VARPBIT: {operand}", InstructionBaseType.STORE),
 	PUSH_VARC(true, "PUSH_VARC: {operand}", InstructionBaseType.PUSH),
-	STORE_VARC(true, "STORE_VARC: {operand}", InstructionBaseType.POP),
+	STORE_VARC(true, "STORE_VARC: {operand}", InstructionBaseType.STORE),
 	PUSH_VARCSTR(true, "PUSH_VARCSTR: {operand}", InstructionBaseType.PUSH),
-	STORE_VARC_STR(true, "STORE_VARCSTR: {operand}", InstructionBaseType.POP),
+	STORE_VARC_STR(true, "STORE_VARCSTR: {operand}", InstructionBaseType.STORE),
 	PUSH_VARCLAN(true, "PUSH_VARCLAN: {operand}", InstructionBaseType.PUSH),
 	PUSH_VARCLAN_BIT(true, "PUSH_VARCLAN_BIT: {operand}", InstructionBaseType.PUSH),
 	PUSH_VARCLAN_LONG(true, "PUSH_VARCLAN_LONG: {operand}", InstructionBaseType.PUSH),
@@ -46,19 +46,19 @@ public enum InstructionType {
 	INT_LE(true, "INT_LE: {operand}", InstructionBaseType.BRANCH),
 	INT_GE(true, "INT_GE: {operand}", InstructionBaseType.BRANCH),
 	LOAD_INT(true, "LOAD_INT: {operand}", InstructionBaseType.PUSH),
-	STORE_INT(true, "STORE_INT: {operand}", InstructionBaseType.POP),
+	STORE_INT(true, "STORE_INT: {operand}", InstructionBaseType.STORE),
 	LOAD_OBJ(true, "LOAD_OBJ: {operand}", InstructionBaseType.PUSH),
-	STORE_OBJ(true, "STORE_OBJ: {operand}", InstructionBaseType.POP),
+	STORE_OBJ(true, "STORE_OBJ: {operand}", InstructionBaseType.STORE),
 	MULTISTRING_CONCAT(true, "MULTISTRING_CONCAT: {operand}", InstructionBaseType.POP),
-	POP_INT(false, "POP_INT: {operand}", InstructionBaseType.POP),
-	POP_OBJ(false, "POP_OBJ: {operand}", InstructionBaseType.POP),
+	POP_INT(false, "POP_INT: {operand}", InstructionBaseType.EXECUTE),
+	POP_OBJ(false, "POP_OBJ: {operand}", InstructionBaseType.EXECUTE),
 	CALL_SCRIPT(true, "CALLSCRIPT: {operand}", InstructionBaseType.EXECUTE),
 	NEW_ARRAY(true, "NEW_ARRAY: {operand}", InstructionBaseType.POP),
 	ARRAY_LOAD(true, "ARRAY_LOAD: {operand}", InstructionBaseType.PUSH),
 	ARRAY_STORE(true, "ARRAY_STORE: {operand}", InstructionBaseType.POP),
 	SWITCH(true, "SWITCH: {operand}", InstructionBaseType.SWITCH),
 	PUSH_LONG(true, "PUSH_LONG: {operand}", InstructionBaseType.PUSH),
-	POP_LONG(true, "POP_LONG: {operand}", InstructionBaseType.POP),
+	POP_LONG(true, "POP_LONG: {operand}", InstructionBaseType.EXECUTE),
 	LOAD_LONG(true, "LOAD_LONG: {operand}", InstructionBaseType.PUSH),
 	STORE_LONG(true, "STORE_LONG: {operand}", InstructionBaseType.POP),
 	LONG_NE(true, "LONG_NE: {operand}", InstructionBaseType.BRANCH),
@@ -400,7 +400,9 @@ public enum InstructionType {
 	PUSH_INV_WEIGHTEDSLOTCOUNT("PUSH_INV_WEIGHTEDSLOTCOUNT", InstructionBaseType.PUSH),
 	PUSH_INV_WEIGHTEDSLOTCOUNT_STACKS("PUSH_INV_WEIGHTEDSLOTCOUNT_STACKS", InstructionBaseType.PUSH),
 	PUSH_LANGUAGE("PUSH_LANGUAGE", InstructionBaseType.PUSH),
-
+	PUSH_DATE_OF_BIRTH("PUSH_DATE_OF_BIRTH", InstructionBaseType.PUSH),
+	PUSH_IS_QUICK_CHAT("PUSH_IS_QUICK_CHAT", InstructionBaseType.PUSH),
+	
 	// Account creation
 	PUSH_CREATION_RC("PUSH_CREATION_RC", InstructionBaseType.PUSH),
 
@@ -537,6 +539,9 @@ public enum InstructionType {
 	STR_COMPARE("STR_COMPARE", InstructionBaseType.PUSH),
 	PUSH_TEXT_LINE_COUNT("PUSH_TEXT_LINE_COUNT", InstructionBaseType.PUSH),
 	PUSH_TEXT_RENDER_WIDTH("PUSH_TEXT_RENDER_WIDTH", InstructionBaseType.PUSH),
+	PUSH_TEXT_RENDER_WIDTH_NORM("PUSH_TEXT_RENDER_WIDTH_NORM", InstructionBaseType.PUSH),
+	PUSH_IS_CLIENT_FOCUSED("PUSH_IS_CLIENT_FOCUSED", InstructionBaseType.PUSH),
+	
 	TEXT_CHOICE("TEXT_CHOICE", InstructionBaseType.PUSH),
 	PUSH_ENCODED_STRING("PUSH_ENCODED_STRING", InstructionBaseType.PUSH),
 	STRING_CHAR_CONCAT("STRING_CHAR_CONCAT", InstructionBaseType.PUSH),
@@ -704,7 +709,10 @@ public enum InstructionType {
 	PUSH_QUEST_MEETS_REQS("PUSH_QUEST_MEETS_REQS", InstructionBaseType.PUSH),
 	PUSH_QUEST_STARTED("PUSH_QUEST_STARTED", InstructionBaseType.PUSH),
 	PUSH_QUEST_COMPLETED("PUSH_QUEST_COMPLETED", InstructionBaseType.PUSH),
-	PUSH_QUEST_PARAM("PUSH_QUEST_PARAM", InstructionBaseType.PUSH),
+	PUSH_QUEST_PARAM("PUSH_QUEST_PARAM", InstructionBaseType.PUSH), 
+	INLINE_CONDITIONAL("INLINE_COND", InstructionBaseType.CUSTOM),
+	WIDGET_SET_CLIENT_PLAYER_MODEL("WIDGET_SET_CLIENT_PLAYER_MODEL", InstructionBaseType.EXECUTE),
+
 	;
 
 	/**

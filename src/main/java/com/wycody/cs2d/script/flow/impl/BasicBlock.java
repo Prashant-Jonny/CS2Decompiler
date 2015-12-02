@@ -14,6 +14,7 @@ import com.wycody.cs2d.script.inst.walker.InstructionWalker;
 import com.wycody.cs2d.script.inst.walker.WalkState;
 import com.wycody.cs2d.script.inst.walker.WalkerAction;
 import com.wycody.utils.DynamicArray;
+import com.wycody.utils.IllegalOperationException;
 import com.wycody.utils.Match;
 
 /**
@@ -62,9 +63,19 @@ public class BasicBlock extends Block {
 	 */
 	@Override
 	public void print(Context context, ScriptPrinter printer) {
-		for (Instruction instruction : instructions) {
-			instruction.print(context, context.getPrinter());
+		for (int index = 0; index < instructions.size(); index++) {
+
+			Instruction instr = instructions.get(index);
+			if (instr.getBeforeComment() != null) {
+				instr.getBeforeComment().print(context, printer);
+			}
+			instr.print(context, printer);
+			if (instr.getAfterComment() != null) {
+				instr.getAfterComment().print(context, printer);
+			}
+
 		}
+
 	}
 
 	/**
@@ -104,8 +115,14 @@ public class BasicBlock extends Block {
 	}
 
 	public void removeInstruction(Instruction last) {
+		int index = instructions.indexOf(last);
+		if (index != -1) {
+			instructions.remove(index);
+		} else {
+			// throw new IndexOutOfBoundsException("The object could not be
+			// found in the array!");
+		}
 		last.unlink();
-		instructions.remove(instructions.indexOf(last));
 	}
 
 	public BasicBlock getLastReachable() {
@@ -119,7 +136,7 @@ public class BasicBlock extends Block {
 				index = 0;
 			}
 		}
-		
+
 		return block;
 	}
 
@@ -151,36 +168,121 @@ public class BasicBlock extends Block {
 
 	}
 
-	public Instruction getFirstPrintableInstruction(Instruction after) {
-		for (int address = after == null ? 0 : after.getAddress(); address < instructions.size(); address++) {
-			Instruction instr = instructions.get(address);
-			if (instr.getType().getBaseType().isPrintable()) {
-				return instr;
+	public DynamicArray<Instruction> getPrintableInstructions(Instruction after) {
+		DynamicArray<Instruction> instrs = new DynamicArray<>(Instruction.class);
+		InstructionWalker walker = new InstructionWalker(this, InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_FALSE_BLOCKS, new WalkerAction() {
+
+			@Override
+			public WalkState visitInstr(int depth, Instruction instruction) {
+				if (instruction.getHolder() == BasicBlock.this) {
+					if (after != null && after.getAddress() >= instruction.getAddress()) {
+						return WalkState.CONTINUE;
+					}
+				}
+				if (!instruction.isPrintable()) {
+					return WalkState.CONTINUE;
+				}
+				if (instruction.getType().getBaseType().isPrintable()) {
+					instrs.add(instruction);
+				}
+				return WalkState.CONTINUE;
 			}
-		}
-		return null;
+		});
+		walker.startWalking();
+		return instrs;
 	}
 
-	public Match<JumpInstruction> findNearestMatchJump(BasicBlock target) {
+	public Instruction getFirstPrintableInstruction(Instruction after) {
+		return getFirstPrintableInstruction(after, null);
+	}
+
+	public Instruction getFirstPrintableInstruction(Instruction after, Class<?> ignores) {
+		return getFirstPrintableInstruction(after, InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_FALSE_BLOCKS, ignores);
+	}
+
+	public Instruction getFirstPrintableInstruction(Instruction after, int mode, Class<?> ignores) {
+		final Instruction[] instr = new Instruction[1];
+		InstructionWalker walker = new InstructionWalker(this, mode, new WalkerAction() {
+
+			@Override
+			public WalkState visitInstr(int depth, Instruction instruction) {
+				if (instruction.getHolder() == BasicBlock.this) {
+					if (after != null && instruction.getHolder().getInstructions().indexOf(after) >= instruction.getHolder().getInstructions().indexOf(instruction)) {
+
+						return WalkState.CONTINUE;
+					}
+				}
+
+				if (instruction.getType().getBaseType().isPrintable()) {
+					if (ignores != null) {
+						if (ignores == instruction.getClass()) {
+							return WalkState.CONTINUE;
+						}
+
+					}
+					instr[0] = instruction;
+					return WalkState.STOP_WALKING;
+				}
+				return WalkState.CONTINUE;
+			}
+		});
+		walker.startWalking();
+		return instr[0];
+	}
+
+	public DynamicArray<Instruction> getBetween(Instruction start, Instruction end) {
+		if (start == null) {
+			throw new NullPointerException("The start node is null");
+		}
+		if (end == null) {
+			throw new NullPointerException("The end node is null");
+		}
+
+		DynamicArray<Instruction> between = new DynamicArray<Instruction>(Instruction.class);
+		InstructionWalker walker = new InstructionWalker(this, InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_FALSE_BLOCKS, new WalkerAction() {
+
+			@Override
+			public WalkState visitInstr(int depth, Instruction instruction) {
+				if (start != null && start.getAddress() < instruction.getAddress()) {
+					if (end != null && end.getAddress() > instruction.getAddress()) {
+
+						between.add(instruction);
+					}
+				}
+				return WalkState.CONTINUE;
+			}
+		});
+		walker.startWalking();
+		return between;
+	}
+
+	public Match<JumpInstruction> findElseJump(BasicBlock target) {
+		if (this == target) {
+			try {
+				throw new IllegalOperationException("You cannot search for matches in same block!");
+			} catch (IllegalOperationException e) {
+				e.printStackTrace();
+			}
+		}
 		TreeMap<Integer, JumpInstruction> thisJumps = new TreeMap<Integer, JumpInstruction>();
 		Match<JumpInstruction> match = new Match<>();
 
-		InstructionWalker thisWalker = new InstructionWalker(this, InstructionWalker.RESOLVE_JUMPS, new WalkerAction() {
-			
+		InstructionWalker thisWalker = new InstructionWalker(this, InstructionWalker.RESOLVE_SWITCH_BLOCKS | InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_FALSE_BLOCKS, new WalkerAction() {
+
 			@Override
 			public WalkState visitInstr(int depth, Instruction instruction) {
 				if (instruction.getType().getBaseType() == InstructionBaseType.JUMP) {
 					JumpInstruction jump = (JumpInstruction) instruction;
 					thisJumps.put(jump.getJumpTarget(), jump);
 				}
-				return WalkState.NONE;
+				return WalkState.CONTINUE;
 			}
 		});
 
 		thisWalker.startWalking();
 
-		InstructionWalker targetWalker = new InstructionWalker(target, InstructionWalker.RESOLVE_JUMPS, new WalkerAction() {
-			
+		InstructionWalker targetWalker = new InstructionWalker(target, InstructionWalker.RESOLVE_SWITCH_BLOCKS | InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_FALSE_BLOCKS, new WalkerAction() {
+
 			@Override
 			public WalkState visitInstr(int depth, Instruction instruction) {
 				if (instruction.getType().getBaseType() == InstructionBaseType.JUMP) {
@@ -191,38 +293,182 @@ public class BasicBlock extends Block {
 						return WalkState.STOP_WALKING;
 					}
 				}
-				return WalkState.NONE;
+				return WalkState.CONTINUE;
 			}
 		});
 		targetWalker.startWalking();
-		return match;
-
-	}
-
-	public JumpInstruction detectNearestWhileJump(ConditionalInstruction cond) {
-		Instruction instr = instructions.last();
-		
-		while((instr instanceof JumpInstruction)) {
-			JumpInstruction jumpInstr = (JumpInstruction) instr;
-			// We don't want to perform the other way since it's gonna loop over while
-			BasicBlock target = jumpInstr.getTarget();
-			if(target == null)
-			 {
-				return jumpInstr;// temporary patch
-			}
-			Instruction last = target.getInstructions().last();
-			if(last instanceof JumpInstruction) {
-				JumpInstruction lastJump = (JumpInstruction) last;
-				if(lastJump.getJumpTarget() <= cond.getAddress()) {
-					return lastJump;
-				}
-				instr = last;
-			} else {
-				instr = null;
-			}
+		if (match.getFirst() != null && match.getSecond() != null && match.getFirst() != match.getSecond()) {
+			return match;
 		}
 		return null;
 	}
 
+	public Match<JumpInstruction> findFirstMatchJump(BasicBlock target) {
+		TreeMap<Integer, JumpInstruction> thisJumps = new TreeMap<Integer, JumpInstruction>();
+		Match<JumpInstruction> match = new Match<>();
+
+		InstructionWalker thisWalker = new InstructionWalker(this, InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_FALSE_BLOCKS, new WalkerAction() {
+
+			@Override
+			public WalkState visitInstr(int depth, Instruction instruction) {
+				if (instruction.getType().getBaseType() == InstructionBaseType.JUMP) {
+					JumpInstruction jump = (JumpInstruction) instruction;
+					thisJumps.put(jump.getJumpTarget(), jump);
+				}
+				return WalkState.CONTINUE;
+			}
+		});
+
+		thisWalker.startWalking();
+
+		InstructionWalker targetWalker = new InstructionWalker(target, InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_FALSE_BLOCKS, new WalkerAction() {
+
+			@Override
+			public WalkState visitInstr(int depth, Instruction instruction) {
+				if (instruction.getType().getBaseType() == InstructionBaseType.JUMP) {
+					JumpInstruction jump = (JumpInstruction) instruction;
+					if (thisJumps.containsKey(jump.getJumpTarget())) {
+						match.setFirst(thisJumps.get(jump.getJumpTarget()));
+						match.setSecond(jump);
+						return WalkState.STOP_WALKING;
+					}
+				}
+				return WalkState.CONTINUE;
+			}
+		});
+		targetWalker.startWalking();
+		if (match.getFirst() != null && match.getSecond() != null) {
+			return match;
+		}
+		return null;
+	}
+
+	public Match<JumpInstruction> findNearestMatchJump(JumpInstruction target) {
+		Match<JumpInstruction> match = new Match<>();
+		InstructionWalker thisWalker = new InstructionWalker(this, InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_FALSE_BLOCKS, new WalkerAction() {
+
+			@Override
+			public WalkState visitInstr(int depth, Instruction instruction) {
+				if (instruction.getType().getBaseType() == InstructionBaseType.JUMP) {
+					JumpInstruction jump = (JumpInstruction) instruction;
+					if (jump.getJumpTarget() == target.getJumpTarget()) {
+						match.setFirst(jump);
+
+						match.setSecond(target);
+
+						return WalkState.STOP_WALKING;
+					}
+				}
+				return WalkState.CONTINUE;
+			}
+		});
+
+		thisWalker.startWalking();
+		if (match.getFirst() != null && match.getSecond() != null) {
+			return match;
+		}
+		return null;
+
+	}
+
+	public JumpInstruction detectNearestWhileJump(ConditionalInstruction cond) {
+		// Instruction instr = instructions.last();
+		//
+		// while ((instr instanceof JumpInstruction)) {
+		// JumpInstruction jumpInstr = (JumpInstruction) instr;
+		//
+		// BasicBlock target = jumpInstr.getTarget();
+		//
+		// if(target == null) {
+		// if((jumpInstr.getAddress() > jumpInstr.getJumpTarget()) &&
+		// (jumpInstr.getJumpTarget() == cond.getTarget().getAddress())) {
+		// return jumpInstr;
+		// }
+		// System.err.println(jumpInstr.getJumpTarget() + ", " +
+		// cond.getTarget().getAddress() + ", (" + cond.getCondition() + ")");
+		// //throw new Error("Undetected while loop probably!");
+		//
+		// }
+		//
+		// Instruction last = target.getInstructions().last();
+		// if (last instanceof JumpInstruction) {
+		// instr = last;
+		// } else {
+		// instr = null;//jumpInstr.getJumpTarget() >=
+		// cond.getHolder().getAddress() && jumpInstr.getJumpTarget() <=
+		// cond.getAddress()-2
+		// }
+		// }
+		final JumpInstruction[] jumps = new JumpInstruction[1];// temporary
+																// patch for
+																// final shit in
+																// enclosing
+																// types
+		InstructionWalker walker = new InstructionWalker(this, InstructionWalker.ALL, new WalkerAction() {
+
+			@Override
+			public WalkState visitInstr(int depth, Instruction instruction) {
+				if (instruction instanceof JumpInstruction) {
+					JumpInstruction jump = (JumpInstruction) instruction;
+					BasicBlock target = jump.getTarget();
+					if (target == null || target == cond.getHolder()) {
+						if (jump.getJumpTarget() < jump.getAddress()) {
+							if (jump.getJumpTarget() >= cond.getHolder().getAddress()) {
+								if (jump.getJumpTarget() <= cond.getAddress() - 2) {
+
+									jumps[0] = jump;
+									return WalkState.STOP_WALKING;
+								}
+							}
+						}
+
+						return WalkState.DONT_WALK_BLOCKS;
+
+					}
+				}
+				return WalkState.CONTINUE;
+			}
+		});
+		walker.startWalking();
+		return jumps[0];
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("----------- Start of " + getName() + " -----------\n");
+		for (Instruction instruction : instructions) {
+			sb.append("[id=" + instruction.getId() + ", address=" + instruction.getAddress() + "]\n");
+		}
+		return sb.toString();
+
+	}
+
+	public void addAfter(Instruction after, Instruction instr) {
+		instructions.addAfter(after, instr);
+		instr.setHolder(this);
+	}
+
+	public void addFirst(Instruction n) {
+		n.setHolder(this);
+		instructions.addFirst(n);
+	}
+
+	public Instruction getFirstJump(int mode) {
+		final JumpInstruction[] jumps = new JumpInstruction[1];
+		InstructionWalker walker = new InstructionWalker(this, mode, new WalkerAction() {
+
+			@Override
+			public WalkState visitInstr(int depth, Instruction instruction) {
+				if (instruction instanceof JumpInstruction) {
+					jumps[0] = (JumpInstruction) instruction;
+					return WalkState.STOP_WALKING;
+				}
+				return WalkState.CONTINUE;
+			}
+		});
+		walker.startWalking();
+		return jumps[0];
+	}
 
 }

@@ -11,6 +11,9 @@ import com.wycody.utils.DynamicArray;
  */
 public class SwitchBlock {
 
+	/**
+	 * The epxression of the node
+	 */
 	private Object expression;
 
 	/**
@@ -78,6 +81,16 @@ public class SwitchBlock {
 	}
 
 	/**
+	 * Find the node's index and perform remove action
+	 * 
+	 * @param node
+	 *            the node to remove
+	 */
+	public void removeCase(CaseNode node) {
+		cases.remove(cases.indexOf(node));
+	}
+
+	/**
 	 * @return the expression
 	 */
 	public Object getExpression() {
@@ -121,4 +134,7 @@ public class SwitchBlock {
 	public void setAddress(int address) {
 		this.address = address;
 	}
+
+
+
 }

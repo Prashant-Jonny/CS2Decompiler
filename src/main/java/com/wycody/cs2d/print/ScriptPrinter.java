@@ -29,9 +29,13 @@ public abstract class ScriptPrinter {
     public abstract void print(Object object);
 
     
-    public abstract void initializeForScript(CS2Script script);
+    public void initializeForScript(CS2Script script) {
+    	
+    }
     
-    public abstract void finalizeForScript(CS2Script script);
+    public void finalizeForScript(CS2Script script) {
+    	
+    }
     
     /**
      * Printing by invoking method {@link #print(Object)} then insert new method
@@ -91,4 +95,12 @@ public abstract class ScriptPrinter {
         }
         indent--;
     }
+
+	public void flush() {
+		
+	}
+	
+	public void finish()  {
+		
+	}
 }

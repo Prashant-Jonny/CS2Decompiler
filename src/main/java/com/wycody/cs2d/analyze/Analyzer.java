@@ -12,7 +12,7 @@ public abstract class Analyzer {
 	/**
 	 * The script to run for 
 	 */
-	protected CS2Script script;// Mhmm maybe we should split into static ones?
+	protected CS2Script script;
 	
 	/**
 	 * Construct a new {@link Analyzer}

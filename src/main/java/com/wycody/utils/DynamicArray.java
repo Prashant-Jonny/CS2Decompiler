@@ -3,6 +3,8 @@ package com.wycody.utils;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 
+import org.apache.commons.collections4.list.TreeList;
+
 /**
  * This is a dynamic array, change the mean of fixed array by recreating the
  * array after each resize
@@ -98,23 +100,40 @@ public class DynamicArray<T> implements Iterable<T> {
 	 * @param index
 	 *            the index of the value
 	 */
-	public void remove(int index) {
+	public void remove(int index, boolean refresh) {
 		// There's no way we can remove an element that does not exists
 		if (index >= data.length) {
 			return;
 		}
 		// Remove the value at the index
 		data[index] = null;
+		if (refresh) {
+			refresh();
+		}
+	}
 
+	public void remove(int index) {
+		remove(index, true);
+	}
+
+	public void refresh() {
 		// Recreate and resort the array
-		T[] newData = (T[]) Array.newInstance(type, data.length - 1);
-		int off = 0;
-		for (int i = 0; i < data.length; i++) {
-			if (data[i] != null) {
-				newData[off++] = data[i];
+		// T[] newData = (T[]) Array.newInstance(type, data.length - 1);
+		TreeList<T> list = new TreeList<T>();
+		for (T t : data) {
+			if (t != null) {
+				list.add(t);
 			}
 		}
-		data = newData;
+		data = (T[]) list.toArray();
+		// int off = 0;
+		// for (int i = 0; i < data.length; i++) {
+		// if (data[i] != null) {
+		// newData[off++] = data[i];
+		// }
+		// }
+		// data = newData;
+
 	}
 
 	/**
@@ -206,7 +225,7 @@ public class DynamicArray<T> implements Iterable<T> {
 	 */
 	public int indexOf(T element) {
 		for (int index = 0; index < data.length; index++) {
-			if (element == data[index]) {
+			if (element.equals(data[index])) {
 				return index;
 			}
 		}
@@ -247,6 +266,38 @@ public class DynamicArray<T> implements Iterable<T> {
 		data = (T[]) Array.newInstance(type, 0);
 	}
 
+	public boolean contains(int key) {
+		return get(key) != null;
+	}
 
+	public boolean contains(T value) {
+		return indexOf(value) != -1;
+	}
+
+	public void addAfter(T after, T value) {
+		int afterIndex = indexOf(after);
+		if (afterIndex == -1) {
+			throw new IllegalStateException("The 'after' node does not exists!");
+		}
+		TreeList<T> list = new TreeList<T>();
+		for (int elementIndex = 0; elementIndex < size(); elementIndex++) {
+			T element = data[elementIndex];
+			list.add(element);
+			if (element == after) {
+				list.add(value);
+			}
+		}
+		data = (T[]) list.toArray();
+	}
+
+	public void addFirst(T value) {
+		T[] clone = (T[]) Array.newInstance(type, size() + 1);
+		int i = 0;
+		clone[i++] = value;
+		for (T element : this.data) {
+			clone[i++] = element;
+		}
+		this.data = clone;
+	}
 
 }

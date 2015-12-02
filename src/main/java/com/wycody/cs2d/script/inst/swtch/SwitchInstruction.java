@@ -4,11 +4,14 @@ import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
 import com.wycody.cs2d.script.flow.impl.BasicBlock;
 import com.wycody.cs2d.script.inst.Instruction;
+import com.wycody.cs2d.script.inst.InstructionBaseType;
 import com.wycody.cs2d.script.inst.InstructionType;
+import com.wycody.cs2d.script.inst.base.branch.JumpInstruction;
 import com.wycody.cs2d.script.inst.types.StackType;
 
 /**
  * Handles the switch block instruction
+ * 
  * @author Walied-Yassen
  * @date Nov 12, 2015
  */
@@ -17,18 +20,30 @@ public class SwitchInstruction extends Instruction {
 	 * The switch block of the instruction
 	 */
 	private SwitchBlock block;
-	
+
+	/**
+	 * The default case jump instruction
+	 */
+	private Instruction defaultInstruction;
+
+	private BasicBlock defaultBlock;
+
 	/**
 	 * Construct a new {@link SwitchInstruction}
-	 * @param type the type of the instruction
+	 * 
+	 * @param type
+	 *            the type of the instruction
 	 */
 	public SwitchInstruction(InstructionType type) {
 		super(type);
+		defaultBlock = new BasicBlock(-1);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.wycody.cs2d.script.inst.Instruction#process(com.wycody.cs2d.Context)
+	 * 
+	 * @see
+	 * com.wycody.cs2d.script.inst.Instruction#process(com.wycody.cs2d.Context)
 	 */
 	@Override
 	public void process(Context context) {
@@ -39,22 +54,47 @@ public class SwitchInstruction extends Instruction {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.wycody.cs2d.script.inst.Instruction#print(com.wycody.cs2d.Context, com.wycody.cs2d.print.ScriptPrinter)
+	 * 
+	 * @see
+	 * com.wycody.cs2d.script.inst.Instruction#print(com.wycody.cs2d.Context,
+	 * com.wycody.cs2d.print.ScriptPrinter)
 	 */
 	@Override
 	public void print(Context context, ScriptPrinter printer) {
 		printer.println("switch (" + block.getExpression() + ") {");
 		printer.tab();
-		for(CaseNode node : block.getCases()) {
+		for (CaseNode node : block.getCases()) {
 			printer.println("case " + node.getExpression() + ":");
-			printer.tab();
-			BasicBlock block = script.getBlockAt(1 + address + node.getJumpTarget());
-			block.print(context, printer);
-			printer.println("break;");
-			printer.untab();
+			for (CaseNode child : node.getChilds()) {
+				printer.println("case " + child.getExpression() + ":");
+			}
+			printNode(context, printer, getTarget(node));
+		}
+		if (defaultInstruction != null && defaultBlock.getInstructions().size() > 0) {
+			printer.println("default:");
+			printNode(context, printer, defaultBlock);
+
 		}
 		printer.untab();
 		printer.println("}");
+	}
+
+	private void printNode(Context context, ScriptPrinter printer, BasicBlock block) {
+		printer.tab();
+		// block.print(context, printer);
+		if (!context.isDebug()) {
+			block.print(context, printer);
+		} else {
+			printer.println("GOTO\tblockAt(" + block.getAddress() + ")");
+		}
+		BasicBlock reach = block.getLastReachable();
+		if (reach != null) {
+			if (reach.getInstructions().last() == null || reach.getInstructions().last().getType().getBaseType() != InstructionBaseType.RETURN) {
+				printer.println("break;");
+			}
+		}
+
+		printer.untab();
 	}
 
 	@Override
@@ -75,7 +115,8 @@ public class SwitchInstruction extends Instruction {
 	}
 
 	/**
-	 * @param block the block to set
+	 * @param block
+	 *            the block to set
 	 */
 	public void setBlock(SwitchBlock block) {
 		this.block = block;
@@ -88,10 +129,43 @@ public class SwitchInstruction extends Instruction {
 		sb.append(")\n");
 
 		SwitchBlock block = script.getSwitchBlock(integerOperand);
-		for(CaseNode node : block.getCases()) {
-			sb.append("\t\t").append(node.getExpression()).append(" -> ").append(node.getJumpTarget()+1+this.address).append("\n");
+		for (CaseNode node : block.getCases()) {
+			sb.append("\t\t").append(node.getExpression()).append(" -> ").append(node.getJumpTarget() + 1 + this.address).append("\n");
 		}
 		return sb.toString();
+	}
+
+	public BasicBlock getTarget(CaseNode node) {
+		return script.getBlockAt(getJumpTarget(node));
+	}
+
+	private int getJumpTarget(CaseNode node) {
+		return 1 + address + node.getJumpTarget();
+	}
+
+	public BasicBlock[] getTargets() {
+		BasicBlock[] targets = new BasicBlock[block.getCases().size() + (defaultInstruction != null && defaultInstruction instanceof JumpInstruction ? 1 : 0)];
+		for (int caseIndex = 0; caseIndex < block.getCases().size(); caseIndex++) {
+			targets[caseIndex] = getTarget(block.getCase(caseIndex));
+		}
+		if (defaultInstruction != null && defaultInstruction instanceof JumpInstruction) {
+			targets[targets.length - 1] = defaultBlock;
+		}
+		return targets;
+	}
+
+	public void setDefaultCase(JumpInstruction defaultInstruction) {
+		if(defaultBlock == null) {
+			defaultBlock = script.getGenerator().generateCustomBlock();
+		}
+		this.defaultInstruction = defaultInstruction;
+		defaultBlock.getInstructions().clear();
+		defaultBlock.addInstruction(defaultInstruction);
+
+	}
+
+	public Instruction getDefaultInstruction() {
+		return defaultInstruction;
 	}
 
 }

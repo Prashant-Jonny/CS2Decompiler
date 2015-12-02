@@ -12,7 +12,10 @@ import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionBaseType;
 import com.wycody.cs2d.script.inst.InstructionType;
+import com.wycody.cs2d.script.inst.base.ReturnInstruction;
 import com.wycody.cs2d.script.inst.base.branch.BranchInstruction;
+import com.wycody.cs2d.script.inst.base.branch.JumpInstruction;
+import com.wycody.cs2d.script.inst.base.branch.NaturalFlowJump;
 
 /**
  * 
@@ -20,8 +23,8 @@ import com.wycody.cs2d.script.inst.base.branch.BranchInstruction;
  * @date Nov 15, 2015
  */
 public class BasicBlockGenerator {
-    
-    private static final Logger logger = LoggerFactory.getLogger(BasicBlockGenerator.class.getName());
+
+	private static final Logger logger = LoggerFactory.getLogger(BasicBlockGenerator.class.getName());
 
 	/**
 	 * The target script to generate for
@@ -39,6 +42,11 @@ public class BasicBlockGenerator {
 	private BasicBlock currentBlock;
 
 	/**
+	 * The custom address for blocks this will always be negative
+	 */
+	private int customAddress;
+	
+	/**
 	 * Construct a new {@link BasicBlockGenerator}
 	 * 
 	 * @param script
@@ -47,6 +55,7 @@ public class BasicBlockGenerator {
 	public BasicBlockGenerator(CS2Script script) {
 		this.script = script;
 		generatedBlocks = new TreeMap<Integer, BasicBlock>();
+		customAddress = -1;
 	}
 
 	/**
@@ -61,25 +70,25 @@ public class BasicBlockGenerator {
 		for (int address = 0; address < raw.length; address++) {
 			Instruction instruction = raw[address];
 			Instruction prevInstruction = address > 0 ? raw[address - 1] : null;
-			Instruction nextInstruction = address < raw.length-1 ? raw[address + 1] : null;
+			Instruction nextInstruction = address < raw.length - 1 ? raw[address + 1] : null;
 			currentBlock.addInstruction(instruction);
 			if (instruction.getType().getBaseType() == InstructionBaseType.BRANCH) {
-				createAt.add(1 + instruction.getAddress() + instruction.getIntegerOperand());
+				if (!createAt.contains(1 + instruction.getAddress() + instruction.getIntegerOperand())) {
+					createAt.add(1 + instruction.getAddress() + instruction.getIntegerOperand());
+				}
 			} else if (instruction.getType() == InstructionType.JUMP) {
-				createAt.add(1 + instruction.getAddress() + instruction.getIntegerOperand());
+				if (!createAt.contains(1 + instruction.getAddress() + instruction.getIntegerOperand())) {
+					createAt.add(1 + instruction.getAddress() + instruction.getIntegerOperand());
+				}
 				generateBasicBlock(instruction.getAddress() + 1);
 			} else if (instruction.getType() == InstructionType.RETURN) {
-				generateBasicBlock(instruction.getAddress() + 1);
+				if (!createAt.contains(instruction.getAddress() + 1)) {
+					generateBasicBlock(instruction.getAddress() + 1);
+				}
 			}
 			if (nextInstruction != null) {
 				if (createAt.contains(nextInstruction.getAddress())) {
-//					if(instruction.getType() != InstructionType.JUMP && instruction.getType() != InstructionType.RETURN && prevInstruction.getType().getBaseType() != InstructionBaseType.BRANCH) {
-//						JumpInstruction jmp = new JumpInstruction();
-//						jmp.setScript(script);
-//						jmp.setAddress(address);
-//						jmp.setIntegerOperand(0); Natural Flow?
-//						currentBlock.addInstruction(jmp);
-//					}
+
 					createAt.remove(nextInstruction.getAddress());
 					generateBasicBlock(nextInstruction.getAddress());
 				}
@@ -92,13 +101,11 @@ public class BasicBlockGenerator {
 	}
 
 	private void calculate() {
-		for(Instruction instr : script.getAllInstructions()) {
-			if(instr instanceof BranchInstruction) {
+		for (Instruction instr : script.getAllInstructions()) {
+			if (instr instanceof BranchInstruction) {
 				BranchInstruction branch = (BranchInstruction) instr;
 				BasicBlock target = generatedBlocks.get(branch.getJumpTarget());
-				if(target == null) {
-					// Those errors are  just whiles lmao
-					//	logger.warn("Could not find target at: " + branch.getJumpTarget());
+				if (target == null) {
 					continue;
 				}
 				target.getPredecessors().add(branch.getHolder());
@@ -116,12 +123,30 @@ public class BasicBlockGenerator {
 	 *            the content of the block
 	 */
 	private void generateBasicBlock(int address) {
-		
+		if (currentBlock != null) {
+			Instruction last = currentBlock.getInstructions().last();
+			if (currentBlock.getAddress() == 222 && last != null) {
+				
+			}
+			if (!(last instanceof JumpInstruction) && !(last instanceof ReturnInstruction)) {
+				NaturalFlowJump natJump = new NaturalFlowJump(address);
+				natJump.setScript(script);
+				currentBlock.addInstruction(natJump);
+
+			}
+		}
 		currentBlock = new BasicBlock(address);
 		currentBlock.setHolder(script);
 		generatedBlocks.put(address, currentBlock);
+
 	}
 
+	public BasicBlock generateCustomBlock() {
+		BasicBlock block = new  BasicBlock(customAddress--);
+		block.setHolder(script);
+		generatedBlocks.put(block.getAddress(), block);
+		return block;
+	}
 	/**
 	 * @return the script
 	 */

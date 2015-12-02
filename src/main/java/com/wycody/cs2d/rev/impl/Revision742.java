@@ -720,6 +720,10 @@ public class Revision742 extends Revision {
         
     }
 
+  public static void main(String[] args) {
+	Revision742 rev = new Revision742();
+	
+}
     @Override
     public void registerLarges() {
         registerLarge(3);

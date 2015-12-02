@@ -59,7 +59,7 @@ public class EventBindInstruction extends Instruction {
         if (isActiveComponent) {
             prefix = "getActiveWidget()";
         } else {
-            prefix = CS2Utils.getWidget(pop(StackType.INT));
+            prefix = CS2Utils.getWidget(script, pop(StackType.INT));
         }
         String signature = (String) pop(StackType.OBJECT);     
         
@@ -108,8 +108,7 @@ public class EventBindInstruction extends Instruction {
             printer.println(prefix+".remove"+handlerName+"Event();");
         } else {
             StringBuilder bldr = new StringBuilder();
-            bldr.append(prefix).append(".set").append(handlerName).append("Event(script_");
-            bldr.append(scriptId).append("(");
+            bldr.append(prefix).append(".set").append(handlerName).append("Event(~" + context.getDecompiler().getNameMapper().getName(scriptId) + "(");
 
           //  bldr.append(scriptId);
             if (args.length > 0) {

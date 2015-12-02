@@ -51,7 +51,17 @@ public enum InstructionBaseType {
 	/**
 	 * Null type
 	 */
-	NULL(false);
+	NULL(false), 
+	
+	/**
+	 * Store (anInt0 = 0;)
+	 */
+	STORE(true), 
+	
+	/**
+	 * Customs things such as InlineConditional
+	 */
+	CUSTOM(true);
 
 	/**
 	 * Is this instruction going to be printed when decompiled?

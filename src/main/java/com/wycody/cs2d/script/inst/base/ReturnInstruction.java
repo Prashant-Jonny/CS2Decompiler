@@ -8,6 +8,7 @@ import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.types.ReturnType;
 import com.wycody.cs2d.script.inst.types.StackType;
+import com.wycody.utils.ArrayUtils;
 
 /**
  * @author Walied-Yassen
@@ -26,7 +27,7 @@ public class ReturnInstruction extends Instruction {
 //		System.out.println("==========================");
 		int total = script.getIntegerStack().size() + script.getObjectStack().size() + script.getLongStack().size();
 	//	System.out.println("IntegerTotal:" + script.getIntegerStack().size() + ", ObjectTotal: " + script.getObjectStack().size() + ", LongTotal: " + script.getLongStack().size());
-		retObjs = new Object[total];
+	//	retObjs = new Object[total];
 		if (total == 0) {
 			retType = ReturnType.VOID;
 		} else if (total == 1) {
@@ -41,38 +42,64 @@ public class ReturnInstruction extends Instruction {
 			retType = ReturnType.OBJECT_ARRAY;
 		}
 	//	System.out.println("Defined type as: "+ retType);
-		int c = 0;
+		int c = 0, c2 = 0;;
 		StackType[] types = new StackType[total];
+		Object[] ints = new Object[script.getIntegerStack().size()];
+		Object[] objs = new Object[script.getObjectStack().size()];
+		Object[] longs = new Object[script.getLongStack().size()];
+		
 		while(script.getIntegerStack().size() > 0) {
-			types[c] = StackType.INT;
-			retObjs[c++] = script.popInteger(this.address);
+			types[c++] = StackType.INT;
+			ints[c2++] = script.popInteger(address);
 		//	System.out.println("Adding integer: " +  retObjs[c-1]);
 		}
+		c2 = 0;
 		while(script.getObjectStack().size() > 0) {
-			types[c] = StackType.OBJECT;
-			retObjs[c++] = script.popObject(this.address);
+			types[c++] = StackType.OBJECT;
+		//	retObjs[c++] = script.popObject(this.address);
 		//	System.out.println("Adding object: " +  retObjs[c-1]);
+			objs[c2++] = script.popObject(address);
 		}
+		c2 = 0;
 		while(script.getLongStack().size() > 0) {
-			types[c] = StackType.LONG;
-			retObjs[c++] = script.popLong(this.address);
+			types[c++] = StackType.LONG;
+		//	retObjs[c++] = script.popLong(this.address);
 			//System.out.println("Adding long: " +  retObjs[c-1]);
+			longs[c2++] = script.popLong(address);
 		}
 		//System.out.println("Attaching the result: " + Arrays.toString(retObjs));
 		script.setReturnTypes(types);
 		//System.out.println("Generating return types: " + Arrays.toString(types));
 		script.setType(retType);
+		ints = ArrayUtils.flip(ints);
+		objs = ArrayUtils.flip(objs);
+		longs = ArrayUtils.flip(longs);
+		retObjs = new Object[total];
+		c = 0;
+		for(Object o : ints) {
+			retObjs[c++] = o;
+		}
+		for(Object o : objs) {
+			retObjs[c++] = o;
+		}
+		for(Object o : longs) {
+			retObjs[c++] = o;
+		}
+		
 	//	System.out.println("====================================");
 	}
 
-	@Override
-	public void print(Context context, ScriptPrinter printer) {
+	public String getReturnText() {
 		String temp = Arrays.toString(retObjs);
 		if (retType == ReturnType.VOID) {
-			printer.println("return;");
+			return ("return;");
 		} else {
-			printer.println(retType.getReturnFormat().replace("{value}", temp.substring(1, temp.length() - 1)));
+			return (retType.getReturnFormat().replace("{value}", temp.substring(1, temp.length() - 1)));
 		}
+	}
+	@Override
+	public void print(Context context, ScriptPrinter printer) {
+		printer.println(getReturnText());
 	}
 
 	@Override

@@ -10,9 +10,15 @@ import java.util.function.Function;
 
 import com.wycody.cs2d.analyze.Analyzer;
 import com.wycody.cs2d.analyze.AnalyzerManager;
+import com.wycody.cs2d.analyze.impl.ConditionalElseDetect;
+import com.wycody.cs2d.analyze.impl.ConditionalRelationDetect;
+import com.wycody.cs2d.analyze.impl.DuplicationFix;
+import com.wycody.cs2d.analyze.impl.ForLoopDetect;
+import com.wycody.cs2d.analyze.impl.IncrDecrDetect;
+import com.wycody.cs2d.analyze.impl.SwitchAnalyzer;
 import com.wycody.cs2d.analyze.impl.WhileLoopDetect;
 import com.wycody.cs2d.script.CS2Script;
-import com.wycody.cs2d.script.flow.impl.BasicBlockGenerator;
+import com.wycody.cs2d.script.name.ScriptNameMapper;
 
 import net.openrs.cache.Container;
 import net.openrs.io.WrappedByteBuffer;
@@ -33,17 +39,14 @@ public class CS2Decompiler {
 	public static final ArrayList<Class<? extends Analyzer>> ANALYZER_GROUP = new ArrayList<Class<? extends Analyzer>>();
 
 	static {
-		//ANALYZER_GROUP.add(NaturalFlow.class);
-//		ANALYZER_GROUP.add(SwitchOptimization.class);
-//		
 		ANALYZER_GROUP.add(WhileLoopDetect.class);
-		
-//		
-	//	ANALYZER_GROUP.add(ConditionalElseDetect.class);
-//		ANALYZER_GROUP.add(MathOEDetect.class);
-//		
-	//	ANALYZER_GROUP.add(ConditionalRelationDetect.class);
-
+		ANALYZER_GROUP.add(ConditionalElseDetect.class);
+		ANALYZER_GROUP.add(SwitchAnalyzer.class);
+		ANALYZER_GROUP.add(IncrDecrDetect.class);
+		ANALYZER_GROUP.add(DuplicationFix.class);
+		ANALYZER_GROUP.add(ConditionalRelationDetect.class);
+		ANALYZER_GROUP.add(ForLoopDetect.class);
+		// ANALYZER_GROUP.add(InlineConditionalDetect.class); this works fine but tbh i dont prefer it :D
 
 	}
 
@@ -53,6 +56,8 @@ public class CS2Decompiler {
 	private Context context;
 
 	private SortedMap<Integer, CS2Script> decompiledScripts;
+
+	private ScriptNameMapper nameMapper;
 	
 	/**
 	 * Construct a new {@link CS2Decompiler}
@@ -62,7 +67,7 @@ public class CS2Decompiler {
 	public CS2Decompiler(Context context) {
 		this.context = context;
 		this.decompiledScripts = new TreeMap<Integer, CS2Script>();
-		
+		this.nameMapper = new ScriptNameMapper();
 	}
 
 	/**
@@ -73,7 +78,7 @@ public class CS2Decompiler {
 	 * @return the decompiled script
 	 */
 	public CS2Script decompile(int scriptId) {
-		if(decompiledScripts.containsKey(scriptId)) {
+		if (decompiledScripts.containsKey(scriptId)) {
 			return decompiledScripts.get(scriptId);
 		}
 		return decompile(disassemble(scriptId));
@@ -89,7 +94,7 @@ public class CS2Decompiler {
 	 * @return the decompiled script
 	 */
 	public CS2Script decompile(int scriptId, File file) {
-		if(decompiledScripts.containsKey(scriptId)) {
+		if (decompiledScripts.containsKey(scriptId)) {
 			return decompiledScripts.get(scriptId);
 		}
 		return decompile(disassemble(scriptId, file));
@@ -103,14 +108,15 @@ public class CS2Decompiler {
 	 * @return the decompiled script
 	 */
 	private CS2Script decompile(CS2Script script) {
-		new BasicBlockGenerator(script).start();
+		nameMapper.check(script);
+		script.getGenerator().start();
 		if (!context.isBlockEditing()) {
 			script.finalizeBlocks();
 		}
 		script.getBlocks().forEach((k, v) -> {
 			v.process(context);
 		});
-	
+
 		new AnalyzerManager(script, ANALYZER_GROUP).run();
 		decompiledScripts.put(script.getId(), script);
 		return script;
@@ -131,12 +137,12 @@ public class CS2Decompiler {
 
 	}
 
-    public static Function<Integer,WrappedByteBuffer> scriptLoader = null;
-    
+	public static Function<Integer, WrappedByteBuffer> scriptLoader = null;
+
 	public CS2Script disassemble(int scriptId) {
 		WrappedByteBuffer data = null;
 		try {
-            if(scriptLoader == null) {
+			if (scriptLoader == null) {
 				data = WrappedByteBuffer.wrap(Container.decode(context.getCache().getStore().read(12, scriptId)).getData());
 			} else {
 				data = scriptLoader.apply(scriptId);
@@ -184,5 +190,18 @@ public class CS2Decompiler {
 		this.context = context;
 	}
 
+	/**
+	 * @return the nameMapper
+	 */
+	public ScriptNameMapper getNameMapper() {
+		return nameMapper;
+	}
+
+	/**
+	 * @param nameMapper the nameMapper to set
+	 */
+	public void setNameMapper(ScriptNameMapper nameMapper) {
+		this.nameMapper = nameMapper;
+	}
 
 }

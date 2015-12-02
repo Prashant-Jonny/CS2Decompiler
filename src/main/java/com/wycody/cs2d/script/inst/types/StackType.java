@@ -2,9 +2,8 @@ package com.wycody.cs2d.script.inst.types;
 
 public enum StackType {
     INT('I', "int"),
-    LONG('L', "long"),
-    OBJECT('O', "String");
-    
+    OBJECT('O', "String"),
+    LONG('L', "long");
     private final char id;
     private String genericType;
     

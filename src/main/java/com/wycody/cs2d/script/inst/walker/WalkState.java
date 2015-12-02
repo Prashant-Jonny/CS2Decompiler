@@ -10,7 +10,7 @@ public enum WalkState {
 	/**
 	 * Continue walking normally
 	 */
-	NONE,
+	CONTINUE,
 
 	/**
 	 * Stop walking (Stop the walker)
