@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
-import com.wycody.cs2d.script.CS2Disassembler;
+import com.wycody.cs2d.script.CS2Assembler;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionDecoder;
-import java.util.function.Supplier;
+import com.wycody.cs2d.script.inst.InstructionType;
 
 /**
  * Handles the revision control methods
@@ -16,13 +17,14 @@ import java.util.function.Supplier;
  * @author Walied-Yassen
  * @date Nov 7, 2015
  */
-public abstract class Revision implements CS2Disassembler, InstructionDecoder {
+public abstract class Revision implements CS2Assembler, InstructionDecoder {
 
 	/**
 	 * The registered instructions by the revision (They get scrambled each
 	 * revision)
 	 */
 	protected Map<Integer, Supplier<? extends Instruction>> registeredInstructions;
+	protected Map<Integer, Instruction> emptyInstructions;
 
 	/**
 	 * The 32 bit operand instructions
@@ -34,6 +36,7 @@ public abstract class Revision implements CS2Disassembler, InstructionDecoder {
 	 */
 	public Revision() {
 		registeredInstructions = new HashMap<Integer, Supplier<? extends Instruction>>();
+		emptyInstructions = new HashMap<>();
 		largeOpcodes = new ArrayList<Integer>();
 		registerInstructions();
 		registerLarges();
@@ -69,14 +72,18 @@ public abstract class Revision implements CS2Disassembler, InstructionDecoder {
 	 * 
 	 * @param id
 	 *            the id of the instruction
-	 * @param instruction
+	 * @param supplier
 	 *            the instruction supplier/factory.
 	 */
-	public void registerInstruction(int id, Supplier<? extends Instruction> instruction) {
+	public void registerInstruction(int id, Supplier<? extends Instruction> supplier) {
 		if (registeredInstructions.containsKey(id)) {
-//			throw new Error("You cannot register one id to multiple instructions");
+			// throw new Error("You cannot register one id to multiple
+			// instructions");
 		}
-		registeredInstructions.put(id, instruction);
+		registeredInstructions.put(id, supplier);
+		Instruction instr = supplier.get();
+		instr.setId(id);
+		emptyInstructions.put(id, instr);
 	}
 
 	/**
@@ -89,22 +96,34 @@ public abstract class Revision implements CS2Disassembler, InstructionDecoder {
 		largeOpcodes.add(id);
 	}
 
-	
 	/**
 	 * Return the instruction is 32 bit integer operand
-	 * @param id the id of the instruction
-	 * @return 
+	 * 
+	 * @param id
+	 *            the id of the instruction
+	 * @return
 	 */
 	public boolean isLarge(int id) {
 		return largeOpcodes.contains(id);
 	}
-    
-    /**
-     * Returns if the opcode is known.
-     * @param opcode
-     * @return
-     */
-    public boolean isKnowOpcode(int opcode) {
-        return this.registeredInstructions.containsKey(opcode);
-    }
+
+	/**
+	 * Returns if the opcode is known.
+	 * 
+	 * @param opcode
+	 * @return
+	 */
+	public boolean isKnowOpcode(int opcode) {
+		return this.registeredInstructions.containsKey(opcode);
+	}
+
+	public int forType(InstructionType type) {
+		for (Instruction instr : emptyInstructions.values()) {
+			if (instr.getType() == type) {
+				return instr.getId();
+			}
+
+		}
+		return -1;
+	}
 }

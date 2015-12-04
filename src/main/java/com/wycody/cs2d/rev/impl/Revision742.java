@@ -35,6 +35,8 @@ import com.wycody.cs2d.script.inst.impl.WindowMode;
 import com.wycody.cs2d.script.inst.impl.WorldList;
 import com.wycody.cs2d.script.inst.swtch.CaseNode;
 import com.wycody.cs2d.script.inst.swtch.SwitchBlock;
+import com.wycody.io.Buffer;
+import com.wycody.utils.DynamicArray;
 
 import net.openrs.cache.Cache;
 import net.openrs.io.WrappedByteBuffer;
@@ -343,7 +345,7 @@ public class Revision742 extends Revision {
         registerInstruction(775, Widget.PUSH_POSY);
         registerInstruction(452, Widget.PUSH_WIDTH);
         registerInstruction(470, Widget.PUSH_HEIGHT);
-        registerInstruction(391, Widget.PUSH_HIDE);
+        registerInstruction(391, Widget.PUSH_HIDDEN);
         registerInstruction(422, Widget.PUSH_PARENT);
         registerInstruction(543, Widget.PUSH_HASH);
         registerInstruction(824, Widget.PUSH_COL);
@@ -803,8 +805,8 @@ public class Revision742 extends Revision {
 
         // Read the header offset
         buffer.setPosition(buffer.length() - 2);
-        int headerLength = buffer.getUnsignedShort();
-        int headerOffset = buffer.length() - 18 - headerLength;
+        int switchTableBufferLength = buffer.getUnsignedShort();
+        int headerOffset = buffer.length() - 18 - switchTableBufferLength;
         buffer.setPosition(headerOffset);
         buffer.getInt();//Instruction count (not used)
 
@@ -845,7 +847,7 @@ public class Revision742 extends Revision {
 
         buffer.getNullString();
         // Read the instructions and assign them to the script
-        int instructionsEnd = buffer.length() - 18 - headerLength;
+        int instructionsEnd = buffer.length() - 18 - switchTableBufferLength;
         int instrAddress = 0;
         ArrayList<Instruction> tempInstructions = new ArrayList<>();
         while (buffer.getPosition() < instructionsEnd) {
@@ -856,5 +858,49 @@ public class Revision742 extends Revision {
         script.initializeFields();
         return script;
     }
+
+	@Override
+	public byte[] assemble(Context context, CS2Script script) {
+		Buffer buffer = new Buffer(5000, 0);
+		buffer.writeNullableString(null);
+		for (int address = 0; address < script.getInstructions().length; address++) {
+			Instruction instruction = script.getInstruction(address);
+			buffer.writeShort(instruction.getId());
+			if (instruction.getType() == InstructionType.PUSH_OBJ) {
+				buffer.writeString(instruction.getObjectOperand().toString());
+			} else if (instruction.getType() == InstructionType.PUSH_OBJ) {
+				buffer.writeLong(instruction.getLongOperand());
+			} else {
+				if (isLarge(instruction.getId())) {
+					buffer.writeInt(instruction.getIntegerOperand());
+				} else {
+					buffer.writeByte(instruction.getIntegerOperand());
+				}
+			}
+		}
+		int headerOffset = buffer.getOffset();
+		buffer.writeInt(script.getInstructions().length);
+		buffer.writeShort(script.getIntegerFields().length);
+		buffer.writeShort(script.getObjectFields().length);
+		buffer.writeShort(script.getLongFields().length);
+		buffer.writeShort(script.getIntegerParameters().length);
+		buffer.writeShort(script.getIntegerParameters().length);
+		buffer.writeShort(script.getIntegerParameters().length);
+		buffer.writeByte(script.getSwitchBlocks().length);
+		for (int blockIndex = 0; blockIndex < script.getSwitchBlocks().length; blockIndex++) {
+			SwitchBlock block = script.getSwitchBlocks()[blockIndex];
+			DynamicArray<CaseNode> cases = block.getAllCases();
+			buffer.writeShort(cases.size());
+
+			for (int caseIndex = 0; caseIndex < cases.size(); caseIndex++) {
+				CaseNode node = cases.get(caseIndex);
+				buffer.writeInt(node.getExpression());
+				buffer.writeInt(node.getJumpTarget());
+			}
+
+		}
+		buffer.writeShort(headerOffset);
+		return buffer.trimAndGet();
+	}
 
 }

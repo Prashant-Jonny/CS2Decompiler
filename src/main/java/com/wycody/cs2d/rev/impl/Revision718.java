@@ -18,6 +18,8 @@ import com.wycody.cs2d.script.inst.impl.Var;
 import com.wycody.cs2d.script.inst.impl.Widget;
 import com.wycody.cs2d.script.inst.swtch.CaseNode;
 import com.wycody.cs2d.script.inst.swtch.SwitchBlock;
+import com.wycody.io.Buffer;
+import com.wycody.utils.DynamicArray;
 
 import net.openrs.io.WrappedByteBuffer;
 
@@ -63,6 +65,8 @@ public class Revision718 extends Revision {
 
 		registerInstruction(210, Widget.BIND_MOUSE_HOVER_IN_HANDLER);
 		registerInstruction(633, Widget.BIND_MOUSE_HOVER_OUT_HANDLER);
+		registerInstruction(790, Widget.PUSH_HIDDEN);
+		registerInstruction(600, Widget.SETHIDDEN);
 
 		
 	}
@@ -181,6 +185,52 @@ public class Revision718 extends Revision {
 		script.initializeFields();
 		return script;
 	}
+	@Override
+	public byte[] assemble(Context context, CS2Script script) {
+		Buffer buffer = new Buffer(512, 0);
+		buffer.writeNullableString(null);
+		for (int address = 0; address < script.getInstructions().length; address++) {
+			Instruction instruction = script.getInstruction(address);
+			buffer.writeShort(instruction.getId());
+			if(instruction.getType() == InstructionType.PUSH_OBJ) {
+				buffer.writeString(instruction.getObjectOperand().toString());
+			} else if(instruction.getType() == InstructionType.PUSH_OBJ) {
+				buffer.writeLong(instruction.getLongOperand());
+			} else {
+				if (isLarge(instruction.getId())) {
+					buffer.writeInt(instruction.getIntegerOperand());
+				} else {
+					buffer.writeByte(instruction.getIntegerOperand());
+				}
+			}
+		}
+
+		buffer.writeInt(script.getInstructions().length);
+		buffer.writeShort(script.getIntegerFields().length);
+		buffer.writeShort(script.getObjectFields().length);
+		buffer.writeShort(script.getLongFields().length);
+		buffer.writeShort(script.getIntegerParameters().length);
+		buffer.writeShort(script.getIntegerParameters().length);
+		buffer.writeShort(script.getIntegerParameters().length);
+		buffer.writeByte(script.getSwitchBlocks().length);
+		int stStart = buffer.getOffset();
+		for (int blockIndex = 0; blockIndex < script.getSwitchBlocks().length; blockIndex++) {
+			SwitchBlock block = script.getSwitchBlocks()[blockIndex];
+			DynamicArray<CaseNode> cases = block.getAllCases();
+			buffer.writeShort(cases.size());
+
+			for (int caseIndex = 0; caseIndex < cases.size(); caseIndex++) {
+				CaseNode node = cases.get(caseIndex);
+				buffer.writeInt(node.getExpression());
+				buffer.writeInt(node.getJumpTarget());
+			}
+
+		}
+
+		buffer.writeShort(buffer.getOffset() - stStart + 1);
+		return buffer.trimAndGet();
+	}
+
 
 	@Override
 	public Instruction decode(CS2Script script, Context context, WrappedByteBuffer buffer, int id, int address) {
@@ -198,4 +248,5 @@ public class Revision718 extends Revision {
 		instr.setScript(script);
 		return instr;
 	}
+
 }

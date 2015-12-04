@@ -25,7 +25,8 @@ public class Buffer {
 	 * @param data
 	 *            the data for the buffer in this case this will be input type
 	 *            mostly
-	 * @param  offset of the {@code data}
+	 * @param offset
+	 *            of the {@code data}
 	 */
 	public Buffer(byte[] data, int offset) {
 		this.data = data;
@@ -45,6 +46,9 @@ public class Buffer {
 		this(new byte[length], offset);
 	}
 
+	public Buffer(int length) {
+		this(new byte[length], 0);
+	}
 	/**
 	 * Construct a {@link Buffer} type
 	 * 
@@ -83,9 +87,7 @@ public class Buffer {
 	 *            the value of the byte
 	 */
 	public void writeByte(int value) {
-		if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE) {
-			throw new Error("Attempt to write an byte with more/less than max/min value");
-		}
+		checkCapacity(offset, 1);
 		data[offset++] = (byte) value;
 	}
 
@@ -155,6 +157,7 @@ public class Buffer {
 
 	/**
 	 * Read 8 bytes (long)
+	 * 
 	 * @return the long
 	 */
 	public long readLong() {
@@ -199,9 +202,25 @@ public class Buffer {
 	 *            the value of the string
 	 */
 	public void writeString(String value) {
+		checkCapacity(offset + value.length() + 1, value.length() + 1);
 		System.arraycopy(value.getBytes(), 0, data, offset, value.length());
 		offset += value.length();
 		writeByte((byte) 0);
+	}
+
+	public String readNullableString() {
+		if (readByte() == 0)
+			return null;
+		return readString();
+	}
+
+	public void writeNullableString(String value) {
+		if (value == null) {
+			writeByte(0);
+		} else {
+			writeString(value);
+		}
+
 	}
 
 	/**
@@ -259,5 +278,24 @@ public class Buffer {
 	 */
 	public int getLength() {
 		return data.length;
+	}
+
+	public void trim() {
+		byte[] data = new byte[offset];
+		System.arraycopy(this.data, 0, data, 0, data.length);
+		this.data = data;
+	}
+
+	public byte[] trimAndGet() {
+		trim();
+		return data;
+	}
+
+	public void checkCapacity(int target, int expandBy) {
+		if (target >= data.length) {
+			byte[] newData = new byte[target + expandBy];
+			System.arraycopy(data, 0, newData, 0, data.length);
+			data = newData;
+		}
 	}
 }

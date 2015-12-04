@@ -319,8 +319,8 @@ public class CS2Script {
 	/**
 	 * @return the instructions
 	 */
-	public Instruction getInstruction(int index) {
-		return instructions[index];
+	public Instruction getInstruction(int address) {
+		return instructions[address];
 	}
 
 	/**

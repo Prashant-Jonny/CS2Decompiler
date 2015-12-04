@@ -1,6 +1,7 @@
 package com.wycody.cs2d.rev.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.jagex.core.constants.SerialEnum;
 import com.jagex.game.runetek5.config.vartype.constants.BaseVarType;
@@ -15,20 +16,18 @@ import com.wycody.cs2d.script.inst.impl.ActiveWidget;
 import com.wycody.cs2d.script.inst.impl.Branch;
 import com.wycody.cs2d.script.inst.impl.ClientGeneral;
 import com.wycody.cs2d.script.inst.impl.Config;
+import com.wycody.cs2d.script.inst.impl.Math;
 import com.wycody.cs2d.script.inst.impl.Pop;
 import com.wycody.cs2d.script.inst.impl.Push;
 import com.wycody.cs2d.script.inst.impl.RS3Var;
+import com.wycody.cs2d.script.inst.impl.ScriptEnum;
 import com.wycody.cs2d.script.inst.impl.Store;
 import com.wycody.cs2d.script.inst.impl.Text;
-import com.wycody.cs2d.script.inst.impl.Math;
-import com.wycody.cs2d.script.inst.impl.ScriptEnum;
 import com.wycody.cs2d.script.inst.impl.Unsorted;
 import com.wycody.cs2d.script.inst.impl.Widget;
 import com.wycody.cs2d.script.inst.impl.WidgetContainer;
 import com.wycody.cs2d.script.inst.swtch.CaseNode;
 import com.wycody.cs2d.script.inst.swtch.SwitchBlock;
-
-import java.util.HashSet;
 
 import net.openrs.cache.Cache;
 import net.openrs.io.WrappedByteBuffer;
@@ -669,6 +668,12 @@ Unknown opcode: 342
 		script.setInstructions(tempInstructions.toArray(new Instruction[tempInstructions.size()]));
 		script.initializeFields();
 		return script;
+	}
+
+	@Override
+	public byte[] assemble(Context context, CS2Script script) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

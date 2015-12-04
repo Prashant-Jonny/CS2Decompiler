@@ -22,7 +22,7 @@ import com.wycody.utils.DynamicArray;
  */
 public class InlineConditionalDetect extends Analyzer {
 
-	public static final int MAX_ALLOWED = 1;
+	public static final int MAX_ALLOWED = 2;
 
 	private TreeMap<Integer, ArrayList<ConditionalInstruction>> instructions;
 	private int biggestDepth;

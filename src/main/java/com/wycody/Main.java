@@ -98,7 +98,7 @@ public class Main {
 			// 1013 - wtf
 			// int scriptId = 1434;////1895; //47;
 
-			int scriptId = 11497; // 11497 or 11494
+			int scriptId =9917; // 11497 or 11494
 			if (args.length > 0) {
 				try {
 					System.err.println("Loading script: " + args[0]);
@@ -110,7 +110,7 @@ public class Main {
 			script.print(context);
 
 		} else {
-			int scriptId = 5652;
+			int scriptId = 765;
 
 			if (args.length >= 1) {
 				try {

@@ -254,7 +254,7 @@ public abstract class Instruction extends Node implements Printable {
 		case LONG:
 			return this.longOperand;
 		case OBJECT:
-			return this.objectOperand;
+				return "\"" + this.objectOperand + "\"";
 		default:
 			throw new Error("Unknown operand type!");
 		}

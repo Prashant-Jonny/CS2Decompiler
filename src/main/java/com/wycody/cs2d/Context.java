@@ -1,7 +1,8 @@
 package com.wycody.cs2d;
 
 import com.wycody.cs2d.print.ScriptPrinter;
-import com.wycody.cs2d.script.CS2Disassembler;
+import com.wycody.cs2d.rev.Revision;
+import com.wycody.cs2d.script.CS2Assembler;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.inst.InstructionDecoder;
 
@@ -24,13 +25,17 @@ public class Context {
 	/**
 	 * This will disassemble the bytecode into {@link CS2Script} structure
 	 */
-	private CS2Disassembler disassembler;
+	private CS2Assembler disassembler;
 
 	/**
 	 * This will decode the buffer of the instruction into instruction
 	 */
 	private InstructionDecoder instructionDecoder;
 
+	/**
+	 * I know this is kinda useless but i'm gonna make use of it later
+	 */
+	private Revision revision;
 	/**
 	 * The output handler for the script
 	 */
@@ -54,7 +59,7 @@ public class Context {
 	/**
 	 * @return the disassembler
 	 */
-	public CS2Disassembler getDisassembler() {
+	public CS2Assembler getDisassembler() {
 		return disassembler;
 	}
 
@@ -62,7 +67,7 @@ public class Context {
 	 * @param disassembler
 	 *            the disassembler to set
 	 */
-	public void setDisassembler(CS2Disassembler disassembler) {
+	public void setDisassembler(CS2Assembler disassembler) {
 		this.disassembler = disassembler;
 	}
 
@@ -172,7 +177,7 @@ public class Context {
 	 *            the disassembler to set
 	 * @return the current context
 	 */
-	public Context withDisassembler(CS2Disassembler disassembler) {
+	public Context withDisassembler(CS2Assembler disassembler) {
 		this.disassembler = disassembler;
 		return this;
 	}
@@ -233,6 +238,18 @@ public class Context {
 	public Context withBlockEditing(boolean blockEditing) {
 		this.blockEditing = blockEditing;
 		return this;
+	}
+
+	public Context withRevision(Revision revision) {
+		this.revision = revision;
+		return this;
+	}
+	public Revision getRevision() {
+		return revision;
+	}
+
+	public void setRevision(Revision revision) {
+		this.revision = revision;
 	}
 
 }

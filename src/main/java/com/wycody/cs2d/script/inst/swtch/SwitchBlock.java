@@ -135,6 +135,15 @@ public class SwitchBlock {
 		this.address = address;
 	}
 
+	public DynamicArray<CaseNode> getAllCases() {
+		DynamicArray<CaseNode> array = new DynamicArray<CaseNode>(CaseNode.class);
+		for (CaseNode node : cases) {
+			array.add(node);
+			for (CaseNode child : node.getChilds())
+				array.add(child);
+		}
+		return array;
+	}
 
 
 }

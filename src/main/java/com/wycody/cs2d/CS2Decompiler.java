@@ -15,6 +15,7 @@ import com.wycody.cs2d.analyze.impl.ConditionalRelationDetect;
 import com.wycody.cs2d.analyze.impl.DuplicationFix;
 import com.wycody.cs2d.analyze.impl.ForLoopDetect;
 import com.wycody.cs2d.analyze.impl.IncrDecrDetect;
+import com.wycody.cs2d.analyze.impl.InlineConditionalDetect;
 import com.wycody.cs2d.analyze.impl.SwitchAnalyzer;
 import com.wycody.cs2d.analyze.impl.WhileLoopDetect;
 import com.wycody.cs2d.script.CS2Script;
@@ -46,7 +47,9 @@ public class CS2Decompiler {
 		ANALYZER_GROUP.add(DuplicationFix.class);
 		ANALYZER_GROUP.add(ConditionalRelationDetect.class);
 		ANALYZER_GROUP.add(ForLoopDetect.class);
-		// ANALYZER_GROUP.add(InlineConditionalDetect.class); this works fine but tbh i dont prefer it :D
+		ANALYZER_GROUP.add(InlineConditionalDetect.class); // this works fine
+															// but tbh i dont
+															// prefer it :D
 
 	}
 
@@ -58,7 +61,7 @@ public class CS2Decompiler {
 	private SortedMap<Integer, CS2Script> decompiledScripts;
 
 	private ScriptNameMapper nameMapper;
-	
+
 	/**
 	 * Construct a new {@link CS2Decompiler}
 	 * 
@@ -107,7 +110,7 @@ public class CS2Decompiler {
 	 *            the script to decompile
 	 * @return the decompiled script
 	 */
-	private CS2Script decompile(CS2Script script) {
+	public CS2Script decompile(CS2Script script) {
 		nameMapper.check(script);
 		script.getGenerator().start();
 		if (!context.isBlockEditing()) {
@@ -153,6 +156,12 @@ public class CS2Decompiler {
 		return disassemble(scriptId, data);
 	}
 
+	public CS2Script disassemble(int scriptId, byte[] buf) {
+		WrappedByteBuffer data = WrappedByteBuffer.wrap(buf);
+
+		return disassemble(scriptId, data);
+	}
+
 	/**
 	 * This method will disassemble the byte-code of script with id
 	 * {@code scriptId} into {@link CS2Script} structure
@@ -163,12 +172,20 @@ public class CS2Decompiler {
 	 */
 	public CS2Script disassemble(int scriptId, File file) {
 		WrappedByteBuffer data = null;
+		FileInputStream in = null;
 		try {
-			FileInputStream in = new FileInputStream(file);
+			in = new FileInputStream(file);
 			byte[] buffer = new byte[in.available()];
 			in.read(buffer);
 			data = WrappedByteBuffer.wrap(buffer);
+			in.close();
 		} catch (IOException e) {
+			if (in != null)
+				try {
+					in.close();
+				} catch (IOException e1) {
+
+				}
 			e.printStackTrace();
 		}
 
@@ -198,7 +215,8 @@ public class CS2Decompiler {
 	}
 
 	/**
-	 * @param nameMapper the nameMapper to set
+	 * @param nameMapper
+	 *            the nameMapper to set
 	 */
 	public void setNameMapper(ScriptNameMapper nameMapper) {
 		this.nameMapper = nameMapper;

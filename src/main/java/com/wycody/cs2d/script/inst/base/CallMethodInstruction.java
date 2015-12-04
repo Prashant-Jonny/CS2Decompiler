@@ -111,7 +111,6 @@ public class CallMethodInstruction extends Instruction {
 
 	@Override
 	public void process(Context context) {
-		System.out.println(methodName);
 		/*
 		 * PLEASE DO NOT ADJUST THIS, THIS MESSED UP A LOT OF STUFF. ADJUST THE
 		 * PRINTING ORDER BY HAND! I WILL MAKE AN EXCEPTION FOR ONES WITH NO

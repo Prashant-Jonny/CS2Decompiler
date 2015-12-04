@@ -18,6 +18,7 @@ import com.wycody.utils.DynamicArray;
 public class ConditionalInstruction extends BranchInstruction {
 
 	public static final int IF_BLOCK = 0, WHILE_BLOCK = 1, FOR_BLOCK = 2;
+	public static final boolean REMOVE_BRACKETS_WHEN_CAN = false;
 
 	private StackType stackType;
 
@@ -142,7 +143,7 @@ public class ConditionalInstruction extends BranchInstruction {
 			printer.println("}");
 
 		} else if (blockType == FOR_BLOCK) {
-			printer.println("for (" + (forVarDeclare != null ? forVarDeclare.getPrintString(1, true) : ";") + " " + getCondition() + "; " + forVarIncr.getPrintString(0, false) + ") {");
+			printer.print("for (" + (forVarDeclare != null ? forVarDeclare.getPrintString(1, true) : ";") + " " + getCondition() + "; " + forVarIncr.getPrintString(0, false) + ") {");
 			printer.tab();
 			BasicBlock block = getTarget();
 			if (!context.isDebug()) {
@@ -153,10 +154,13 @@ public class ConditionalInstruction extends BranchInstruction {
 			printer.untab();
 			printer.println("}");
 		} else {
-			printer.println("if (" + getCondition() + ") {");
+			BasicBlock block = getTarget();
+
+			boolean needBrackets = needBrackets(block);
+			printer.println("if (" + getCondition() + ")" + (needBrackets ? " {" : ""));
 			printer.tab();
 
-			BasicBlock block = getTarget();
+	
 			if (!context.isDebug()) {
 				block.print(context, printer);
 			} else {
@@ -165,12 +169,16 @@ public class ConditionalInstruction extends BranchInstruction {
 			printer.untab();
 
 			for (ConditionalInstruction elseIf : elseIfs) {
-				printer.println("} else if(" + elseIf.getCondition() + ") {");
+				boolean before = needBrackets;
+				needBrackets = needBrackets(elseIf.getTarget());
+				printer.println((before ? "} " : "") + "else if(" + elseIf.getCondition() + ")" + (needBrackets ? " {" : ""));
 				printer.tab();
 				elseIf.getTarget().print(context, printer);
 				printer.untab();
 			}
-			printer.println("}" + (elseBlock != null ? " else {" : ""));
+			boolean before = needBrackets;
+			needBrackets = elseBlock != null && needBrackets(elseBlock);
+			printer.println((before ? "} " : "") + (elseBlock != null ? "else" + (needBrackets ? " {" : "") : ""));
 			if (elseBlock != null) {
 				printer.tab();
 				if (!context.isDebug()) {
@@ -179,12 +187,23 @@ public class ConditionalInstruction extends BranchInstruction {
 					printer.println("GOTO\tblockAt(" + elseBlock.getAddress() + ")");
 				}
 				printer.untab();
+				if (needBrackets)
 				printer.println("}");
 			}
 
 		}
 	}
 
+	private boolean needBrackets(BasicBlock block) {
+		if (!REMOVE_BRACKETS_WHEN_CAN)
+			return true;
+		int count = block.getPrintableInstructions(null).size();
+		return count > 1 || count == 0;
+	}
+
+	public void printIfBlock(Context context, ScriptPrinter printer) {
+
+	}
 	@Override
 	public int getPushCount(StackType type) {
 		return 0;

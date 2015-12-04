@@ -1,5 +1,7 @@
 package com.wycody.cs2d.script.inst.base;
 
+import com.jagex.core.stringtools.general.StringTools;
+import com.jagex.core.constants.SerialEnum;
 import com.jagex.game.runetek5.config.vartype.constants.ScriptVarType;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
@@ -23,7 +25,13 @@ public class ArrayCreateInstruction extends Instruction {
     @Override
     public void print(Context context, ScriptPrinter printer) {
         int arrayId = this.integerOperand >> 16;
-        ScriptVarType arrayType = ScriptVarType.getByChar((char) (this.integerOperand & 0xffff));
+        char character = (char) (this.integerOperand & 0xffff);
+        	
+        ScriptVarType arrayType = null;//TODO might not work always
+        if(StringTools.method12875(character))
+        	arrayType = ScriptVarType.getByChar(character);
+        else
+        	arrayType = SerialEnum.forID(ScriptVarType.values(), (int)character);
         printer.println(arrayType.name().toLowerCase()+"[]"+" array"+arrayId+" = new "+arrayType.name().toLowerCase()+"["+size+"];");
     }
 

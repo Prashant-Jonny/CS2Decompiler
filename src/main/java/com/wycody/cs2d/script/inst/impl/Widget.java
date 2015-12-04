@@ -658,7 +658,7 @@ public interface Widget {
     /**
      * Gets whether the specified component is hidden (1=hidden, 0=visible)
      */
-    Supplier<CallMethodInstruction> PUSH_HIDE = () ->
+    Supplier<CallMethodInstruction> PUSH_HIDDEN = () ->
             new CallMethodInstruction(InstructionType.PUSH_COMP_HIDE)
                     .setName("isHidden")
                     .setPushType(StackType.INT)

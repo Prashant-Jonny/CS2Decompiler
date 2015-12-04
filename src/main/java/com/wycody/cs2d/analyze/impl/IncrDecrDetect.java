@@ -55,12 +55,13 @@ public class IncrDecrDetect extends Analyzer {
 				continue;
 			}
 			for (StoreInstruction instruction : instructions) {
+	
 				// Temporary while we store the stacks as instructions
 				String value = instruction.getValue().toString();
-				if (!value.startsWith("(")) {
-					continue;
+				if (value.startsWith("(")) {
+					value = value.substring(1, value.length() - 1);
 				}
-				value = value.substring(1, value.length() - 1);
+		
 				String[] parts = value.split(" ", 3);
 				if (parts[0].equalsIgnoreCase(instruction.getVariable().toString())) {
 					// DETECTEd

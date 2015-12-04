@@ -51,7 +51,6 @@ public class BasicBlock extends Block {
 	@Override
 	public void process(Context context) {
 		for (Instruction instruction : instructions) {
-			System.out.println(instruction.getType());
 			instruction.process(context);
 		}
 	}
