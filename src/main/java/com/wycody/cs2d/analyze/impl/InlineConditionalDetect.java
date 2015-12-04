@@ -73,7 +73,6 @@ public class InlineConditionalDetect extends Analyzer {
 				DynamicArray<Instruction> elsePrintables = elseBlock.getPrintableInstructions(null);
 
 				if (targetPrintables.size() != elsePrintables.size() || targetPrintables.size() > MAX_ALLOWED) {
-					System.err.println(targetPrintables.size() + ", " + elsePrintables.size() +", " + instruction.getCondition());
 					continue instr;
 				}
 				boolean apply = true;

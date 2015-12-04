@@ -3,6 +3,10 @@ package com.wycody;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import com.jagex.game.runetek5.config.paramtype.ParamTypeList;
 import com.wycody.cs2d.CS2Converter;
 import com.wycody.cs2d.CS2Decompiler;
@@ -16,25 +20,26 @@ import net.openrs.cache.FileStore;
 
 public class Walied {
 
-	public static final int REVISION_ID = 718;
+	public static final int REVISION_ID = 742;
 	public static final String CACHE_PATH = REVISION_ID == 718 ? "C:\\Users\\Cody\\Desktop\\718 cache\\" : "E:\\Misc\\Runescape Private Servers\\Releases\\RuneNova\\Source\\data\\cache\\";
 
 	public static ParamTypeList paramTypeList;
 
 	public static void main(String[] args) throws IOException {
+		BasicConfigurator.configure();
+		Logger.getRootLogger().setLevel(Level.INFO);
 		Revision revision = createRevision(REVISION_ID);
-		int scriptId = 6128;
+		int scriptId = 2323;
 		FileStore s = FileStore.open(new File(CACHE_PATH));
 		Cache cache = new Cache(s);
 		paramTypeList = new ParamTypeList(cache);
 		Context context = new Context();
 		CS2Decompiler decompiler = new CS2Decompiler(context);
 		//
-		// context.withBlockEditing(true).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withRevision(revision).withPrinter(new
-		// ConsolePrinter());
-		// CS2Script script = decompiler.decompile(scriptId);
-		// script.print(context);
-		test();
+		context.withBlockEditing(true).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withRevision(revision).withPrinter(new ConsolePrinter());
+		CS2Script script = decompiler.decompile(scriptId);
+		script.print(context);
+		// test();
 	}
 
 	public static void test() throws IOException {
