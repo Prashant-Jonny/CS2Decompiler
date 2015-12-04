@@ -39,13 +39,7 @@ import com.wycody.cs2d.script.inst.swtch.SwitchBlock;
 import net.openrs.cache.Cache;
 import net.openrs.io.WrappedByteBuffer;
 
-/************************************
- * 
- * 
- * GET OUT OF THIS FUCKIN CLASS IF YOU're NOT SUNDAYS OR WALIED, JUST TO YOUR REVISION NUB  SRSLY
- * 
- * 
- * 
+/**
  * @author Walied-Yassen
  * @date Nov 10, 2015
  */
@@ -313,7 +307,7 @@ public class Revision742 extends Revision {
         registerInstruction(893, Widget.BIND_MOUSEDRAGPAST_HANDLER);
         registerInstruction(564, Widget.BIND_MOUSERELEASE_HANDLER);
         registerInstruction(816, Widget.BIND_MOUSEOVER_HANDLER);
-        registerInstruction(942, Widget.BIND_MOUSEOUT_HANDLER);
+        registerInstruction(942, Widget.BIND_MOUSE_HOVER_OUT_HANDLER);
         registerInstruction(900, Widget.BIND_DRAGRELEASE_HANDLER);
         registerInstruction(706, Widget.BIND_DESELECT_HANDLER);
         registerInstruction(1016, Widget.BIND_VARP_HANDLER);
@@ -321,7 +315,7 @@ public class Revision742 extends Revision {
         registerInstruction(191, Widget.BIND_OPTION_HANDLER);
         registerInstruction(648, Widget.BIND_DRAG_HANDLER);
         registerInstruction(994, Widget.BIND_MOUSEDRAG_HANDLER);
-        registerInstruction(472, Widget.BIND_MOUSEHOVER_HANDLER);
+        registerInstruction(472, Widget.BIND_MOUSE_HOVER_IN_HANDLER);
         registerInstruction(398, Widget.BIND_INV_HANDLER);
         registerInstruction(935, Widget.BIND_STAT_HANDLER);
         registerInstruction(946, Widget.BIND_SELECT_HANDLER);
@@ -370,6 +364,9 @@ public class Revision742 extends Revision {
         registerInstruction(504, Widget.PUSH_GRAPHICROT);
         registerInstruction(859, Widget.PUSH_MODEL);
         registerInstruction(786, Widget.PUSH_FONT);
+        // Duplicated instruction by jagex
+        registerInstruction(248, Widget.PUSH_FONT);
+        
         registerInstruction(652, Widget.PUSH_GRAPHICSIZE);
         
         //Component - container getters
@@ -562,7 +559,9 @@ public class Revision742 extends Revision {
         registerInstruction(819, Text.INT_TO_STR);
         registerInstruction(130, Text.COMPARE);
         registerInstruction(944, Text.LINE_COUNT);
-        registerInstruction(255, Text.RENDER_WIDTH);
+        registerInstruction(255, Text.RENDER_WIDTH_WX);
+        registerInstruction(869, Text.RENDER_WIDTH);
+        
         registerInstruction(958, Text.CHOICE);
         registerInstruction(218, Text.ENCODE_STR);
         registerInstruction(1026, Text.CONCAT_CHAR);

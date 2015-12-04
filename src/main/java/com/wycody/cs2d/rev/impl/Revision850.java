@@ -241,7 +241,7 @@ public class Revision850 extends RS3Revision {
         registerInstruction(985, Widget.BIND_MOUSEDRAGPAST_HANDLER);
         registerInstruction(790, Widget.BIND_MOUSERELEASE_HANDLER);
         registerInstruction(250, Widget.BIND_MOUSEOVER_HANDLER);
-        registerInstruction(663, Widget.BIND_MOUSEOUT_HANDLER);
+        registerInstruction(663, Widget.BIND_MOUSE_HOVER_OUT_HANDLER);
         //SET_UNKNOWN1_EVENT_HANDLER(90)
         registerInstruction(879, Widget.BIND_DESELECT_HANDLER);
         registerInstruction(912, Widget.BIND_VARP_HANDLER);
@@ -249,7 +249,7 @@ public class Revision850 extends RS3Revision {
         registerInstruction(447, Widget.BIND_OPTION_HANDLER);
         registerInstruction(31, Widget.BIND_DRAG_HANDLER);
         registerInstruction(252, Widget.BIND_MOUSEDRAG_HANDLER);
-        registerInstruction(373, Widget.BIND_MOUSEHOVER_HANDLER);
+        registerInstruction(373, Widget.BIND_MOUSE_HOVER_IN_HANDLER);
         registerInstruction(385, Widget.BIND_INV_HANDLER);
         registerInstruction(1122, Widget.BIND_STAT_HANDLER);
         registerInstruction(1086, Widget.BIND_SELECT_HANDLER);

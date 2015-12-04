@@ -435,8 +435,8 @@ public interface Widget {
     /**
      * Sets the mouse out event handler for the specified component
      */
-    Supplier<EventBindInstruction> BIND_MOUSEOUT_HANDLER = () ->
-            new EventBindInstruction(InstructionType.COMP_SET_MOUSEOUT_HANDLER, "MouseOut", false);
+    Supplier<EventBindInstruction> BIND_MOUSE_HOVER_OUT_HANDLER = () ->
+ new EventBindInstruction(InstructionType.COMP_SET_MOUSEOUT_HANDLER, "MouseHoverOut", false);
     
     /**
      * Sets the drag release event handler for the specified component
@@ -483,8 +483,8 @@ public interface Widget {
     /**
      * Sets the mouse move event handler for the specified component
      */
-    Supplier<EventBindInstruction> BIND_MOUSEHOVER_HANDLER = () ->
-            new EventBindInstruction(InstructionType.COMP_SET_MOUSEHOVER_HANDLER, "MouseHover", false);
+    Supplier<EventBindInstruction> BIND_MOUSE_HOVER_IN_HANDLER = () ->
+ new EventBindInstruction(InstructionType.COMP_SET_MOUSEHOVER_HANDLER, "MouseHoverIn", false);
     
     /**
      * Sets the inventory update event handler for the specified component
@@ -721,7 +721,7 @@ public interface Widget {
     Supplier<CallMethodInstruction> PUSH_TEXT = () ->
             new CallMethodInstruction(InstructionType.PUSH_COMP_TEXT)
                     .setName("getText")
-                    .setPushType(StackType.INT)
+                    .setPushType(StackType.OBJECT)
                     .setArgumentTypes(StackType.INT)
                     .setPrefixFormatters(widgetFormatter);
     
@@ -830,7 +830,7 @@ public interface Widget {
      */
     Supplier<CallMethodInstruction> PUSH_FONT = () ->
             new CallMethodInstruction(InstructionType.PUSH_COMP_FONT)
-                    .setName("getFont")
+                    .setName("getFontId")
                     .setPushType(StackType.INT)
                     .setArgumentTypes(StackType.INT)
                     .setPrefixFormatters(widgetFormatter);

@@ -67,13 +67,18 @@ public interface Text {
     /**
      * Returns the width of the provided text line if it was rendered in the given font. Format: (text, maxwidth)
      */
-    Supplier<CallMethodInstruction> RENDER_WIDTH = () ->
+    Supplier<CallMethodInstruction> RENDER_WIDTH_WX = () ->
             new CallMethodInstruction(InstructionType.PUSH_TEXT_RENDER_WIDTH)
                     .setFormattedName("getFont(%1).getRenderWidth(%2, %3)")
                     .setArgumentTypes(StackType.INT, StackType.OBJECT, StackType.INT)
                     .setPushType(StackType.INT);
+            Supplier<CallMethodInstruction> RENDER_WIDTH = () ->
+            new CallMethodInstruction(InstructionType.PUSH_TEXT_RENDER_WIDTH)
+                    .setFormattedName("getFont(%1).getRenderWidth(%2)")
+                    .setArgumentTypes(StackType.INT, StackType.OBJECT)
+                    .setPushType(StackType.INT);
     
-    
+        
     Supplier<CallMethodInstruction> RUNEDATE_TO_STRING = () ->
             new CallMethodInstruction(InstructionType.RUNEDAY_STR)
                     .setName("runedayToString")

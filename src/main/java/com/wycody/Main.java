@@ -92,7 +92,7 @@ public class Main {
 
 			Context context = new Context().withCache(c).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 			CS2Decompiler decompiler = new CS2Decompiler(context);
-			context.withBlockEditing(true).withDebug(true).withCache(c).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
+			context.withBlockEditing(true).withDebug(false).withCache(c).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 
 			// int scriptId = 534;
 			// 1013 - wtf
@@ -110,7 +110,7 @@ public class Main {
 			script.print(context);
 
 		} else {
-			int scriptId = 4801;
+			int scriptId = 5652;
 
 			if (args.length >= 1) {
 				try {
@@ -135,7 +135,7 @@ public class Main {
 			CS2Decompiler decompiler = new CS2Decompiler(context);
 
 			context.withBlockEditing(true).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
-			boolean dumpAll = true;
+			boolean dumpAll = false;
 			if (dumpAll) {
 				for (scriptId = 0; scriptId < decompiler.getContext().getCache().getFileCount(12); scriptId++) {
 					ScriptDumper.dump(context, scriptId, System.getProperty("user.home") + "/Desktop/742Dump", "cs2");

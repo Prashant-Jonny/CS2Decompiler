@@ -1,11 +1,12 @@
 package com.wycody.cs2d.script.inst.impl;
 
+import java.util.function.Supplier;
+
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.base.CallMethodInstruction;
 import com.wycody.cs2d.script.inst.base.EventBindInstruction;
 import com.wycody.cs2d.script.inst.base.PushParamInstruction;
 import com.wycody.cs2d.script.inst.types.StackType;
-import java.util.function.Supplier;
 
 public interface ActiveWidget {
     String AC_PREFIX = "getActiveWidget().";
@@ -385,7 +386,7 @@ public interface ActiveWidget {
      * Sets the mouse out event handler for the active component
      */
     Supplier<EventBindInstruction> BIND_MOUSEOUT_HANDLER = () ->
-            new EventBindInstruction(InstructionType.AC_SET_MOUSEOUT_HANDLER, "MouseOut", true);
+ new EventBindInstruction(InstructionType.AC_SET_MOUSEOUT_HANDLER, "MouseHoverOut", true);
     
     /**
      * Sets the drag release event handler for the active component

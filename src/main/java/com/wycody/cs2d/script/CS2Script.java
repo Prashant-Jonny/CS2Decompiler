@@ -393,6 +393,7 @@ public class CS2Script {
 	 */
 	public Object popObject(int address) {
 		if (objectStack.size() == 0) {
+		
 			throw new Error("Empty stack at script: " + this.id + " at adress: " + address);
 		}
 		Object o = objectStack.pop();

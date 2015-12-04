@@ -72,15 +72,15 @@ public class Fear {
 
 		//findSHIT(894,1102,913,62,455,597);
 
-//		for(ScriptVarType type : ScriptVarType.values()){
-//			System.out.println(type.getSerialId() + "\t" + type.name());
-//		}
+		for(ScriptVarType type : ScriptVarType.values()){
+			System.out.println(type.getSerialId() + "\t" + "\"" + type.getChar() + "\"" + type.name());
+		}
 
-//
-//		ScriptVarType type = SerialEnum.forID(ScriptVarType.values(), 73);
-//		System.out.println(type);
-//		if("".equalsIgnoreCase(""))
-//			return;
+
+		ScriptVarType type = SerialEnum.forID(ScriptVarType.values(), 73);
+		System.out.println(type);
+		if("".equalsIgnoreCase(""))
+			return;
 
         //test();
         // 686 605
