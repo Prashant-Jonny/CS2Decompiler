@@ -9,9 +9,13 @@ public enum ReturnType {
 	
 	VOID("void", "return;"),
 	INTEGER("int", "return {value};"),
-	OBJECT("Object", "return {value};"),
+	INTEGER_ARRAY("int[]", "new int[] { {value} };"),
 	LONG("long", "return {value};"),
-	OBJECT_ARRAY("Object[]", "return new Object[] { {value} };"); 
+	LONG_ARRAY("long[]", "new long[] { {value} };"),
+	OBJECT("Object", "return {value};"),
+	OBJECT_ARRAY("Object[]", "return new Object[] { {value} };"),
+	BOOLEAN("boolean", "return {value};"),
+	BOOLEAN_ARRAY("boolean[]", "new boolean[] { return {value} };"),;
 	
 	/**
 	 * The type of the script

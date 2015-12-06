@@ -15,13 +15,16 @@ import com.jagex.game.runetek5.config.structtype.StructTypeList;
 import com.wycody.cs2d.CS2Decompiler;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ConsolePrinter;
-import com.wycody.cs2d.rev.Revision;
+import com.wycody.cs2d.rev.RS2Revision;
+import com.wycody.cs2d.rev.RS3Revision;
 import com.wycody.cs2d.rev.impl.Revision742;
+import com.wycody.cs2d.rev.impl.Revision835;
 import com.wycody.cs2d.rev.impl.Revision850;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.utils.ConfigParser;
 import com.wycody.cs2d.utils.ScriptDumper;
+import java.io.FileNotFoundException;
 
 import net.openrs.cache.Cache;
 import net.openrs.cache.FileStore;
@@ -78,11 +81,12 @@ public class Main {
 		} else if (f.exists()) {
 			FileStore s = FileStore.open(f);// "E:\\Misc\\Runescape Private
 			Cache c = new Cache(s);
-			Revision revision = new Revision850(c);
+			RS2Revision revision = new Revision850(c);
 
 			ConfigParser config = new ConfigParser();
 			// config.download("850");
 			Revision850.print_unknowns = true;
+			Revision850.debug_instructions = true;
 			// Revision850.debug_instructions = true;
 			config.loadRevision("850", revision);
 
@@ -98,7 +102,7 @@ public class Main {
 			// 1013 - wtf
 			// int scriptId = 1434;////1895; //47;
 
-			int scriptId =9917; // 11497 or 11494
+			int scriptId =8707; // 11497 or 11494
 			if (args.length > 0) {
 				try {
 					System.err.println("Loading script: " + args[0]);
@@ -121,10 +125,12 @@ public class Main {
 			File cachePath = new File("E:\\Misc\\Runescape Private Servers\\Releases\\RuneNova\\Source\\data\\cache\\");
 			if (args.length >= 2) {
 				cachePath = new File(args[1].replaceFirst("^~", System.getProperty("user.home")));
+                decode835(cachePath, scriptId);
+                return;
 			}
 
 			// Load up the decompiler
-			Revision revision = new Revision742();
+			RS2Revision revision = new Revision742();
 			// ConfigParser config = new ConfigParser();
 			// config.download("742");
 			// config.loadRevision("742", revision);
@@ -137,8 +143,9 @@ public class Main {
 			context.withBlockEditing(true).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 			boolean dumpAll = false;
 			if (dumpAll) {
+                File outputDir = new File(System.getProperty("user.home") + "/Desktop/742Dump");
 				for (scriptId = 0; scriptId < decompiler.getContext().getCache().getFileCount(12); scriptId++) {
-					ScriptDumper.dump(context, scriptId, System.getProperty("user.home") + "/Desktop/742Dump", "cs2");
+					ScriptDumper.dump(context, scriptId, outputDir, "cs2");
 				}
 			} else {
 				CS2Script script = decompiler.decompile(scriptId);// 793
@@ -147,6 +154,20 @@ public class Main {
 
 		}
 	}
+    
+    private static void decode835 (File cachePath, int scriptId) throws IOException {
+        FileStore s = FileStore.open(cachePath);
+        Cache cache = new Cache(s);
+        paramTypeList = new ParamTypeList(cache);
+        Context context = new Context();
+        CS2Decompiler decompiler = new CS2Decompiler(context);
+		RS3Revision revision = new Revision835(cache);
+
+        context.withBlockEditing(true).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
+        
+        File outputDir = new File(System.getProperty("user.home") + "/RuneScape/cache/output/835/decompiled_cs2/");
+        ScriptDumper.dump(context, scriptId, outputDir);
+    }
 
 	public static ArrayList<CS2Script> findInstruction(CS2Decompiler decompiler, int id) throws IOException {
 		ArrayList<CS2Script> scripts = new ArrayList<CS2Script>();

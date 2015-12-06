@@ -10,6 +10,7 @@ import java.util.function.Function;
 
 import com.wycody.cs2d.analyze.Analyzer;
 import com.wycody.cs2d.analyze.AnalyzerManager;
+import com.wycody.cs2d.analyze.impl.BooleanDetector;
 import com.wycody.cs2d.analyze.impl.ConditionalElseDetect;
 import com.wycody.cs2d.analyze.impl.ConditionalRelationDetect;
 import com.wycody.cs2d.analyze.impl.DuplicationFix;
@@ -19,7 +20,7 @@ import com.wycody.cs2d.analyze.impl.InlineConditionalDetect;
 import com.wycody.cs2d.analyze.impl.SwitchAnalyzer;
 import com.wycody.cs2d.analyze.impl.WhileLoopDetect;
 import com.wycody.cs2d.script.CS2Script;
-import com.wycody.cs2d.script.name.ScriptNameMapper;
+import com.wycody.cs2d.script.name.ScriptNameMap;
 
 import net.openrs.cache.Container;
 import net.openrs.io.WrappedByteBuffer;
@@ -47,9 +48,9 @@ public class CS2Decompiler {
 		ANALYZER_GROUP.add(DuplicationFix.class);
 		ANALYZER_GROUP.add(ConditionalRelationDetect.class);
 		ANALYZER_GROUP.add(ForLoopDetect.class);
-		ANALYZER_GROUP.add(InlineConditionalDetect.class); // this works fine
-															// but tbh i dont
-															// prefer it :D
+		ANALYZER_GROUP.add(BooleanDetector.class);
+
+		ANALYZER_GROUP.add(InlineConditionalDetect.class);
 
 	}
 
@@ -58,9 +59,8 @@ public class CS2Decompiler {
 	 */
 	private Context context;
 
-	private SortedMap<Integer, CS2Script> decompiledScripts;
-
-	private ScriptNameMapper nameMapper;
+	private final SortedMap<Integer, CS2Script> decompiledScripts;
+	private final SortedMap<Integer, CS2Script> diassembledScripts;
 
 	/**
 	 * Construct a new {@link CS2Decompiler}
@@ -69,8 +69,8 @@ public class CS2Decompiler {
 	 */
 	public CS2Decompiler(Context context) {
 		this.context = context;
-		this.decompiledScripts = new TreeMap<Integer, CS2Script>();
-		this.nameMapper = new ScriptNameMapper();
+		this.decompiledScripts = new TreeMap<>();
+		this.diassembledScripts = new TreeMap<>();
 	}
 
 	/**
@@ -111,7 +111,6 @@ public class CS2Decompiler {
 	 * @return the decompiled script
 	 */
 	public CS2Script decompile(CS2Script script) {
-		nameMapper.check(script);
 		script.getGenerator().start();
 		if (!context.isBlockEditing()) {
 			script.finalizeBlocks();
@@ -133,9 +132,17 @@ public class CS2Decompiler {
 	 * @return the disassembled code, CS2Script
 	 */
 	public CS2Script disassemble(int scriptId, WrappedByteBuffer data) {
+		if (diassembledScripts.containsKey(scriptId)) {
+			return diassembledScripts.get(scriptId);
+		}
+
 		CS2Script script = context.getDisassembler().disassemble(context, data);
 		script.setId(scriptId);
 		script.setName("script_" + scriptId);
+		diassembledScripts.put(scriptId, script);
+		if (hasNameMap())
+			getNameMap().check(script);
+
 		return script;
 
 	}
@@ -143,6 +150,7 @@ public class CS2Decompiler {
 	public static Function<Integer, WrappedByteBuffer> scriptLoader = null;
 
 	public CS2Script disassemble(int scriptId) {
+
 		WrappedByteBuffer data = null;
 		try {
 			if (scriptLoader == null) {
@@ -210,16 +218,12 @@ public class CS2Decompiler {
 	/**
 	 * @return the nameMapper
 	 */
-	public ScriptNameMapper getNameMapper() {
-		return nameMapper;
+	public ScriptNameMap getNameMap() {
+		return context.getScriptNameMap();
 	}
 
-	/**
-	 * @param nameMapper
-	 *            the nameMapper to set
-	 */
-	public void setNameMapper(ScriptNameMapper nameMapper) {
-		this.nameMapper = nameMapper;
+	public boolean hasNameMap() {
+		return getNameMap() != null;
 	}
 
 }

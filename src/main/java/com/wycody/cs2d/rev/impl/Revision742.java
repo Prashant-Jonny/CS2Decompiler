@@ -1,13 +1,6 @@
 package com.wycody.cs2d.rev.impl;
 
-import java.util.ArrayList;
-
-import com.wycody.cs2d.Context;
-import com.wycody.cs2d.rev.Revision;
-import com.wycody.cs2d.script.CS2Field;
-import com.wycody.cs2d.script.CS2Script;
-import com.wycody.cs2d.script.inst.Instruction;
-import com.wycody.cs2d.script.inst.InstructionType;
+import com.wycody.cs2d.rev.RS2Revision;
 import com.wycody.cs2d.script.inst.impl.ActiveWidget;
 import com.wycody.cs2d.script.inst.impl.Array;
 import com.wycody.cs2d.script.inst.impl.Branch;
@@ -33,19 +26,14 @@ import com.wycody.cs2d.script.inst.impl.Widget;
 import com.wycody.cs2d.script.inst.impl.WidgetContainer;
 import com.wycody.cs2d.script.inst.impl.WindowMode;
 import com.wycody.cs2d.script.inst.impl.WorldList;
-import com.wycody.cs2d.script.inst.swtch.CaseNode;
-import com.wycody.cs2d.script.inst.swtch.SwitchBlock;
-import com.wycody.io.Buffer;
-import com.wycody.utils.DynamicArray;
 
 import net.openrs.cache.Cache;
-import net.openrs.io.WrappedByteBuffer;
 
 /**
  * @author Walied-Yassen
  * @date Nov 10, 2015
  */
-public class Revision742 extends Revision {
+public class Revision742 extends RS2Revision {
     
     public Revision742(){}
 
@@ -432,6 +420,8 @@ public class Revision742 extends Revision {
         registerInstruction(774, ClientGeneral.PUSH_INV_WEIGHTEDSLOTCOUNT);
         registerInstruction(186, ClientGeneral.PUSH_INV_WEIGHTEDSLOTCOUNT_STACKS);
         registerInstruction(346, ClientGeneral.PUSH_LANGUAGE);
+        //4x unknown
+        registerInstruction(146, ClientGeneral.PUSH_APPLET_FOCUSED);
         
         //Enum instructions
         registerInstruction(14, ScriptEnum.PUSH_VALUE_STR);
@@ -592,8 +582,8 @@ public class Revision742 extends Revision {
         registerInstruction(881, Config.PUSH_OBJ_FROMCERT);
         registerInstruction(974, Config.PUSH_OBJ_TOCERT);
         registerInstruction(567, Config.PUSH_OBJ_WEARPOS);
-        registerInstruction(185, Config.PUSH_OBJ_WEARTYPE);
-        registerInstruction(730, Config.PUSH_OBJ_HIDEWEARPOS);
+        registerInstruction(185, Config.PUSH_OBJ_WEARPOS2);
+        registerInstruction(730, Config.PUSH_OBJ_WEARPOS3);
         registerInstruction(842, Config.PUSH_OBJ_MEMBERS);
         registerInstruction(455, Config.PUSH_OBJ_PARAM);
         registerInstruction(1005, Config.PUSH_OBJ_IOPCUR);
@@ -691,6 +681,11 @@ public class Revision742 extends Revision {
         registerInstruction(524, Camera.CAMERA_IS_ANINT1621_EQUALS_4);
         registerInstruction(209, Camera.UNKNOWN_METHOD);
         
+        //Unknown
+        registerInstruction(1029, Unsorted.PUSH_CHAT_RELATED_BOOLEAN);
+        registerInstruction(6, Unsorted.PUSH_DOB);
+        
+        
         // Quest instructions
         registerInstruction(618, Quest.PUSH_NAME);
         //1x unknown
@@ -780,127 +775,5 @@ public class Revision742 extends Revision {
         registerLarge(1044);
     }
 
-    @Override
-    public Instruction decode(CS2Script script, Context context, WrappedByteBuffer buffer, int id, int address) {
-        int instKey = registeredInstructions.containsKey(id) ? id : -1;
-        Instruction instr = registeredInstructions.get(instKey).get();
-        instr.setBaseData(id, address);
-
-        if (instr.getType() == InstructionType.PUSH_OBJ) {
-            instr.setObjectOperand(buffer.getString().intern());
-        } else if (instr.getType() == InstructionType.PUSH_LONG) {
-            instr.setLongOperand(buffer.getLong());
-        } else {
-            instr.setIntegerOperand(isLarge(id) ? buffer.getInt() : buffer.getUnsignedByte());
-        }
-        instr.setScript(script);
-        return instr;
-    }
-
-    @Override
-    public CS2Script disassemble(Context context, WrappedByteBuffer buffer) {
-
-        // Construct an empty CS2Script
-        CS2Script script = new CS2Script();
-
-        // Read the header offset
-        buffer.setPosition(buffer.length() - 2);
-        int switchTableBufferLength = buffer.getUnsignedShort();
-        int headerOffset = buffer.length() - 18 - switchTableBufferLength;
-        buffer.setPosition(headerOffset);
-        buffer.getInt();//Instruction count (not used)
-
-        // Read the fields lengths and assign them to the script
-        int size = buffer.getUnsignedShort();
-        
-        script.setIntegerFields(new CS2Field[size]);
-        script.setObjectFields(new CS2Field[buffer.getUnsignedShort()]);
-        script.setLongFields(new CS2Field[buffer.getUnsignedShort()]);
-
-        // Read the parameters lengths and assign them to the script
-        size = buffer.getUnsignedShort();
-
-        script.setIntegerParameters(new CS2Field[size]);
-        script.setObjectParameters(new CS2Field[buffer.getUnsignedShort()]);
-        script.setLongParameters(new CS2Field[buffer.getUnsignedShort()]);
-
-        // Read the switch blocks and assign them to the script
-        SwitchBlock[] blocks = new SwitchBlock[buffer.getUnsignedByte()];
-        for (int blockIndex = 0; blockIndex < blocks.length; blockIndex++) {
-            int casesCount = buffer.getUnsignedShort();
-            SwitchBlock block = blocks[blockIndex] = new SwitchBlock(casesCount);
-            // Loop through cases and store them
-            CaseNode previousCase = null;
-
-            for (int caseIndex = 0; caseIndex < casesCount; caseIndex++) {
-                CaseNode currentCase = new CaseNode(buffer.getInt(), buffer.getInt());
-                if (previousCase != null) {
-                    previousCase.setNext(currentCase);
-                }
-                currentCase.setPrevious(previousCase);
-                block.addCase(currentCase);
-            }
-
-        }
-        script.setSwitchBlocks(blocks);
-        buffer.setPosition(0);
-
-        buffer.getNullString();
-        // Read the instructions and assign them to the script
-        int instructionsEnd = buffer.length() - 18 - switchTableBufferLength;
-        int instrAddress = 0;
-        ArrayList<Instruction> tempInstructions = new ArrayList<>();
-        while (buffer.getPosition() < instructionsEnd) {
-            tempInstructions.add(context.getInstructionDecoder().decode(script, context, buffer, buffer.getUnsignedShort(), instrAddress));
-            instrAddress++;
-        }
-        script.setInstructions(tempInstructions.toArray(new Instruction[tempInstructions.size()]));
-        script.initializeFields();
-        return script;
-    }
-
-	@Override
-	public byte[] assemble(Context context, CS2Script script) {
-		Buffer buffer = new Buffer(5000, 0);
-		buffer.writeNullableString(null);
-		for (int address = 0; address < script.getInstructions().length; address++) {
-			Instruction instruction = script.getInstruction(address);
-			buffer.writeShort(instruction.getId());
-			if (instruction.getType() == InstructionType.PUSH_OBJ) {
-				buffer.writeString(instruction.getObjectOperand().toString());
-			} else if (instruction.getType() == InstructionType.PUSH_OBJ) {
-				buffer.writeLong(instruction.getLongOperand());
-			} else {
-				if (isLarge(instruction.getId())) {
-					buffer.writeInt(instruction.getIntegerOperand());
-				} else {
-					buffer.writeByte(instruction.getIntegerOperand());
-				}
-			}
-		}
-		int headerOffset = buffer.getOffset();
-		buffer.writeInt(script.getInstructions().length);
-		buffer.writeShort(script.getIntegerFields().length);
-		buffer.writeShort(script.getObjectFields().length);
-		buffer.writeShort(script.getLongFields().length);
-		buffer.writeShort(script.getIntegerParameters().length);
-		buffer.writeShort(script.getIntegerParameters().length);
-		buffer.writeShort(script.getIntegerParameters().length);
-		buffer.writeByte(script.getSwitchBlocks().length);
-		for (int blockIndex = 0; blockIndex < script.getSwitchBlocks().length; blockIndex++) {
-			SwitchBlock block = script.getSwitchBlocks()[blockIndex];
-			DynamicArray<CaseNode> cases = block.getAllCases();
-			buffer.writeShort(cases.size());
-
-			for (int caseIndex = 0; caseIndex < cases.size(); caseIndex++) {
-				CaseNode node = cases.get(caseIndex);
-				buffer.writeInt(node.getExpression());
-				buffer.writeInt(node.getJumpTarget());
-			}
-
-		}
-		buffer.writeShort(headerOffset);
-		return buffer.trimAndGet();
-	}
 
 }

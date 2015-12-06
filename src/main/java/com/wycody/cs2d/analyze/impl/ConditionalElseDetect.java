@@ -35,7 +35,7 @@ public class ConditionalElseDetect extends Analyzer {
 			@Override
 			public WalkState visitInstr(int depth, Instruction instruction) {
 				if (instruction instanceof ConditionalInstruction) {
-					
+
 					if (depth > biggestDepth) {
 						biggestDepth = depth;
 					}
@@ -63,13 +63,14 @@ public class ConditionalElseDetect extends Analyzer {
 					continue b;
 				}
 				BasicBlock trueBlock = (BasicBlock) instruction.getHolder().getSuccessors().get(0);
+
 				if (!(instruction.getHolder().getInstructions().last() instanceof JumpInstruction)) {
 					continue b;
 				}
 				BasicBlock falseBlock = (BasicBlock) instruction.getHolder().getSuccessors().get(1);
-		
+
 				Match<JumpInstruction> match = trueBlock.findElseJump(falseBlock);
-		
+
 				if (match != null) {
 					// Else block
 					JumpInstruction first = match.getFirst();
@@ -83,12 +84,13 @@ public class ConditionalElseDetect extends Analyzer {
 
 					instruction.setElse(falseBlock);
 					int index = instruction.getHolder().getSuccessors().indexOf(falseBlock);
-					if(index == -1) {
+					if (index == -1) {
 						throw new Error(index + ", " + instruction.getHolder().getSuccessors().size());
 					}
-						
+
 					instruction.getHolder().getSuccessors().remove(index);
 				}
+
 			}
 		}
 		for (int depth = biggestDepth; depth >= 0; depth--) {

@@ -37,7 +37,7 @@ public enum Js5ConfigGroup {//TODO REFORMAT THIS FUCK
    VAR_CLAN("VAR_CLAN", 66, ".var_clan"),//67
    VAR_CLAN_SETTING("VAR_CLAN_SETTING", 67, ".var_clan_setting"),//80
    VAR_GLOBAL("", 68, ""),
-   VAR_BIT("VAR_BIT", 69, ".var_bit", 10, 22),
+   VAR_BIT("VAR_BIT", 69, ".var_bit", 0, 22),
    HITBARTYPE("HITBARTYPE", 72, ".hitbar"),
    VAR_EXCHANGE("", 75, ""),
    SEQ_FLOWCONTROL("SEQ_FLOWCONTROL", 77, ".seq_fc"), 

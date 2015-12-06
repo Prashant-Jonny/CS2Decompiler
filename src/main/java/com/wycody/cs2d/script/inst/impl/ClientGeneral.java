@@ -393,4 +393,13 @@ public interface ClientGeneral {
                     .setPushType(StackType.INT);
     
     
+    /**
+     * Returns whether the game applet currently has focus.
+     */
+    Supplier<CallMethodInstruction> PUSH_APPLET_FOCUSED = () ->
+            new CallMethodInstruction(InstructionType.PUSH_APPLET_FOCUSED)
+                    .setName("isAppletFocused()")
+                    .setPushType(StackType.INT);
+    
+    
 }

@@ -1,0 +1,3 @@
+void some_script(int intArg, String strArg, long longArg) {
+	someMethod("leet", 1337);
+}

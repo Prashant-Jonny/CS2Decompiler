@@ -8,6 +8,6 @@ import com.jagex.game.runetek5.config.constants.Js5ConfigGroup;
 public class ParamTypeList extends ConfigTypeList {
 
 	public ParamTypeList(Cache cache) {
-		super(cache, ParamType.class, Js5ConfigGroup.PARAMTYPE.id);
+		super(cache, ParamType.class, Js5ConfigGroup.PARAMTYPE);
 	}
 }

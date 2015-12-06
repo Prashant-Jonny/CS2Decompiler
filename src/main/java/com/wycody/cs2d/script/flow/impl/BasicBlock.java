@@ -66,6 +66,7 @@ public class BasicBlock extends Block {
 		for (int index = 0; index < instructions.size(); index++) {
 
 			Instruction instr = instructions.get(index);
+
 			if (instr.getBeforeComment() != null) {
 				instr.getBeforeComment().print(context, printer);
 			}
@@ -469,6 +470,27 @@ public class BasicBlock extends Block {
 		});
 		walker.startWalking();
 		return jumps[0];
+	}
+
+	public Instruction getLastReachableInstruction() {
+		final Instruction[] jumps = new Instruction[1];
+		InstructionWalker walker = new InstructionWalker(this, InstructionWalker.RESOLVE_FALSE_BLOCKS | InstructionWalker.RESOLVE_NOR_JUMP | InstructionWalker.RESOLVE_CUST_JUMP, new WalkerAction() {
+
+			@Override
+			public WalkState visitInstr(int depth, Instruction instruction) {
+				jumps[0] = instruction;
+				return WalkState.CONTINUE;
+			}
+		});
+		walker.startWalking();
+		return jumps[0];
+	}
+
+	public void replaceInstruction(Instruction instruction, Instruction with) {
+		int index = instructions.indexOf(instruction);
+		if (index == -1)
+			throw new Error("Could not find the instruction to replace with.");
+		instructions.add(index, with);
 	}
 
 }

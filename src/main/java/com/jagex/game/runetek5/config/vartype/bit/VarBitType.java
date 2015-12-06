@@ -50,6 +50,10 @@ public class VarBitType extends ConfigType {
 		return baseValue & (mask ^ 0xffffffff) | newValue << startBit & mask;
     }
     
+    public boolean isBooleanType () {
+        return startBit == endBit;
+    }
+    
     public void decode (WrappedByteBuffer buffer, int opcode) {
     	VarBitTypeEncodingKey key = SerialEnum.forID(VarBitTypeEncodingKey.values(), opcode);
     	switch (key) {

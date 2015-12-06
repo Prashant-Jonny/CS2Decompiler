@@ -1,10 +1,11 @@
 package com.wycody.cs2d;
 
 import com.wycody.cs2d.print.ScriptPrinter;
-import com.wycody.cs2d.rev.Revision;
+import com.wycody.cs2d.rev.RS2Revision;
 import com.wycody.cs2d.script.CS2Assembler;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.inst.InstructionDecoder;
+import com.wycody.cs2d.script.name.ScriptNameMap;
 
 import net.openrs.cache.Cache;
 
@@ -35,7 +36,7 @@ public class Context {
 	/**
 	 * I know this is kinda useless but i'm gonna make use of it later
 	 */
-	private Revision revision;
+	private RS2Revision revision;
 	/**
 	 * The output handler for the script
 	 */
@@ -50,12 +51,14 @@ public class Context {
 	 * The decompiler
 	 */
 	private CS2Decompiler decompiler;
-	
+
 	/**
 	 * Allow the block to be edited after it's generated
 	 */
 	private boolean blockEditing;
-	
+
+	private ScriptNameMap scriptNameMap;
+
 	/**
 	 * @return the disassembler
 	 */
@@ -124,7 +127,8 @@ public class Context {
 	}
 
 	/**
-	 * @param debug the debug to set
+	 * @param debug
+	 *            the debug to set
 	 */
 	public void setDebug(boolean debug) {
 		this.debug = debug;
@@ -138,7 +142,8 @@ public class Context {
 	}
 
 	/**
-	 * @param decompiler the decompiler to set
+	 * @param decompiler
+	 *            the decompiler to set
 	 */
 	public void setDecompiler(CS2Decompiler decompiler) {
 		this.decompiler = decompiler;
@@ -152,10 +157,27 @@ public class Context {
 	}
 
 	/**
-	 * @param allowBlockEditing the allowBlockEditing to set
+	 * @param allowBlockEditing
+	 *            the allowBlockEditing to set
 	 */
 	public void setBlockEditing(boolean blockEditing) {
 		this.blockEditing = blockEditing;
+	}
+
+	public RS2Revision getRevision() {
+		return revision;
+	}
+
+	public void setRevision(RS2Revision revision) {
+		this.revision = revision;
+	}
+
+	public ScriptNameMap getScriptNameMap() {
+		return scriptNameMap;
+	}
+
+	public void setScriptNameMap(ScriptNameMap scriptNameMap) {
+		this.scriptNameMap = scriptNameMap;
 	}
 
 	/**
@@ -205,6 +227,7 @@ public class Context {
 		this.printer = printer;
 		return this;
 	}
+
 	/**
 	 * Building method use it to set the debug mode
 	 * 
@@ -228,11 +251,13 @@ public class Context {
 		this.decompiler = decompiler;
 		return this;
 	}
+
 	/**
 	 * Building method use it to set the block editing mode
 	 * 
 	 * @param blockEditing
-	 *            allow the blocks to be edited after it's generated? (Recommended yes)
+	 *            allow the blocks to be edited after it's generated?
+	 *            (Recommended yes)
 	 * @return the current context
 	 */
 	public Context withBlockEditing(boolean blockEditing) {
@@ -240,16 +265,14 @@ public class Context {
 		return this;
 	}
 
-	public Context withRevision(Revision revision) {
+	public Context withRevision(RS2Revision revision) {
 		this.revision = revision;
 		return this;
 	}
-	public Revision getRevision() {
-		return revision;
-	}
 
-	public void setRevision(Revision revision) {
-		this.revision = revision;
+	public Context withScriptNameMap(ScriptNameMap scriptNameMap) {
+		this.scriptNameMap = scriptNameMap;
+		return this;
 	}
 
 }

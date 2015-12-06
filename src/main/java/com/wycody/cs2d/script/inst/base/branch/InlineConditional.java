@@ -7,6 +7,7 @@ import com.wycody.cs2d.script.inst.InstructionBaseType;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.base.ReturnInstruction;
 import com.wycody.cs2d.script.inst.base.StoreInstruction;
+import com.wycody.cs2d.script.inst.types.ReturnType;
 import com.wycody.cs2d.script.inst.types.StackType;
 
 /**
@@ -37,13 +38,27 @@ public class InlineConditional extends Instruction {
 	@Override
 	public void print(Context context, ScriptPrinter printer) {
 		if (trueInstr.getType().getBaseType() == InstructionBaseType.RETURN) {
-			ReturnInstruction trueStore = (ReturnInstruction) trueInstr;
-			ReturnInstruction falseStore = (ReturnInstruction) falseInstr;
-			
+			ReturnInstruction trueReturn = (ReturnInstruction) trueInstr;
+			ReturnInstruction falseReturn = (ReturnInstruction) falseInstr;
+
+			if(trueReturn.getReturnType() == ReturnType.BOOLEAN) {
+				int trueVal = (int) trueReturn.getReturnObjects()[0];
+				int falseVal = (int) falseReturn.getReturnObjects()[0];
+				String cond = real.getCondition();
+				if(trueVal == 1) {
+					
+				} else {
+					cond = "!(" + cond + ")";
+				}
+				printer.println("return " + cond + ";");
+			} else {
+				printer.println("return " + real.getCondition() + " ? " + trueReturn.getReturnObjectsText() + " : " + falseReturn.getReturnObjectsText() + ";");
+				
+			}
 		} else if (trueInstr.getType().getBaseType() == InstructionBaseType.STORE) {
 			StoreInstruction trueStore = (StoreInstruction) trueInstr;
 			StoreInstruction falseStore = (StoreInstruction) falseInstr;
-			printer.println(trueStore.getVariable().toString() + " = " + real.getCondition() + " ? " + trueStore.getValue() + " : " + falseStore.getValue());
+			printer.println(trueStore.getVariable().toString() + " = " + real.getCondition() + " ? (" + trueStore.getValue() + ") : (" + falseStore.getValue() + ")");
 		}
 	}
 

@@ -50,6 +50,16 @@ public interface Friend {
                     .setPrefixFormatters(friendFormatter);
     
     /**
+     * Returns the note of the specified friend.
+     */
+    Supplier<CallMethodInstruction> PUSH_FRIEND_NOTE = () ->
+            new CallMethodInstruction(InstructionType.PUSH_FRIEND_RANK)
+                    .setName("getNote")
+                    .setArgumentTypes(StackType.INT)
+                    .setPushType(StackType.OBJECT)
+                    .setPrefixFormatters(friendFormatter);
+    
+    /**
      * Returns the flags of the world the specified friend is currently on.
      */
     Supplier<CallMethodInstruction> PUSH_FRIEND_WORLDFLAGS = () ->
@@ -66,6 +76,22 @@ public interface Friend {
             new CallMethodInstruction(InstructionType.FRIEND_SETRANK)
                     .setName("setFriendRank")
                     .setArgumentTypes(StackType.OBJECT, StackType.INT);
+    
+    /**
+     * Requests the note of the specified friend be changed to the specified value.
+     */
+    Supplier<CallMethodInstruction> FRIEND_SETNOTE = () ->
+            new CallMethodInstruction(InstructionType.FRIEND_SETNOTE)
+                    .setName("setFriendNote")
+                    .setArgumentTypes(StackType.OBJECT, StackType.OBJECT);
+    
+    /**
+     * Requests the note of the specified ignore be changed to the specified value.
+     */
+    Supplier<CallMethodInstruction> IGNORE_SETNOTE = () ->
+            new CallMethodInstruction(InstructionType.IGNORE_SETNOTE)
+                    .setName("setIgnoreNote")
+                    .setArgumentTypes(StackType.OBJECT, StackType.OBJECT);
     
     /**
      * Requests the specified name be added the player's friends list.
@@ -219,6 +245,16 @@ public interface Friend {
                     .setName("getNames")
                     .setArgumentTypes(StackType.INT)
                     .setPushTypes(StackType.OBJECT, StackType.OBJECT)
+                    .setPrefixFormatters(ignoreFormatter);
+    
+    /**
+     * Returns the note of the specified ignore.
+     */
+    Supplier<CallMethodInstruction> PUSH_IGNORE_NOTE = () ->
+            new CallMethodInstruction(InstructionType.PUSH_IGNORE_NOTE)
+                    .setName("getNote")
+                    .setArgumentTypes(StackType.INT)
+                    .setPushType(StackType.OBJECT)
                     .setPrefixFormatters(ignoreFormatter);
     
     /**

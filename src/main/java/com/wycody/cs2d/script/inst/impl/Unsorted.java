@@ -42,4 +42,12 @@ public interface Unsorted {
             new CallMethodInstruction(InstructionType.MIN)
                     .setName("getUnknownGamePreference")
                     .setPushType(StackType.INT);
+    
+    Supplier<CallMethodInstruction> PUSH_DOB = () ->
+            new CallMethodInstruction(InstructionType.PUSH_DOB).setName("getActivePlayer().getDateOfBirth")
+                    .setPushType(StackType.INT).setArgumentTypes(StackType.NONE).fixDefaultType();
+    
+    Supplier<CallMethodInstruction> PUSH_CHAT_RELATED_BOOLEAN = () ->
+            new CallMethodInstruction(InstructionType.PUSH_CHAT_RELATED_BOOLEAN).setName("getActivePlayer().getSomeChatRelatedBoolean")
+                    .setPushType(StackType.INT).setArgumentTypes(StackType.NONE).fixDefaultType();
 }

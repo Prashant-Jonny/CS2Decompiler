@@ -93,21 +93,21 @@ public interface Config {
                     .setPrefixFormatters(ocFormatter);
     
     /**
-     * Gets the worn type (equip type) for the specified object (item).
+     * Gets the second worn position (equip type) for the specified object (item).
      */
-    Supplier<CallMethodInstruction> PUSH_OBJ_WEARTYPE = () ->
-            new CallMethodInstruction(InstructionType.PUSH_OC_WEARTYPE)
-                    .setName("getWearPos")
+    Supplier<CallMethodInstruction> PUSH_OBJ_WEARPOS2 = () ->
+            new CallMethodInstruction(InstructionType.PUSH_OC_WEARPOS2)
+                    .setName("getWearPos2")
                     .setArgumentTypes(StackType.INT)
                     .setPushType(StackType.INT)
                     .setPrefixFormatters(ocFormatter);
     
     /**
-     * Gets the worn position (equip ID) that is hidden when the specified object (item) is worn.
+     * Gets the third worn position (equip ID) for the specified object (item).
      */
-    Supplier<CallMethodInstruction> PUSH_OBJ_HIDEWEARPOS = () ->
-            new CallMethodInstruction(InstructionType.PUSH_OC_HIDEWEARPOS)
-                    .setName("getHideWearPos")
+    Supplier<CallMethodInstruction> PUSH_OBJ_WEARPOS3 = () ->
+            new CallMethodInstruction(InstructionType.PUSH_OC_WEARPOS3)
+                    .setName("getWearPos3")
                     .setArgumentTypes(StackType.INT)
                     .setPushType(StackType.INT)
                     .setPrefixFormatters(ocFormatter);

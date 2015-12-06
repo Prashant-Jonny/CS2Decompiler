@@ -1,13 +1,6 @@
 package com.wycody.cs2d.rev.impl;
 
-import java.util.ArrayList;
-
-import com.wycody.cs2d.Context;
-import com.wycody.cs2d.rev.Revision;
-import com.wycody.cs2d.script.CS2Field;
-import com.wycody.cs2d.script.CS2Script;
-import com.wycody.cs2d.script.inst.Instruction;
-import com.wycody.cs2d.script.inst.InstructionType;
+import com.wycody.cs2d.rev.RS2Revision;
 import com.wycody.cs2d.script.inst.impl.Branch;
 import com.wycody.cs2d.script.inst.impl.Math;
 import com.wycody.cs2d.script.inst.impl.Push;
@@ -16,14 +9,8 @@ import com.wycody.cs2d.script.inst.impl.Text;
 import com.wycody.cs2d.script.inst.impl.Unsorted;
 import com.wycody.cs2d.script.inst.impl.Var;
 import com.wycody.cs2d.script.inst.impl.Widget;
-import com.wycody.cs2d.script.inst.swtch.CaseNode;
-import com.wycody.cs2d.script.inst.swtch.SwitchBlock;
-import com.wycody.io.Buffer;
-import com.wycody.utils.DynamicArray;
 
-import net.openrs.io.WrappedByteBuffer;
-
-public class Revision718 extends Revision {
+public class Revision718 extends RS2Revision {
 
 	@Override
 	public void registerInstructions() {
@@ -127,126 +114,5 @@ public class Revision718 extends Revision {
 
 	}
 
-	@Override
-	public CS2Script disassemble(Context context, WrappedByteBuffer buffer) {
-
-		// Construct an empty CS2Script
-		CS2Script script = new CS2Script();
-
-		// Read the header offset
-		buffer.setPosition(buffer.length() - 2);
-		int headerLength = buffer.getUnsignedShort();
-		int headerOffset = buffer.length() - 18 - headerLength;
-		buffer.setPosition(headerOffset);
-		buffer.getInt();// Instruction count (not used)
-
-		// Read the fields lengths and assign them to the script
-
-		script.setIntegerFields(new CS2Field[buffer.getUnsignedShort()]);
-		script.setObjectFields(new CS2Field[buffer.getUnsignedShort()]);
-		script.setLongFields(new CS2Field[buffer.getUnsignedShort()]);
-
-		// Read the parameters lengths and assign them to the script
-		script.setIntegerParameters(new CS2Field[buffer.getUnsignedShort()]);
-		script.setObjectParameters(new CS2Field[buffer.getUnsignedShort()]);
-		script.setLongParameters(new CS2Field[buffer.getUnsignedShort()]);
-
-		// Read the switch blocks and assign them to the script
-		SwitchBlock[] blocks = new SwitchBlock[buffer.getUnsignedByte()];
-		for (int blockIndex = 0; blockIndex < blocks.length; blockIndex++) {
-			int casesCount = buffer.getUnsignedShort();
-			SwitchBlock block = blocks[blockIndex] = new SwitchBlock(casesCount);
-			// Loop through cases and store them
-			CaseNode previousCase = null;
-
-			for (int caseIndex = 0; caseIndex < casesCount; caseIndex++) {
-				CaseNode currentCase = new CaseNode(buffer.getInt(), buffer.getInt());
-				if (previousCase != null) {
-					previousCase.setNext(currentCase);
-				}
-				currentCase.setPrevious(previousCase);
-				block.addCase(currentCase);
-			}
-
-		}
-		script.setSwitchBlocks(blocks);
-		buffer.setPosition(0);
-
-		buffer.getNullString();
-		// Read the instructions and assign them to the script
-		int instructionsEnd = buffer.length() - 18 - headerLength;
-		int instrAddress = 0;
-		ArrayList<Instruction> tempInstructions = new ArrayList<>();
-		while (buffer.getPosition() < instructionsEnd) {
-			tempInstructions.add(context.getInstructionDecoder().decode(script, context, buffer, buffer.getUnsignedShort(), instrAddress));
-			instrAddress++;
-		}
-		script.setInstructions(tempInstructions.toArray(new Instruction[tempInstructions.size()]));
-		script.initializeFields();
-		return script;
-	}
-	@Override
-	public byte[] assemble(Context context, CS2Script script) {
-		Buffer buffer = new Buffer(512, 0);
-		buffer.writeNullableString(null);
-		for (int address = 0; address < script.getInstructions().length; address++) {
-			Instruction instruction = script.getInstruction(address);
-			buffer.writeShort(instruction.getId());
-			if(instruction.getType() == InstructionType.PUSH_OBJ) {
-				buffer.writeString(instruction.getObjectOperand().toString());
-			} else if(instruction.getType() == InstructionType.PUSH_OBJ) {
-				buffer.writeLong(instruction.getLongOperand());
-			} else {
-				if (isLarge(instruction.getId())) {
-					buffer.writeInt(instruction.getIntegerOperand());
-				} else {
-					buffer.writeByte(instruction.getIntegerOperand());
-				}
-			}
-		}
-
-		buffer.writeInt(script.getInstructions().length);
-		buffer.writeShort(script.getIntegerFields().length);
-		buffer.writeShort(script.getObjectFields().length);
-		buffer.writeShort(script.getLongFields().length);
-		buffer.writeShort(script.getIntegerParameters().length);
-		buffer.writeShort(script.getIntegerParameters().length);
-		buffer.writeShort(script.getIntegerParameters().length);
-		buffer.writeByte(script.getSwitchBlocks().length);
-		int stStart = buffer.getOffset();
-		for (int blockIndex = 0; blockIndex < script.getSwitchBlocks().length; blockIndex++) {
-			SwitchBlock block = script.getSwitchBlocks()[blockIndex];
-			DynamicArray<CaseNode> cases = block.getAllCases();
-			buffer.writeShort(cases.size());
-
-			for (int caseIndex = 0; caseIndex < cases.size(); caseIndex++) {
-				CaseNode node = cases.get(caseIndex);
-				buffer.writeInt(node.getExpression());
-				buffer.writeInt(node.getJumpTarget());
-			}
-
-		}
-
-		buffer.writeShort(buffer.getOffset() - stStart + 1);
-		return buffer.trimAndGet();
-	}
-
-
-	@Override
-	public Instruction decode(CS2Script script, Context context, WrappedByteBuffer buffer, int id, int address) {
-		int instKey = registeredInstructions.containsKey(id) ? id : -1;
-		Instruction instr = registeredInstructions.get(instKey).get();
-		instr.setBaseData(id, address);
-
-		if (instr.getType() == InstructionType.PUSH_OBJ) {
-			instr.setObjectOperand(buffer.getString().intern());
-		} else if (instr.getType() == InstructionType.PUSH_LONG) {
-			instr.setLongOperand(buffer.getLong());
-		} else {
-			instr.setIntegerOperand(isLarge(id) ? buffer.getInt() : buffer.getUnsignedByte());
-		}
-		instr.setScript(script);
-		return instr;
-	}
 
 }

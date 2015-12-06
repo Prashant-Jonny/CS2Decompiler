@@ -1,0 +1,162 @@
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+// Source File Name:   CompressionUtils.java
+
+package net.openrs.util;
+
+import java.io.*;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
+import org.tukaani.xz.LZMAInputStream;
+
+public final class CompressionUtils
+{
+
+    public static byte[] unlzma(byte buffer[], int size)
+    {
+        byte result[] = new byte[size];
+        try
+        {
+            byte temp[] = new byte[buffer.length + 8];
+            System.arraycopy(buffer, 0, temp, 0, 5);
+            temp[5] = (byte)(size >>> 0);
+            temp[6] = (byte)(size >>> 8);
+            temp[7] = (byte)(size >>> 16);
+            temp[8] = (byte)(size >>> 24);
+            temp[9] = temp[10] = temp[11] = temp[12] = 0;
+            System.arraycopy(buffer, 5, temp, 13, buffer.length - 5);
+            LZMAInputStream stream = new LZMAInputStream(new ByteArrayInputStream(temp));
+            stream.read(result);
+            stream.close();
+        }
+        catch(IOException ioex)
+        {
+            ioex.printStackTrace();
+            return null;
+        }
+        return result;
+    }
+
+    public static byte[] bunzip2(byte bytes[])
+        throws IOException
+    {
+        InputStream is;
+        byte bzip2[] = new byte[bytes.length + 4];
+        bzip2[0] = 66;
+        bzip2[1] = 90;
+        bzip2[2] = 104;
+        bzip2[3] = 49;
+        System.arraycopy(bytes, 0, bzip2, 4, bytes.length);
+        is = new BZip2CompressorInputStream(new ByteArrayInputStream(bzip2));
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        byte buf[] = new byte[4096];
+        for(int len = 0; (len = is.read(buf, 0, buf.length)) != -1;)
+            os.write(buf, 0, len);
+
+        break MISSING_BLOCK_LABEL_111;
+        Exception exception;
+        exception;
+        os.close();
+        throw exception;
+        byte abyte0[];
+        os.close();
+        abyte0 = os.toByteArray();
+        is.close();
+        return abyte0;
+        Exception exception1;
+        exception1;
+        is.close();
+        throw exception1;
+    }
+
+    public static byte[] bzip2(byte bytes[])
+        throws IOException
+    {
+        InputStream is = new ByteArrayInputStream(bytes);
+        ByteArrayOutputStream bout;
+        OutputStream os;
+        bout = new ByteArrayOutputStream();
+        os = new BZip2CompressorOutputStream(bout, 1);
+        byte buf[] = new byte[4096];
+        for(int len = 0; (len = is.read(buf, 0, buf.length)) != -1;)
+            os.write(buf, 0, len);
+
+        break MISSING_BLOCK_LABEL_78;
+        Exception exception;
+        exception;
+        os.close();
+        throw exception;
+        byte abyte0[];
+        os.close();
+        bytes = bout.toByteArray();
+        byte bzip2[] = new byte[bytes.length - 2];
+        System.arraycopy(bytes, 2, bzip2, 0, bzip2.length);
+        abyte0 = bzip2;
+        is.close();
+        return abyte0;
+        Exception exception1;
+        exception1;
+        is.close();
+        throw exception1;
+    }
+
+    public static byte[] gunzip(byte bytes[])
+        throws IOException
+    {
+        InputStream is = new GZIPInputStream(new ByteArrayInputStream(bytes));
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        byte buf[] = new byte[4096];
+        for(int len = 0; (len = is.read(buf, 0, buf.length)) != -1;)
+            os.write(buf, 0, len);
+
+        break MISSING_BLOCK_LABEL_71;
+        Exception exception;
+        exception;
+        os.close();
+        throw exception;
+        byte abyte0[];
+        os.close();
+        abyte0 = os.toByteArray();
+        is.close();
+        return abyte0;
+        Exception exception1;
+        exception1;
+        is.close();
+        throw exception1;
+    }
+
+    public static byte[] gzip(byte bytes[])
+        throws IOException
+    {
+        InputStream is = new ByteArrayInputStream(bytes);
+        ByteArrayOutputStream bout;
+        OutputStream os;
+        bout = new ByteArrayOutputStream();
+        os = new GZIPOutputStream(bout);
+        byte buf[] = new byte[4096];
+        for(int len = 0; (len = is.read(buf, 0, buf.length)) != -1;)
+            os.write(buf, 0, len);
+
+        break MISSING_BLOCK_LABEL_77;
+        Exception exception;
+        exception;
+        os.close();
+        throw exception;
+        byte abyte0[];
+        os.close();
+        abyte0 = bout.toByteArray();
+        is.close();
+        return abyte0;
+        Exception exception1;
+        exception1;
+        is.close();
+        throw exception1;
+    }
+
+    private CompressionUtils()
+    {
+    }
+}

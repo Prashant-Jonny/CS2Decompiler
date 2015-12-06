@@ -26,6 +26,7 @@ public class CS2Field<T> {
 	 */
 	private boolean declared;
 
+
 	/**
 	 * Construct a new {@link CS2Field}
 	 * 

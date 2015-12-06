@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.wycody.cs2d.rev.Revision;
+import com.wycody.cs2d.rev.RS2Revision;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.base.CallMethodInstruction;
@@ -82,7 +82,7 @@ public class ConfigParser {
     }
     
     
-    public void loadRevision(String revision, Revision target) {
+    public void loadRevision(String revision, RS2Revision target) {
         try{
             String line;
             BufferedReader r = new BufferedReader(new FileReader(new File("config/"+revision+".tsv")));

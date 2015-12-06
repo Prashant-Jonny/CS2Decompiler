@@ -11,6 +11,13 @@ public interface Chat {
     Function<Object,Object> quickChatCategoryFormatter = o -> "getQuickChatCategory("+o+")";
     Function<Object,Object> quickChatPhraseFormatter = o -> "getQuickChatPhrase("+o+")";
     
+    
+    Supplier<CallMethodInstruction> PUSH_BYID = () ->
+            new CallMethodInstruction(InstructionType.PUSH_CHAT_BYID)
+                    .setName("getChatLineById")
+                    .setArgumentTypes(StackType.INT)
+                    .setPushTypes(StackType.INT, StackType.INT, StackType.INT, StackType.OBJECT, StackType.OBJECT, StackType.OBJECT, StackType.OBJECT, StackType.INT, StackType.OBJECT);
+    
     /**
      * Returns current public chat filter status. 
      */

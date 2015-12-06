@@ -71,6 +71,9 @@ public class DynamicArray<T> implements Iterable<T> {
 		// you can only increase it by one, this saved memory because when you
 		// want to create additional elements they're going to be empty and
 		// removed automatically
+		if (index > data.length) {
+			throw new ArrayIndexOutOfBoundsException("You cannot add value by more than 1 index pad to DynamicArray");
+		}
 		if (index == data.length) {
 			// Recreate the array with the new size
 			int newSize = data.length + 1;
@@ -78,9 +81,8 @@ public class DynamicArray<T> implements Iterable<T> {
 			// Copy the old array into new array
 			System.arraycopy(data, 0, newData, 0, data.length);
 			this.data = newData;
-		} else {
-			throw new ArrayIndexOutOfBoundsException("You cannot add value by more than 1 index to DynamicArray");
 		}
+
 		data[index] = value;
 	}
 

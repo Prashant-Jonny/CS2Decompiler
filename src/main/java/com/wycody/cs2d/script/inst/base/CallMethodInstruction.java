@@ -1,5 +1,6 @@
 package com.wycody.cs2d.script.inst.base;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 import com.wycody.cs2d.Context;

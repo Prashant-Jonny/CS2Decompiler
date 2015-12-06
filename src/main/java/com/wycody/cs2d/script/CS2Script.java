@@ -134,7 +134,7 @@ public class CS2Script {
 		fieldNameMapper = new FieldNameMapper();
 		BlockComment comment = new BlockComment();
 		comment.addLine("Thanks for using our decompiler");
-		comment.addLine("Authors: Walied-Yassen, Fear, Sundays911, Pea2nut");
+		comment.addLine("Authors: Walied-Yassen, Fear, Sundays211, Pea2nuts");
 		setFooterComment(comment);
 		generator = new BasicBlockGenerator(this);
 	}
@@ -457,13 +457,13 @@ public class CS2Script {
 	public void print(Context context) {
 		ScriptPrinter printer = context.getPrinter();
 		printer.initializeForScript(this);
+		if (footerComment != null) {
+			footerComment.print(context, printer);
+		}
 
 		printHeader(context);
 		printBody(context);
 		printFooter(context);
-		if (footerComment != null) {
-			footerComment.print(context, printer);
-		}
 		printer.finalizeForScript(this);
 
 	}
@@ -509,7 +509,7 @@ public class CS2Script {
 	 */
 	private void printHeader(Context context) {
 		ScriptPrinter printer = context.getPrinter();
-		printer.print(type.getType() + " " + name + "(");
+		printer.print(type.getType() + " " + getName() + "(");
 		printer.print(generateParameters(null));
 		printer.println(") {");
 		printer.tab();

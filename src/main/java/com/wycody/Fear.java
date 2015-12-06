@@ -25,7 +25,7 @@ import com.jagex.game.runetek5.config.structtype.StructTypeList;
 import com.wycody.cs2d.CS2Decompiler;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ConsolePrinter;
-import com.wycody.cs2d.rev.Revision;
+import com.wycody.cs2d.rev.RS2Revision;
 import com.wycody.cs2d.rev.impl.Revision742;
 import com.wycody.cs2d.rev.impl.Revision850;
 import com.wycody.cs2d.script.CS2Script;
@@ -143,7 +143,7 @@ script: 3106
 			Cache c = new Cache(s);
 			//Revision revision = new Revision742(c);
             
-            Revision revision = new Revision742();
+            RS2Revision revision = new Revision742();
             ConfigParser config = new ConfigParser();
           //  config.download("742");
             config.loadRevision("742", revision);
@@ -223,7 +223,7 @@ script: 3106
 		FileStore s = FileStore.open(new File("F:\\CACHES\\850\\"));
 		Cache c = new Cache(s);
 		ConfigParser config = new ConfigParser();
-		Revision revision = new Revision850(c);
+		RS2Revision revision = new Revision850(c);
 		config.loadRevision("850", revision);
 
 		Main.paramTypeList = new ParamTypeList(c);
@@ -280,7 +280,7 @@ script: 3106
 		FileStore s = FileStore.open(new File("c:\\850\\"));
 		Cache c = new Cache(s);
 		ConfigParser config = new ConfigParser();
-		Revision revision = new Revision850(c);
+		RS2Revision revision = new Revision850(c);
 		config.loadRevision("850", revision);
 
 		Main.paramTypeList = new ParamTypeList(c);
@@ -333,7 +333,7 @@ script: 3106
         if (new File("F:\\LIVE\\").exists()) {
 			FileStore s = FileStore.open(new File("F:\\CACHES\\850"));
 			Cache c = new Cache(s);
-			Revision revision = new Revision850(c);
+			RS2Revision revision = new Revision850(c);
             
             ConfigParser config = new ConfigParser();
             //config.download("850");

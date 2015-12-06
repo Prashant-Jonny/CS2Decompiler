@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.jagex.game.runetek5.config.vartype.constants.ScriptVarType;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
+import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.types.StackType;
@@ -40,12 +41,14 @@ public class EventBindInstruction extends Instruction {
     /**
      * The object which contains the script ID
      */
-    private Object scriptId;
+	private int scriptId;
     
     /**
      * The script arguments
      */
     private Object[] args;
+
+	private CS2Script target;
 
     public EventBindInstruction(InstructionType type, String handlerName, boolean isActiveComponent) {
         super(type);
@@ -98,17 +101,19 @@ public class EventBindInstruction extends Instruction {
             	args[i] = CS2Utils.fixIntegerField(pop(StackType.INT));
             }
         }
-        scriptId = pop(StackType.INT);
+		scriptId = (int) pop(StackType.INT);
+		target = context.getDecompiler().disassemble(scriptId);
+
     }
 
 
     @Override
     public void print(Context context, ScriptPrinter printer) {
-        if (scriptId instanceof Integer && ((Integer) scriptId) == -1) {
+		if (scriptId == -1) {
             printer.println(prefix+".remove"+handlerName+"Event();");
         } else {
             StringBuilder bldr = new StringBuilder();
-            bldr.append(prefix).append(".set").append(handlerName).append("Event(~" + context.getDecompiler().getNameMapper().getName(scriptId) + "(");
+			bldr.append(prefix).append(".set").append(handlerName).append("Event(~" + target.getName() + "(");
 
           //  bldr.append(scriptId);
             if (args.length > 0) {

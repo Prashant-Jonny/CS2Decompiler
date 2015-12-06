@@ -13,7 +13,7 @@ import com.jagex.game.runetek5.config.structtype.StructTypeList;
 import com.wycody.cs2d.CS2Decompiler;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ConsolePrinter;
-import com.wycody.cs2d.rev.Revision;
+import com.wycody.cs2d.rev.RS2Revision;
 import com.wycody.cs2d.rev.impl.Revision742;
 import com.wycody.cs2d.script.CS2Script;
 
@@ -41,7 +41,7 @@ public class User {
 		if (args.length >= 2) {
 			cachePath = new File(args[1].replaceFirst("^~", System.getProperty("user.home")));
 		}
-		Revision revision = new Revision742();
+		RS2Revision revision = new Revision742();
 		FileStore s = FileStore.open(cachePath);
 		Cache cache = new Cache(s);
 		paramTypeList = new ParamTypeList(cache);

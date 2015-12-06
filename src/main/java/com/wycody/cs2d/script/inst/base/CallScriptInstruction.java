@@ -3,6 +3,7 @@ package com.wycody.cs2d.script.inst.base;
 import com.wycody.cs2d.CS2Decompiler;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
+import com.wycody.cs2d.script.CS2Field;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
@@ -45,7 +46,7 @@ public class CallScriptInstruction extends Instruction {
 	public void preprocess(Context context) {
 		CS2Decompiler decompiler = context.getDecompiler();
 		int scriptId = integerOperand;
-		if (scriptId == getHolder().getHolder().getId()) {
+        if (scriptId == getHolder().getHolder().getId()) {
 			target = getHolder().getHolder();
 		} else {
 			target = decompiler.decompile(scriptId);
@@ -54,8 +55,7 @@ public class CallScriptInstruction extends Instruction {
 		args[StackType.INT.ordinal()] = target.getIntegerParameters().length;
 		args[StackType.OBJECT.ordinal()] = target.getObjectParameters().length;
 		args[StackType.LONG.ordinal()] = target.getLongParameters().length;
-		
-		
+
 	}
 
 	/*
@@ -74,44 +74,46 @@ public class CallScriptInstruction extends Instruction {
 		assert target.getReturnTypes() != null : "Target returns are null";
 
 		switch (target.getType()) {
-		case INTEGER:
-			setPrintable(false);
-			push(StackType.INT, callText);
-			break;
-		case OBJECT:
-			setPrintable(false);
-			push(StackType.OBJECT, callText);
-			break;
-		case LONG:
-			setPrintable(false);
-			push(StackType.LONG, callText);
-			break;
-		case OBJECT_ARRAY:
-			setPrintable(false);
-			arrayName = "result";
-			for (int typeIndex = 0; typeIndex < target.getReturnTypes().length; typeIndex++) {
-				StackType type = target.getReturnTypes()[typeIndex];
-				switch (type) {
-				case INT:
-					push(StackType.INT, arrayName + "[" + typeIndex + "]");
-					break;
-				case LONG:
-					push(StackType.LONG, arrayName + "[" + typeIndex + "]");
-					break;
-				case OBJECT:
-					push(StackType.OBJECT, arrayName + "[" + typeIndex + "]");
-					break;
-				default:
-					throw new UnsupportedOperationException("The '" + type + "' is not supported in object array yet!!");
+			case BOOLEAN:
+			case INTEGER:
+				setPrintable(false);
+				push(StackType.INT, callText);
+				break;
+			case OBJECT:
+				setPrintable(false);
+				push(StackType.OBJECT, callText);
+				break;
+			case LONG:
+				setPrintable(false);
+				push(StackType.LONG, callText);
+				break;
+			case OBJECT_ARRAY:
+				setPrintable(false);
+				arrayName = "result";
+				for (int typeIndex = 0; typeIndex < target.getReturnTypes().length; typeIndex++) {
+					StackType type = target.getReturnTypes()[typeIndex];
+					switch (type) {
+						case INT:
+							push(StackType.INT, arrayName + "[" + typeIndex + "]");
+							break;
+						case LONG:
+							push(StackType.LONG, arrayName + "[" + typeIndex + "]");
+							break;
+						case OBJECT:
+							push(StackType.OBJECT, arrayName + "[" + typeIndex + "]");
+							break;
+						default:
+							throw new UnsupportedOperationException("The '" + type + "' is not supported in object array yet!!");
 
+					}
 				}
-			}
-			break;
-		case VOID:
+				break;
+			case VOID:
 
-			break;
-		default:
-			throw new UnsupportedOperationException("The '" + target.getType() + "' call type is not supported yet!");
+				break;
+
+			default:
+				throw new UnsupportedOperationException("The '" + target.getType() + "' call type is not supported yet!");
 		}
 	}
 

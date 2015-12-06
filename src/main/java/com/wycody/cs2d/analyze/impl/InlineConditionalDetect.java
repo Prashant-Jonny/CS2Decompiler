@@ -7,6 +7,7 @@ import com.wycody.cs2d.analyze.Analyzer;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.flow.impl.BasicBlock;
 import com.wycody.cs2d.script.inst.Instruction;
+import com.wycody.cs2d.script.inst.base.ReturnInstruction;
 import com.wycody.cs2d.script.inst.base.StoreInstruction;
 import com.wycody.cs2d.script.inst.base.branch.ConditionalInstruction;
 import com.wycody.cs2d.script.inst.base.branch.InlineConditional;
@@ -62,37 +63,56 @@ public class InlineConditionalDetect extends Analyzer {
 				continue;
 			}
 			instr: for (ConditionalInstruction instruction : instructions) {
-				if (!instruction.hasElse()) {
-					continue instr;
-				}
+
 				BasicBlock holder = instruction.getHolder();
 				BasicBlock targetBlock = instruction.getTarget();
-				BasicBlock elseBlock = instruction.getElse();
-
-				DynamicArray<Instruction> targetPrintables = targetBlock.getPrintableInstructions(null);
-				DynamicArray<Instruction> elsePrintables = elseBlock.getPrintableInstructions(null);
-
-				if (targetPrintables.size() != elsePrintables.size() || targetPrintables.size() > MAX_ALLOWED) {
-					continue instr;
-				}
-				boolean apply = true;
-				c: for (int index = 0; index < targetPrintables.size(); index++) {
-					Instruction targetPrintable = targetPrintables.get(index);
-					Instruction elsePrintable = elsePrintables.get(index);
-					if (targetPrintable.getType() != elsePrintable.getType() || !canBe(elsePrintable)) {
-						apply = false;
-						break c;
+				if (!instruction.hasElse()) {
+					Instruction first = targetBlock.getFirstPrintableInstruction(null);
+					if (first instanceof ReturnInstruction) {
+						Instruction other = holder.getFirstPrintableInstruction(instruction);
+						if (other instanceof ReturnInstruction) {
+							ReturnInstruction firstReturn = (ReturnInstruction) first;
+							ReturnInstruction otherReturn = (ReturnInstruction) other;
+							InlineConditional cond = new InlineConditional(instruction, firstReturn, otherReturn);
+							instruction.getHolder().removeInstruction(instruction);
+							otherReturn.getHolder().replaceInstruction(otherReturn, cond);
+							// TODO Clean this up & make it remove the block
+							// unused things
+						}
 					}
 
-				}
-				if (apply) {
+				} else {
+					BasicBlock elseBlock = instruction.getElse();
+					if (elseBlock == null) {
+
+						return;
+					}
+					DynamicArray<Instruction> targetPrintables = targetBlock.getPrintableInstructions(null);
+					DynamicArray<Instruction> elsePrintables = elseBlock.getPrintableInstructions(null);
+
+					if (targetPrintables.size() != elsePrintables.size() || targetPrintables.size() > MAX_ALLOWED) {
+						continue instr;
+					}
+					boolean apply = true;
 					c: for (int index = 0; index < targetPrintables.size(); index++) {
 						Instruction targetPrintable = targetPrintables.get(index);
 						Instruction elsePrintable = elsePrintables.get(index);
-						InlineConditional cond = new InlineConditional(instruction, targetPrintable, elsePrintable);
-						holder.addAfter(instruction,  cond);
+						if (targetPrintable.getType() != elsePrintable.getType() || !canBe(elsePrintable)) {
+							apply = false;
+							break c;
+						}
+
 					}
-					holder.removeInstruction(instruction);
+					if (apply) {
+						c: for (int index = 0; index < targetPrintables.size(); index++) {
+							Instruction targetPrintable = targetPrintables.get(index);
+							Instruction elsePrintable = elsePrintables.get(index);
+							InlineConditional cond = new InlineConditional(instruction, targetPrintable, elsePrintable);
+							holder.addAfter(instruction, cond);
+						}
+						holder.removeInstruction(instruction);
+
+					}
 
 				}
 
