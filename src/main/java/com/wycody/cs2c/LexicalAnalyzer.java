@@ -66,4 +66,8 @@ public class LexicalAnalyzer {
 	private boolean isNumber(char c) {
 		return c >= '0' && c <= '9';
 	}
+
+	private boolean isSymbol(char c) {
+		return c == '+' || c == '-' || c == '*' || c == '\\' || c == '&' || c == '%';
+	}
 }

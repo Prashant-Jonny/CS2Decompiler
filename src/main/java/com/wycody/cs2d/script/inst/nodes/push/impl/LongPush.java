@@ -1,6 +1,5 @@
-package com.wycody.cs2d.script.inst.nodes.impl;
+package com.wycody.cs2d.script.inst.nodes.push.impl;
 
-import com.wycody.cs2d.script.inst.nodes.PushNode;
 import com.wycody.cs2d.script.inst.types.StackType;
 
 /**
@@ -12,6 +11,11 @@ public class LongPush extends OperandPush<Long> {
 
 	public LongPush(Long value) {
 		super(StackType.LONG, value);
+	}
+
+	@Override
+	public String getText() {
+		return String.valueOf(value);
 	}
 
 }

@@ -191,7 +191,17 @@ public interface ClientGeneral {
                     .setName("getBaseLevel")
                     .setArgumentTypes(StackType.INT)
                     .setPushType(StackType.INT)
-                    .setPrefixFormatters(statFormatter); 
+                    .setPrefixFormatters(statFormatter);
+    
+    /**
+     * Returns the base level (which is based off xp only) of the specified skill without the f2p cap for the active player.
+     */
+    Supplier<CallMethodInstruction> PUSH_STAT_NOCAPBASE = () ->
+            new CallMethodInstruction(InstructionType.PUSH_STAT_NOCAPBASE)
+                    .setName("getNoCapBaseLevel")
+                    .setArgumentTypes(StackType.INT)
+                    .setPushType(StackType.INT)
+                    .setPrefixFormatters(statFormatter);
     
     /**
      * Returns the experience (xp) gained in the specified skill for the active player.

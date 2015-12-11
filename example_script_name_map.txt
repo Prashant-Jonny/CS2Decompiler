@@ -1,0 +1,27 @@
+# This file will teach you how to write maps for script headers
+# At first you must know few things, To comment use "# Your comment here"
+# Example:
+# This is a comment
+
+# Okay so every map have two parts, first part is the id and the second part is the refactored header
+# Those parts are splited  by " = "
+
+# There's two formats for the the second part which is the refactored header
+
+# You can use the first one when only don't need to check for parameter (Skip parameter check), It's formated as follow:
+# script_id = script_name
+# Without any bracket so our parser would know to skip the parameter check
+
+# The second format is for the rest usage, it can be with parameters or not but it has to be followed by (parameters), for example:
+# You got a script with this header "script_556(int arg0, int arg1, String arg2, long arg3)" the refactored header would be
+# "some_script_name(int someArgName, int otherArg, int otherArgToo, String strArg, long longArg)"
+
+# Also if the script does not have any parameter use "script_name()" as the refactored header
+
+
+# 663 = test_with_no_args
+
+# 999 = utils.colors.rgb(int green, int blue, int red)
+
+
+# Thanks for reading, Enjoy your time!

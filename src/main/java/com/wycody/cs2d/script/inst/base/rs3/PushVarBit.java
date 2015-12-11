@@ -1,6 +1,8 @@
 package com.wycody.cs2d.script.inst.base.rs3;
 
+import com.jagex.game.runetek5.config.vartype.VarType;
 import com.jagex.game.runetek5.config.vartype.bit.VarBitType;
+import com.jagex.game.runetek5.config.vartype.constants.BaseVarType;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
 import com.wycody.cs2d.script.inst.Instruction;
@@ -16,7 +18,11 @@ public class PushVarBit extends Instruction {
 	@Override
 	public void process(Context context) {
 		VarBitType varbitType = (VarBitType) objectOperand;
-		push(StackType.INT, "varbits[" + varbitType.id + "]");   
+		push(StackType.INT, "%varbit" + varbitType.id);   
+		
+		//with basevar
+		//push(StackType.INT, "var" + varbitType.baseVarType.name().toLowerCase() + "s[" + varbitType.baseVarKey + "].varbits[" + varbitType.id + "]"); 
+		
 	}
 
 	@Override

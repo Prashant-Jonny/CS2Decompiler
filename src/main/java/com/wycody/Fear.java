@@ -66,36 +66,11 @@ public class Fear {
 	 */
 	public static void main(String[] args) throws IOException {
 
-        //689
-        //472
-	//	findE();
 
-		//findSHIT(894,1102,913,62,455,597);
-
-		for(ScriptVarType type : ScriptVarType.values()){
-			System.out.println(type.getSerialId() + "\t" + "\"" + type.getChar() + "\"" + type.name());
-		}
-
-
-		ScriptVarType type = SerialEnum.forID(ScriptVarType.values(), 73);
-		System.out.println(type);
-		if("".equalsIgnoreCase(""))
-			return;
-
-        //test();
-        // 686 605
-//396
-//		findSHIT(351,
-//				369,
-//				1031,
-//				1170,
-//				243,
-//				83);
-	//	findSHIT(572);
         Revision850.debug_instructions=true;
         Revision850.print_unknowns=true;
    //     test850(new String[]{"7958"});
-       //test850(new String[]{"9915"});
+       test850(new String[]{"10218"});
 
 /*
 Unknown opcode: 648
@@ -131,7 +106,7 @@ script: 3106
 			findSHIT(ids);
 		}else{
 			;
-			test850(args);
+			//test850(args);
 		}
 
 		//test742(args);

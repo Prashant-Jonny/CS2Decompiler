@@ -46,12 +46,52 @@ public class BasicBlock extends Block {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see
+	 * com.wycody.cs2d.script.flow.Block#preprocess(com.wycody.cs2d.Context)
+	 */
+	@Override
+	public void preprocess(Context context) {
+		for (Instruction instruction : instructions) {
+			try {
+				instruction.preprocess(context);
+			} catch (RuntimeException ex) {
+				throw new RuntimeException("Error preprocessing instruction " + instruction, ex);
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.wycody.cs2d.script.flow.Block#process(com.wycody.cs2d.Context)
 	 */
 	@Override
 	public void process(Context context) {
+
 		for (Instruction instruction : instructions) {
-			instruction.process(context);
+			try {
+				instruction.process(context);
+			} catch (RuntimeException ex) {
+				throw new RuntimeException("Error processing instruction " + instruction, ex);
+			}
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.wycody.cs2d.script.flow.Block#postprocess(com.wycody.cs2d.Context)
+	 */
+	@Override
+	public void postprocess(Context context) {
+		for (Instruction instruction : instructions) {
+			try {
+				instruction.postprocess(context);
+			} catch (RuntimeException ex) {
+				throw new RuntimeException("Error postprocessing instruction " + instruction, ex);
+			}
 		}
 	}
 

@@ -3,7 +3,6 @@ package com.wycody.cs2d.script.inst.base;
 import com.wycody.cs2d.CS2Decompiler;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
-import com.wycody.cs2d.script.CS2Field;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
@@ -46,7 +45,7 @@ public class CallScriptInstruction extends Instruction {
 	public void preprocess(Context context) {
 		CS2Decompiler decompiler = context.getDecompiler();
 		int scriptId = integerOperand;
-        if (scriptId == getHolder().getHolder().getId()) {
+		if (scriptId == getHolder().getHolder().getId()) {
 			target = getHolder().getHolder();
 		} else {
 			target = decompiler.decompile(scriptId);
@@ -73,6 +72,12 @@ public class CallScriptInstruction extends Instruction {
 
 		assert target.getReturnTypes() != null : "Target returns are null";
 
+		Object wtf = target.getReturnTypes();
+
+		if(target.getId() == 8701) {
+			target.setReturnTypes(new StackType[]{StackType.INT,StackType.INT,StackType.INT,StackType.INT,StackType.INT,StackType.INT,StackType.INT,StackType.INT});
+			target.setType(ReturnType.OBJECT_ARRAY);
+		}
 		switch (target.getType()) {
 			case BOOLEAN:
 			case INTEGER:

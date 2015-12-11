@@ -1,0 +1,13 @@
+1287=clan_core_next_update_minute
+1291=clan_core_members_visited_varclan
+1627=clav_1_resource_cap_varclan
+1628=clav_2_resource_cap_varclan
+1629=clav_3_resource_cap_varclan
+1891=clan_stronghold_bonus_xp_type_base
+2552=clan_stronghold_plot_type_base_1
+2559=clan_stronghold_plot_type_base_2
+2566=clan_stronghold_tier_base_1
+2575=clan_stronghold_tier_base_2
+2583=clan_stronghold_upkeep_base
+2834=clan_skillplot_lock_base
+2858=clav_citadel_resource_base

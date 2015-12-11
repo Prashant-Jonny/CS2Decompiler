@@ -1,0 +1,13 @@
+1097=num_dungeoneering_tokens
+1234=num_loyalty_points
+1297=num_quest_points
+1325=dominion_factor
+1342=crucible_high_score
+1419=num_played_castle_wars_games
+1627=mobilising_armies_rank
+1628=num_mobilising_armies_reward_credits
+1660=conquest_score
+1712=fist_of_guthix_rating
+2630=black_knight_kill_score
+5427=num_thaler
+5862=num_chompy_birds_killed

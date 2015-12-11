@@ -68,8 +68,7 @@ public class ConditionalRelationDetect extends Analyzer {
 				}
 
 				detectAnd(instruction);
-	
-				
+
 			}
 		}
 		for (int depth = biggestDepth; depth >= 0; depth--) {
@@ -83,11 +82,10 @@ public class ConditionalRelationDetect extends Analyzer {
 				}
 
 				detectOr(instruction);
-	
-				
+
 			}
 		}
-	
+
 	}
 
 	private boolean detectAnd(ConditionalInstruction instruction) {
@@ -119,7 +117,9 @@ public class ConditionalRelationDetect extends Analyzer {
 			if (condFirst.getTarget() == instruction.getTarget()) {
 				instruction.getRelations().add(new Relation(condFirst, RelationType.OR));
 				condFirst.getHolder().removeInstruction(condFirst);
-				instruction.getHolder().getSuccessors().remove(instruction.getHolder().getSuccessors().indexOf(condFirst.getTarget()));
+				int index = instruction.getHolder().getSuccessors().indexOf(condFirst.getTarget());
+				if (index != -1)
+					instruction.getHolder().getSuccessors().remove(index);
 				return true;
 			}
 		}

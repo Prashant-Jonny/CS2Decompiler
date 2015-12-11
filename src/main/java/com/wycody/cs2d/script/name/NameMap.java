@@ -31,6 +31,11 @@ public class NameMap {
 	private DynamicArray<String> argsName;
 
 	/**
+	 * Check for the parameters when finding
+	 */
+	private boolean checkParameters;
+
+	/**
 	 * Construct a new {@link NameMap} without the need for the builder methods
 	 */
 	public NameMap(String packageName, String name) {
@@ -38,6 +43,7 @@ public class NameMap {
 		this.name = name;
 		this.argsType = new DynamicArray<>(StackType.class);
 		this.argsName = new DynamicArray<>(String.class);
+		checkParameters = true;
 	}
 
 
@@ -107,6 +113,14 @@ public class NameMap {
 	 */
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
+	}
+
+	public boolean isCheckParameters() {
+		return checkParameters;
+	}
+
+	public void setCheckParameters(boolean checkParameters) {
+		this.checkParameters = checkParameters;
 	}
 
 }

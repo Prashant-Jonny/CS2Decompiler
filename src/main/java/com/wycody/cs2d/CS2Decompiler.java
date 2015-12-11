@@ -15,8 +15,8 @@ import com.wycody.cs2d.analyze.impl.ConditionalElseDetect;
 import com.wycody.cs2d.analyze.impl.ConditionalRelationDetect;
 import com.wycody.cs2d.analyze.impl.DuplicationFix;
 import com.wycody.cs2d.analyze.impl.ForLoopDetect;
-import com.wycody.cs2d.analyze.impl.IncrDecrDetect;
 import com.wycody.cs2d.analyze.impl.InlineConditionalDetect;
+import com.wycody.cs2d.analyze.impl.PostfixUnaryDetect;
 import com.wycody.cs2d.analyze.impl.SwitchAnalyzer;
 import com.wycody.cs2d.analyze.impl.WhileLoopDetect;
 import com.wycody.cs2d.script.CS2Script;
@@ -44,7 +44,7 @@ public class CS2Decompiler {
 		ANALYZER_GROUP.add(WhileLoopDetect.class);
 		ANALYZER_GROUP.add(ConditionalElseDetect.class);
 		ANALYZER_GROUP.add(SwitchAnalyzer.class);
-		ANALYZER_GROUP.add(IncrDecrDetect.class);
+		ANALYZER_GROUP.add(PostfixUnaryDetect.class);
 		ANALYZER_GROUP.add(DuplicationFix.class);
 		ANALYZER_GROUP.add(ConditionalRelationDetect.class);
 		ANALYZER_GROUP.add(ForLoopDetect.class);
@@ -111,16 +111,23 @@ public class CS2Decompiler {
 	 * @return the decompiled script
 	 */
 	public CS2Script decompile(CS2Script script) {
+		decompiledScripts.put(script.getId(), script);
+
 		script.getGenerator().start();
 		if (!context.isBlockEditing()) {
 			script.finalizeBlocks();
 		}
 		script.getBlocks().forEach((k, v) -> {
+			v.preprocess(context);
+		});
+		script.getBlocks().forEach((k, v) -> {
 			v.process(context);
+		});
+		script.getBlocks().forEach((k, v) -> {
+			v.postprocess(context);
 		});
 
 		new AnalyzerManager(script, ANALYZER_GROUP).run();
-		decompiledScripts.put(script.getId(), script);
 		return script;
 	}
 

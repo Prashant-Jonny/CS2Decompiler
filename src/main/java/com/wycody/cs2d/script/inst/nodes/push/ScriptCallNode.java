@@ -1,6 +1,7 @@
-package com.wycody.cs2d.script.inst.nodes;
+package com.wycody.cs2d.script.inst.nodes.push;
 
 import com.wycody.cs2d.script.CS2Script;
+import com.wycody.cs2d.script.inst.nodes.PushNode;
 
 /**
  * 

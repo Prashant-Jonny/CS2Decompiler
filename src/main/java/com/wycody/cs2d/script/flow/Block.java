@@ -49,10 +49,21 @@ public abstract class Block extends Node {
 	}
 
 	/**
+	 * 
+	 */
+	public abstract void preprocess(Context context);
+	
+	/**
 	 * Process the script
 	 */
 	public abstract void process(Context context);
 
+	/**
+	 * 
+	 * @param context
+	 */
+	public abstract void postprocess(Context context);
+	
 	/**
 	 * Print the script
 	 */

@@ -1,0 +1,67 @@
+get_item_count_in_inv(int inv_type, int obj_type) = script_1
+get_construction_category_name(int category) = script_2
+get_construction_milestone(int category, int milestone) = script_3
+get_ge_slot_component(int slot) = script_10 //can't check becuase it's different on 835. I think this is correct
+clear_component(int component) =  script_11
+on_close_interface = script_675 // -- havent looked at decompiled script
+rgb(int r, int g, int b) = script_693
+
+Land of the goblins script info
+
+	Fairy Ring Power Relay Interface
+		
+		lotg_ring_power_left_bar_idx  = varbits[13326]
+		lotg_ring_power_middle_bar_idx  = varbits[13327]
+		lotg_ring_power_right_bar_idx  = varbits[13328]
+
+		lotg_ring_power_increment_left_bar = script_549
+		lotg_ring_power_decrement_left_bar = script_550
+		lotg_ring_power_increment_middle_bar = script_551
+		lotg_ring_power_decrement_middle_bar = script_552
+		lotg_ring_power_increment_right_bar = script_553
+		lotg_ring_power_decrement_right_bar  = script_554
+		lotg_ring_power_reset_bars  = script_555
+	
+	Select Your Goblin
+	
+		lotg_currently_selected_goblin = varbits[13339]
+		
+		lotg_goblin_select_if_check_clicked(int goblin_type) = script_556
+		lotg_goblin_select_update_current_goblin = script_557
+		lotg_goblin_select_update(int goblin_type) = script_558
+		
+		
+Pyramid Plunder
+	
+	
+	pp_current_time = varbits[5126]
+	pp_current_level = varbits[5127]
+	pp_current_room = varbits[5128]
+	
+	pp_update_progress(int progressbar_comp, int progressbar_border_comp, int hourglass_comp) = script_324
+	pp_update_status_text(int room_comp, int level_comp) = script_323
+	
+	
+	
+	
+PROGRESS:DLFASDKM CURRENTLY CHECKING
+script_865 - something with GE
+
+these 2 are for penguin and circus emotes. not sure what else
+void script_40(int arg0) {//probably used for other stuff besides emote hovers
+	~script_41(arg0);
+	return;
+}
+//emote_something - need to know what varcs[2] is..
+void script_41(int arg0) {
+	getWidget(arg0).clear();
+	varcs[2] = 0;
+	return;
+}
+
+void script_44(int arg0, int arg1) {//update_comp_sprite - used for hovering - maybe other stuff
+	getWidget(arg0).setSpriteId(arg1);
+	return;
+}
+		
+		

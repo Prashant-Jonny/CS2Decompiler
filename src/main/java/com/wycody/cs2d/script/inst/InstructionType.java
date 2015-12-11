@@ -208,9 +208,13 @@ public enum InstructionType {
 	PUSH_AC_GRAPHICROT("PUSH_AC_GRAPHICROT", InstructionBaseType.PUSH),
 	PUSH_AC_MODEL("PUSH_AC_MODEL", InstructionBaseType.PUSH),
 	PUSH_AC_FONT("PUSH_AC_FONT", InstructionBaseType.PUSH),
-	// 4x unknown
-	PUSH_AC_SLOT("PUSH_AC_SLOT", InstructionBaseType.PUSH),
 	// 1x unknown
+	PUSH_AC_GRAPHICSIZE("PUSH_AC_GRAPHICSIZE", InstructionBaseType.PUSH),
+	// 1x unknown
+	PUSH_AC_OBJECT("PUSH_AC_OBJECT", InstructionBaseType.PUSH),
+	PUSH_AC_OBJCOUNT("PUSH_AC_OBJCOUNT", InstructionBaseType.PUSH),
+	PUSH_AC_SLOT("PUSH_AC_SLOT", InstructionBaseType.PUSH),//
+	PUSH_AC_TARGETEVENTFLAGS("PUSH_AC_TARGETEVENTFLAGS", InstructionBaseType.PUSH),
 	PUSH_AC_OP("PUSH_AC_OP", InstructionBaseType.PUSH),
 	PUSH_AC_APPLYNAME("PUSH_AC_APPLYNAME", InstructionBaseType.PUSH),
 
@@ -377,6 +381,7 @@ public enum InstructionType {
 	PUSH_INV_STOCKCOUNT("PUSH_INV_STOCKCOUNT", InstructionBaseType.PUSH),
 	PUSH_STAT_LEVEL("PUSH_STAT_LEVEL", InstructionBaseType.PUSH),
 	PUSH_STAT_BASE("PUSH_STAT_BASE", InstructionBaseType.PUSH),
+	PUSH_STAT_NOCAPBASE("PUSH_STAT_NOCAPBASE", InstructionBaseType.PUSH),
 	PUSH_STAT_EXPERIENCE("PUSH_STAT_EXPERIENCE", InstructionBaseType.PUSH),
 	PUSH_PLAYER_COORD("PUSH_PLAYER_COORD", InstructionBaseType.PUSH),
 	PUSH_COORD_X("PUSH_COORD_X", InstructionBaseType.PUSH),
@@ -562,6 +567,7 @@ public enum InstructionType {
 	PUSH_CHAR_TOLOWER("PUSH_CHAR_TOLOWER", InstructionBaseType.PUSH),
 	PUSH_CHAR_TOUPPER("PUSH_CHAR_TOUPPER", InstructionBaseType.PUSH),
 	PUSH_INT_FORMATTEDSTR("PUSH_INT_FORMATTEDSTR", InstructionBaseType.PUSH),
+	PUSH_STR_WIDTH("PUSH_STR_WIDTH", InstructionBaseType.PUSH),
 	// 1x unknown
 	PUSH_UTC_TIMESTAMP("PUSH_UTC_TIMESTAMP", InstructionBaseType.PUSH),
 	PUSH_LONG_TO_BASE36STR("PUSH_LONG_TO_BASE36STR", InstructionBaseType.PUSH),
@@ -657,6 +663,11 @@ public enum InstructionType {
 	// Window mode instructions
 	SET_FS_SIZE("SET_FS_SIZE", InstructionBaseType.PUSH),
 	PUSH_WINDOW_MODE("PUSH_WINDOW_MODE", InstructionBaseType.PUSH),
+    
+    //Login instructions
+	PUSH_LOGIN_RESPONSE("PUSH_LOGIN_RESPONSE", InstructionBaseType.PUSH),
+	PUSH_HAS_SIGNLE_SIGNON_KEY("PUSH_HAS_SIGNLE_SIGNON_KEY", InstructionBaseType.PUSH),
+    
 
 	// World list instructions
 	WORLDLIST_FETCH("WORLDLIST_FETCH", InstructionBaseType.PUSH),
@@ -668,6 +679,8 @@ public enum InstructionType {
 	WORLDLIST_RESETACTIVE("DEFAULTWORLD_SETACTIVE", InstructionBaseType.EXECUTE),
 	WORLDLIST_SETFETCHPING("WORLDLIST_SETFETCHPING", InstructionBaseType.EXECUTE),
 	PUSH_ACTIVEWORLD_FLAGS("PUSH_ACTIVEWORLD_FLAGS", InstructionBaseType.PUSH),
+    
+    PUSH_IF_TOP("PUSH_IF_TOP", InstructionBaseType.PUSH),
 
 	// Unknowns
 	CONSOLE_PRINT("CONSOLE_PRINT", InstructionBaseType.EXECUTE),

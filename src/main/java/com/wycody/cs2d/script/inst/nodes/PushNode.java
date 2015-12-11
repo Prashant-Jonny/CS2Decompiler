@@ -8,10 +8,10 @@ import com.wycody.cs2d.script.inst.types.StackType;
  * @date Dec 5, 2015
  * @param <T>
  */
-public class PushNode<T> {
+public abstract class PushNode<T> {
 
-	private StackType pushType;
-	private T value;
+	protected StackType pushType;
+	protected T value;
 
 	public PushNode(StackType pushType, T value) {
 		this.pushType = pushType;
@@ -30,4 +30,5 @@ public class PushNode<T> {
 		return pushType;
 	}
 
+	public abstract String getText();
 }

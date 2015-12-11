@@ -746,6 +746,30 @@ public interface ActiveWidget {
                     .setPushType(StackType.INT);
     
     /**
+     * Gets the size of the specified graphic component, in the format (height, width)
+     */
+    Supplier<CallMethodInstruction> PUSH_GRAPHICSIZE = () ->
+            new CallMethodInstruction(InstructionType.PUSH_AC_GRAPHICSIZE)
+                    .setName(AC_PREFIX+"getGraphicSize")
+                    .setPushTypes(StackType.INT, StackType.INT);
+    
+    /**
+     * Gets the ID of the object on the specified media component
+     */
+    Supplier<CallMethodInstruction> PUSH_OBJECTID = () ->
+            new CallMethodInstruction(InstructionType.PUSH_AC_OBJECT)
+                    .setName("getObject")
+                    .setPushType(StackType.INT);
+    
+    /**
+     * Gets the stack size of the object on the specified media component
+     */
+    Supplier<CallMethodInstruction> PUSH_OBJCOUNT = () ->
+            new CallMethodInstruction(InstructionType.PUSH_AC_OBJCOUNT)
+                    .setName("getObjectCount")
+                    .setPushType(StackType.INT);
+    
+    /**
      * Gets the slot of the active component
      */
     Supplier<CallMethodInstruction> PUSH_SLOT = () ->

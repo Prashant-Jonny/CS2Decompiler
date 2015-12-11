@@ -42,7 +42,7 @@ public class PushInstruction extends Instruction {
     public void process(Context context) {
         switch (this.fieldType) {
             case OPERAND:
-				this.push(this.stackType, this.getOperand(this.srcType));
+                this.push(this.stackType,this.getOperand(this.srcType));
                 break;
             case FIELD:
                 this.push(this.stackType,this.getFields(this.srcType)[this.integerOperand]);

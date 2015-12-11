@@ -1,10 +1,12 @@
 package com.wycody.cs2d.script.inst.impl;
 
+import java.util.function.Supplier;
+
+import com.wycody.cs2d.script.CS2Operator;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.base.CallMethodInstruction;
-import com.wycody.cs2d.script.inst.types.StackType;
 import com.wycody.cs2d.script.inst.base.InfixInstruction;
-import java.util.function.Supplier;
+import com.wycody.cs2d.script.inst.types.StackType;
 
 public interface Math {
     Supplier<CallMethodInstruction> MAX = () ->
@@ -62,28 +64,28 @@ public interface Math {
                     .setPushType(StackType.INT);
     
     Supplier<InfixInstruction> BITWISE_AND = () ->
-            new InfixInstruction(InstructionType.BITWISE_AND,false,"&",StackType.INT,StackType.INT,StackType.INT);
+            new InfixInstruction(InstructionType.BITWISE_AND,false,CS2Operator.BITWISE_AND,StackType.INT,StackType.INT,StackType.INT);
     
     Supplier<InfixInstruction> BITWISE_OR = () ->
-            new InfixInstruction(InstructionType.BITWISE_OR,false,"|",StackType.INT,StackType.INT,StackType.INT);
+            new InfixInstruction(InstructionType.BITWISE_OR,false,CS2Operator.BITWISE_OR,StackType.INT,StackType.INT,StackType.INT);
     
     Supplier<InfixInstruction> SUBTRACT = () ->
-            new InfixInstruction(InstructionType.SUBTRACT,false,"-",StackType.INT,StackType.INT,StackType.INT);
+            new InfixInstruction(InstructionType.SUBTRACT,false,CS2Operator.SUB,StackType.INT,StackType.INT,StackType.INT);
 
     Supplier<InfixInstruction> SUM = () ->
-            new InfixInstruction(InstructionType.ADD,false,"+",StackType.INT,StackType.INT,StackType.INT);
+            new InfixInstruction(InstructionType.ADD,false,CS2Operator.SUM,StackType.INT,StackType.INT,StackType.INT);
     
     Supplier<InfixInstruction> DIVIDE = () ->
-            new InfixInstruction(InstructionType.DIVIDE,false,"/",StackType.INT,StackType.INT,StackType.INT);
+            new InfixInstruction(InstructionType.DIVIDE,false,CS2Operator.DIVIDE,StackType.INT,StackType.INT,StackType.INT);
     
     Supplier<InfixInstruction> MULTIPLY = () ->
-        new InfixInstruction(InstructionType.MULTIPLY,false,"*",StackType.INT,StackType.INT,StackType.INT);
+        new InfixInstruction(InstructionType.MULTIPLY,false,CS2Operator.MULTI,StackType.INT,StackType.INT,StackType.INT);
     
     Supplier<InfixInstruction> MODULO = () ->
-        new InfixInstruction(InstructionType.MODULO,false,"%",StackType.INT,StackType.INT,StackType.INT);
+        new InfixInstruction(InstructionType.MODULO,false,CS2Operator.MODULUS,StackType.INT,StackType.INT,StackType.INT);
     
     Supplier<InfixInstruction> POWER = () ->
-        new InfixInstruction(InstructionType.POWER,false,"^",StackType.INT,StackType.INT,StackType.INT);
+        new InfixInstruction(InstructionType.POWER,false,CS2Operator.BITWISE_XOR,StackType.INT,StackType.INT,StackType.INT);
 
     //FIXME: verify.
     Supplier<CallMethodInstruction> FRAC_MULTIPLY = () ->

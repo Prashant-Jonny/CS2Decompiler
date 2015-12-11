@@ -14,6 +14,7 @@ import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ConsolePrinter;
 import com.wycody.cs2d.rev.RS2Revision;
 import com.wycody.cs2d.script.CS2Script;
+import com.wycody.cs2d.script.name.RS2ScriptNameMap;
 
 import net.openrs.cache.Cache;
 import net.openrs.cache.FileStore;
@@ -29,14 +30,15 @@ public class Walied {
 		BasicConfigurator.configure();
 		Logger.getRootLogger().setLevel(Level.INFO);
 		RS2Revision revision = createRevision(REVISION_ID);
-		int scriptId = (6525);
+		int scriptId = (431);
 		FileStore s = FileStore.open(new File(CACHE_PATH));
 		Cache cache = new Cache(s);
 		paramTypeList = new ParamTypeList(cache);
 		Context context = new Context();
 		CS2Decompiler decompiler = new CS2Decompiler(context);
-
-		context.withBlockEditing(true).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withRevision(revision).withPrinter(new ConsolePrinter());
+		RS2ScriptNameMap map = new RS2ScriptNameMap();
+		map.load("data/walied/script_names.txt");
+		context.withBlockEditing(true).withScriptNameMap(map).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withRevision(revision).withPrinter(new ConsolePrinter());
 		CS2Script script = decompiler.decompile(scriptId);
 		script.print(context);
 		// test();

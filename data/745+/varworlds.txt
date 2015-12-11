@@ -1,0 +1,4 @@
+631=soul_wars_blue_team_avatar_level
+632=soul_wars_red_team_avatar_level
+647=soul_wars_blue_team_avatar_health
+648=soul_wars_red_team_avatar_health

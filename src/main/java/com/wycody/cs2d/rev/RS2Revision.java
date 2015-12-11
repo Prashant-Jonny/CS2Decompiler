@@ -19,6 +19,8 @@ import com.wycody.io.Buffer;
 import com.wycody.utils.DynamicArray;
 
 import net.openrs.io.WrappedByteBuffer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles the revision control methods
@@ -27,6 +29,8 @@ import net.openrs.io.WrappedByteBuffer;
  * @date Nov 7, 2015
  */
 public abstract class RS2Revision implements CS2Assembler, InstructionDecoder {
+
+	private static final Logger logger = LoggerFactory.getLogger(RS2Revision.class.getName());
 
 	/**
 	 * The registered instructions by the revision (They get scrambled each
@@ -86,6 +90,7 @@ public abstract class RS2Revision implements CS2Assembler, InstructionDecoder {
 	 */
 	public void registerInstruction(int id, Supplier<? extends Instruction> supplier) {
 		if (registeredInstructions.containsKey(id)) {
+            logger.debug("WARNING: "+id+" was registered multiple times.");
 			// throw new Error("You cannot register one id to multiple
 			// instructions");
 		}

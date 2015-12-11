@@ -52,6 +52,7 @@ public class PushParamInstruction extends Instruction {
                             else
                                 throw new Error("Unknown type: " + resultType);
                         }
+                        break;
                     }
                 }else if(pushCount > 1)
                     return; // Resolve failed :<

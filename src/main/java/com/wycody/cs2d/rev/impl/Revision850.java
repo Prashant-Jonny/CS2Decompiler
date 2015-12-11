@@ -397,7 +397,7 @@ public class Revision850 extends RS3Revision {
         OR(313),
         MIN(952),
         */
-
+        registerInstruction(313, Math.BITWISE_OR);
         registerInstruction(952,  Math.MIN);
         registerInstruction(241,  Math.MAX);
         registerInstruction(977,  Math.FRAC_MULTIPLY);
@@ -438,6 +438,7 @@ public class Revision850 extends RS3Revision {
         1x ?*/
         
         registerInstruction(282, Config.PUSH_STRUCT_PARAM);
+        registerInstruction(338, Config.PUSH_NPC_PARAM);
         /*
         55x ?
         GET_MAP_SEGMENT_COORDS

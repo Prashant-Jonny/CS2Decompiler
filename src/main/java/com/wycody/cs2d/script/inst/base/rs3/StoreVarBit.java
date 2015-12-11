@@ -20,7 +20,7 @@ public class StoreVarBit extends Instruction {//TODO is this being done correct?
 	public void process(Context context) {
 		VarBitType type = (VarBitType) objectOperand;
 		boolean usePlayerMap = integerOperand == 1;
-        variable = "varbits[" + type.id + "]";
+        variable = "%varbit" + type.id;
         value = integerOperand;
         
 	}

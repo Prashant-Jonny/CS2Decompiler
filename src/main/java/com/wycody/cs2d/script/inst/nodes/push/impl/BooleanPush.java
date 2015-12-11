@@ -1,4 +1,4 @@
-package com.wycody.cs2d.script.inst.nodes.impl;
+package com.wycody.cs2d.script.inst.nodes.push.impl;
 
 import com.wycody.cs2d.script.inst.nodes.PushNode;
 import com.wycody.cs2d.script.inst.types.StackType;
@@ -12,8 +12,17 @@ import com.wycody.cs2d.script.inst.types.StackType;
  */
 public class BooleanPush extends PushNode<Boolean> {
 
+	public BooleanPush(Integer value) {
+		this(value != 0);
+	}
+
 	public BooleanPush(Boolean value) {
 		super(StackType.INT, value);
+	}
+
+	@Override
+	public String getText() {
+		return value == Boolean.TRUE ? "true" : "false";
 	}
 
 }

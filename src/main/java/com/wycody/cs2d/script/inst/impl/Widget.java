@@ -902,4 +902,12 @@ public interface Widget {
                     .setArgumentTypes(StackType.INT)
                     .setPushType(StackType.INT);
     
+    /**
+     * Gets the ID of the top-level interface
+     */
+    Supplier<CallMethodInstruction> PUSH_TOP = () ->
+            new CallMethodInstruction(InstructionType.PUSH_IF_TOP)
+                    .setName("getTopInterface")
+                    .setPushType(StackType.INT);
+    
 }

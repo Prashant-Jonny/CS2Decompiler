@@ -1,0 +1,16 @@
+#custom names
+lotg=land_of_the_goblins
+
+#official names
+ame=anti_macro_events
+ash1=a_shadow_over_ashdale
+dslay=demon_slayer
+mah5=ritual_of_the_mahjarrat
+omge=troll_warzone
+tpr=fate_of_the_gods
+vkq2=a_void_dance
+qbd1=song_from_the_depths
+quest_bacon=bringing_home_the_bacon
+
+
+

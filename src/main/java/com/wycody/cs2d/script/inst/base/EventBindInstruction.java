@@ -48,6 +48,9 @@ public class EventBindInstruction extends Instruction {
      */
     private Object[] args;
 
+    /**
+     * 
+     */
 	private CS2Script target;
 
     public EventBindInstruction(InstructionType type, String handlerName, boolean isActiveComponent) {
@@ -102,8 +105,9 @@ public class EventBindInstruction extends Instruction {
             }
         }
 		scriptId = (int) pop(StackType.INT);
-		target = context.getDecompiler().disassemble(scriptId);
-
+        if (scriptId != -1) {
+            target = context.getDecompiler().disassemble(scriptId);
+        }
     }
 
 

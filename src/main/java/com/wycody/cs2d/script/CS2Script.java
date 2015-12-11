@@ -330,7 +330,6 @@ public class CS2Script {
 	public void setInstructions(Instruction[] instructions) {
 		this.instructions = instructions;
 	}
-
 	/**
 	 * @return the integerStack
 	 */

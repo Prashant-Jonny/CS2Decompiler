@@ -4,14 +4,13 @@ import com.wycody.cs2d.rev.RS3Revision;
 import com.wycody.cs2d.script.inst.impl.ActiveWidget;
 import com.wycody.cs2d.script.inst.impl.Array;
 import com.wycody.cs2d.script.inst.impl.Branch;
-import com.wycody.cs2d.script.inst.impl.Camera;
 import com.wycody.cs2d.script.inst.impl.Chat;
 import com.wycody.cs2d.script.inst.impl.Clan;
 import com.wycody.cs2d.script.inst.impl.ClientGeneral;
 import com.wycody.cs2d.script.inst.impl.Config;
 import com.wycody.cs2d.script.inst.impl.Exchange;
 import com.wycody.cs2d.script.inst.impl.Friend;
-import com.wycody.cs2d.script.inst.impl.Input;
+import com.wycody.cs2d.script.inst.impl.Login;
 import com.wycody.cs2d.script.inst.impl.Math;
 import com.wycody.cs2d.script.inst.impl.Player;
 import com.wycody.cs2d.script.inst.impl.Pop;
@@ -22,7 +21,6 @@ import com.wycody.cs2d.script.inst.impl.ScriptEnum;
 import com.wycody.cs2d.script.inst.impl.Store;
 import com.wycody.cs2d.script.inst.impl.Text;
 import com.wycody.cs2d.script.inst.impl.Unsorted;
-import com.wycody.cs2d.script.inst.impl.Var;
 import com.wycody.cs2d.script.inst.impl.Widget;
 import com.wycody.cs2d.script.inst.impl.WidgetContainer;
 import com.wycody.cs2d.script.inst.impl.WindowMode;
@@ -225,9 +223,9 @@ public class Revision835 extends RS3Revision {
         registerInstruction(703, Widget.SETPARAM_INT);
         registerInstruction(739, Widget.SETPARAM_STR);
         //4x unknown
-        registerInstruction(364, Widget.SETMONOCHROMEFONT);
+        //registerInstruction(-1 Widget.SETMONOCHROMEFONT);
         //1x unknown
-        registerInstruction(251, Widget.SETOBJECT);
+        //registerInstruction(-1, Widget.SETOBJECT);
         
         //Component - interaction
         registerInstruction(957, Widget.SETOP);
@@ -355,15 +353,17 @@ public class Revision835 extends RS3Revision {
         //2x unknown
         registerInstruction(29, ActiveWidget.PUSH_GRAPHIC);
         registerInstruction(38, ActiveWidget.PUSH_PARAM);
-        //registerInstruction(-1, ActiveWidget.PUSH_GRAPHICROT);
+        registerInstruction(655, ActiveWidget.PUSH_GRAPHICROT);
         //registerInstruction(-1, ActiveWidget.PUSH_MODEL);
         //registerInstruction(-1, ActiveWidget.PUSH_FONT);
         //1x unknown
         registerInstruction(684, ActiveWidget.PUSH_FONT);//Not sure why Jagex duplicates this, but whatever...
-        //2x unknown
-        //registerInstruction(-1, ActiveWidget.PUSH_SLOT);
-        //registerInstruction(-1, ActiveWidget.PUSH_OP);
-        //registerInstruction(-1, ActiveWidget.PUSH_APPLYNAME);
+        registerInstruction(421, ActiveWidget.PUSH_OBJECTID);
+        registerInstruction(1144, ActiveWidget.PUSH_OBJCOUNT);
+        registerInstruction(319, ActiveWidget.PUSH_SLOT);
+        //1x unknown
+        registerInstruction(763, ActiveWidget.PUSH_OP);
+        registerInstruction(129, ActiveWidget.PUSH_APPLYNAME);
         
         //Component - layout getters
         registerInstruction(106, Widget.PUSH_POSX);
@@ -416,8 +416,9 @@ public class Revision835 extends RS3Revision {
         registerInstruction(819, ClientGeneral.PUSH_INV_CAPACITY);
         registerInstruction(1096, ClientGeneral.PUSH_INV_STOCKCOUNT);
         registerInstruction(672, ClientGeneral.PUSH_STAT_LEVEL);
-        //2x unknown
-        registerInstruction(435, ClientGeneral.PUSH_STAT_BASE);
+        registerInstruction(563, ClientGeneral.PUSH_STAT_BASE);
+        //1x unknown
+        registerInstruction(435, ClientGeneral.PUSH_STAT_NOCAPBASE);
         registerInstruction(462, ClientGeneral.PUSH_STAT_EXPERIENCE);
         //1x unknown
         registerInstruction(603, ClientGeneral.PUSH_PLAYER_COORD);
@@ -569,8 +570,8 @@ public class Revision835 extends RS3Revision {
         registerInstruction(1068, Text.INT_TO_STR);
         registerInstruction(317, Text.COMPARE);
         registerInstruction(936, Text.LINE_COUNT);
-        //registerInstruction(-1, Text.RENDER_WIDTH_WX);
-        //registerInstruction(-1, Text.RENDER_WIDTH);        
+        registerInstruction(100, Text.RENDER_WIDTH_WX);
+        registerInstruction(406, Text.RENDER_WIDTH);        
         registerInstruction(1170, Text.CHOICE);
         registerInstruction(1011, Text.ENCODE_STR);
         registerInstruction(643, Text.CONCAT_CHAR);
@@ -586,7 +587,8 @@ public class Revision835 extends RS3Revision {
         registerInstruction(279, Text.CHAR_TOLOWER);
         registerInstruction(119, Text.CHAR_TOUPPER);
         registerInstruction(842, Text.INT_FORMATTEDSTR);
-        //2x unknown
+        registerInstruction(226, Text.PUSH_STR_WIDTH);
+        //1x unknown
         registerInstruction(158, Text.UTC_TIMESTAMP);
         registerInstruction(380, Text.LONG_TO_BASE36);
         
@@ -663,6 +665,11 @@ public class Revision835 extends RS3Revision {
         //3x unknown
         registerInstruction(8, WindowMode.PUSH_MODE);
         
+        //Login instructions
+        registerInstruction(334, Login.PUSH_RESPONSE);
+        registerInstruction(368, Login.PUSH_HAS_SIGNLE_SIGNON_KEY);
+        
+        
         //World list instructions
         registerInstruction(159, WorldList.FETCH);
         registerInstruction(96, WorldList.PUSH_FIRSTENTRY);
@@ -673,6 +680,8 @@ public class Revision835 extends RS3Revision {
         //registerInstruction(-1, WorldList.RESETACTIVE);
         //registerInstruction(-1, WorldList.SETFETCHPING);
         registerInstruction(58, WorldList.PUSH_ACTIVEFLAGS);
+        
+        registerInstruction(68, Widget.PUSH_TOP);
         
         // Input
         //registerInstruction(-1, Input.PUSH_PRESSED_MOUSE_BUTTONS);

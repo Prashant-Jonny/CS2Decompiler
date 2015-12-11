@@ -62,9 +62,13 @@ public class BooleanDetector extends Analyzer {
 						int value = (int) retObjs[0];
 						if (value == 0 || value == 1)
 							continue b;
+						
+						else {
+							retBool = false;
+							break;
+						}
 					}
 				}
-				retBool = false;
 			}
 			if (retBool) {
 				for (ReturnInstruction retInstr : instructions) {

@@ -2,6 +2,7 @@ package com.wycody.cs2d.script.inst.base;
 
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
+import com.wycody.cs2d.script.CS2Operator;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.types.StackType;
@@ -11,12 +12,12 @@ import com.wycody.cs2d.script.inst.types.StackType;
 // e.g. setFormattedName("(%1 + %2)")
 public class InfixInstruction extends Instruction{
     private final boolean reverse;
-    private final String operator;
+    private final CS2Operator operator;
     private final StackType leftType;
     private final StackType rightType;
     private final StackType resultType;
     
-    public InfixInstruction(InstructionType type,boolean isReverse, String operator, StackType leftType, StackType rightType, StackType resultType) {
+    public InfixInstruction(InstructionType type,boolean isReverse, CS2Operator operator, StackType leftType, StackType rightType, StackType resultType) {
         super(type);
         this.reverse = isReverse;
         this.operator = operator;
@@ -38,9 +39,9 @@ public class InfixInstruction extends Instruction{
                 (this.getType() != InstructionType.STRING_SIGNINT_CONCAT);
         
         if(!reverse){
-            result = (brackets?"(":"") + left + " " + operator + " " + right + (brackets?")":"");
+            result = (brackets?"(":"") + left + " " + operator.getSymbol() + " " + right + (brackets?")":"");
         }else{
-            result = (brackets?"(":"") + right + " " + operator + " " + left + (brackets?")":"");            
+            result = (brackets?"(":"") + right + " " + operator.getSymbol() + " " + left + (brackets?")":"");            
         }
         
         push(resultType,result);

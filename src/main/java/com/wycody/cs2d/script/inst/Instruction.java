@@ -6,9 +6,11 @@ import org.slf4j.LoggerFactory;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.node.Node;
 import com.wycody.cs2d.print.Printable;
+import com.wycody.cs2d.script.CS2Field;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.flow.impl.BasicBlock;
 import com.wycody.cs2d.script.inst.base.BlockComment;
+import com.wycody.cs2d.script.inst.nodes.PushNode;
 import com.wycody.cs2d.script.inst.types.StackType;
 
 /**
@@ -96,8 +98,12 @@ public abstract class Instruction extends Node implements Printable {
 		this.address = address;
 	}
 
+
 	public abstract void process(Context context);
 
+	public void postprocess(Context context) {
+
+	}
 	/**
 	 * @return the id
 	 */
@@ -203,6 +209,11 @@ public abstract class Instruction extends Node implements Printable {
 		this.script = script;
 	}
 
+	public PushNode push(PushNode node) {
+		push(node.getPushType(), node);
+		return node;
+	}
+	
 	/**
 	 * Push value with specified type to it's stack
 	 * 
@@ -213,8 +224,6 @@ public abstract class Instruction extends Node implements Printable {
 	 */
 	public void push(StackType type, Object value) {
 		logger.debug("PUSH => " + type + " // " + this.toString() + " @ " + this.address);
-		// System.err.println("PUSH => " + type + " // " + this.toString() + " @
-		// " + this.address);
 		switch (type) {
 		case INT:
 			this.script.pushInteger(value);
@@ -260,7 +269,7 @@ public abstract class Instruction extends Node implements Printable {
 		}
 	}
 
-	public Object[] getFields(StackType type) {
+	public CS2Field[] getFields(StackType type) {
 		switch (type) {
 		case INT:
 			return this.script.getIntegerFields();

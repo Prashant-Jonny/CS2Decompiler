@@ -17,11 +17,11 @@ import com.wycody.cs2d.script.inst.walker.WalkerAction;
  * @author Walied-Yassen
  * @date Nov 15, 2015
  */
-public class IncrDecrDetect extends Analyzer {
+public class PostfixUnaryDetect extends Analyzer {
 	private HashMap<Integer, List<StoreInstruction>> instructions;
 	private int biggestDepth;
 
-	public IncrDecrDetect(CS2Script script) {
+	public PostfixUnaryDetect(CS2Script script) {
 		super(script);
 	}
 

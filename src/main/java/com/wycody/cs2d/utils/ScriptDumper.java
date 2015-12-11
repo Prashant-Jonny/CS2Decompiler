@@ -70,8 +70,8 @@ public class ScriptDumper {
 			script.print(context);
 			context.getPrinter().finish();           
             System.out.println("Saved script "+name+" as "+file.getAbsolutePath());
-		} catch (Exception ex) {
-            ex.printStackTrace();
+		} catch (Throwable ex) {
+         
 		}
 		context.withPrinter(beforePrinter);
 	}

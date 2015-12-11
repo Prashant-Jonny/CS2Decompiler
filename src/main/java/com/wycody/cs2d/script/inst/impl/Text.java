@@ -2,6 +2,7 @@ package com.wycody.cs2d.script.inst.impl;
 
 import java.util.function.Supplier;
 
+import com.wycody.cs2d.script.CS2Operator;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.base.CallMethodInstruction;
 import com.wycody.cs2d.script.inst.base.InfixInstruction;
@@ -9,10 +10,10 @@ import com.wycody.cs2d.script.inst.types.StackType;
 
 public interface Text {
     Supplier<InfixInstruction> CONCAT_INT = () ->
-            new InfixInstruction(InstructionType.STRING_INT_CONCAT,false,"+",StackType.OBJECT,StackType.INT,StackType.OBJECT);
+            new InfixInstruction(InstructionType.STRING_INT_CONCAT,false,CS2Operator.SUM,StackType.OBJECT,StackType.INT,StackType.OBJECT);
     
     Supplier<InfixInstruction> CONCAT = () ->
-            new InfixInstruction(InstructionType.STRING_STRING_CONCAT,false,"+",StackType.OBJECT,StackType.OBJECT,StackType.OBJECT);
+            new InfixInstruction(InstructionType.STRING_STRING_CONCAT,false,CS2Operator.SUM,StackType.OBJECT,StackType.OBJECT,StackType.OBJECT);
     
     Supplier<CallMethodInstruction> COLOR_TO_CHAT_STR = () ->
             new CallMethodInstruction(InstructionType.INT_COL_STRING)
@@ -87,7 +88,7 @@ public interface Text {
     
     //TODO: should make this '+' again.
     Supplier<InfixInstruction> CONCAT_CHAR = () ->
-            new InfixInstruction(InstructionType.STRING_CHAR_CONCAT,false,"+",StackType.OBJECT,StackType.INT,StackType.OBJECT);
+            new InfixInstruction(InstructionType.STRING_CHAR_CONCAT,false,CS2Operator.SUM,StackType.OBJECT,StackType.INT,StackType.OBJECT);
     
     Supplier<CallMethodInstruction> COMPARE = () ->
             new CallMethodInstruction(InstructionType.STR_COMPARE)
@@ -185,6 +186,15 @@ public interface Text {
                     .setFormattedName("toFormattedString(%2, %1)")
                     .setArgumentTypes(StackType.INT, StackType.INT)
                     .setPushType(StackType.OBJECT);
+    
+    /**
+     * Returns the width of the specified string when rendered using the given font. Format: (string, font)
+     */
+    Supplier<CallMethodInstruction> PUSH_STR_WIDTH = () ->
+            new CallMethodInstruction(InstructionType.PUSH_STR_WIDTH)
+                    .setFormattedName("getStringWidth(%1, %2)")
+                    .setArgumentTypes(StackType.OBJECT, StackType.INT)
+                    .setPushType(StackType.INT);
     
     /**
      * Returns a utc timestamp based off the provided time
