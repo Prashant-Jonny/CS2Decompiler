@@ -62,7 +62,7 @@ public class DuplicationFix extends Analyzer {
 				if (next instanceof JumpInstruction) {
 					JumpInstruction nextJump = (JumpInstruction) next;
 				
-					Match<JumpInstruction> match = target.findNearestMatchJump(nextJump);
+					Match<JumpInstruction> match = target.findDuplicationJump(nextJump);
 
 					if (match != null) {
 						JumpInstruction first = match.getFirst();

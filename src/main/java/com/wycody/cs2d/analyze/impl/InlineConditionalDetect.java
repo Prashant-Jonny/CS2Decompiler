@@ -35,90 +35,90 @@ public class InlineConditionalDetect extends Analyzer {
 
 	@Override
 	public void initialize() {
-		instructions = new TreeMap<Integer, ArrayList<ConditionalInstruction>>();
-		InstructionWalker walker = new InstructionWalker(script.getStartBlock(), InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_SWITCH_BLOCKS | InstructionWalker.RESOLVE_TARGET_BLOCKS | InstructionWalker.RESOLVE_FALSE_BLOCKS, new WalkerAction() {
-
-			@Override
-			public WalkState visitInstr(int depth, Instruction instruction) {
-				if (instruction instanceof ConditionalInstruction) {
-					if (depth > biggestDepth) {
-						biggestDepth = depth;
-					}
-					if (!instructions.containsKey(depth)) {
-						instructions.put(depth, new ArrayList<ConditionalInstruction>());
-					}
-					instructions.get(depth).add((ConditionalInstruction) instruction);
-				}
-				return WalkState.CONTINUE;
-			}
-		});
-		walker.startWalking();
+//		instructions = new TreeMap<Integer, ArrayList<ConditionalInstruction>>();
+//		InstructionWalker walker = new InstructionWalker(script.getStartBlock(), InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_SWITCH_BLOCKS | InstructionWalker.RESOLVE_TARGET_BLOCKS | InstructionWalker.RESOLVE_FALSE_BLOCKS, new WalkerAction() {
+//
+//			@Override
+//			public WalkState visitInstr(int depth, Instruction instruction) {
+//				if (instruction instanceof ConditionalInstruction) {
+//					if (depth > biggestDepth) {
+//						biggestDepth = depth;
+//					}
+//					if (!instructions.containsKey(depth)) {
+//						instructions.put(depth, new ArrayList<ConditionalInstruction>());
+//					}
+//					instructions.get(depth).add((ConditionalInstruction) instruction);
+//				}
+//				return WalkState.CONTINUE;
+//			}
+//		});
+//		walker.startWalking();
 	}
 
 	@Override
 	public void process() {
-		for (int depth = biggestDepth; depth >= 0; depth--) {
-			ArrayList<ConditionalInstruction> instructions = this.instructions.get(depth);
-			if (instructions == null) {
-				continue;
-			}
-			instr: for (ConditionalInstruction instruction : instructions) {
-
-				BasicBlock holder = instruction.getHolder();
-				BasicBlock targetBlock = instruction.getTarget();
-				if (!instruction.hasElse()) {
-					Instruction first = targetBlock.getFirstPrintableInstruction(null);
-					if (first instanceof ReturnInstruction) {
-						Instruction other = holder.getFirstPrintableInstruction(instruction);
-						if (other instanceof ReturnInstruction) {
-							ReturnInstruction firstReturn = (ReturnInstruction) first;
-							ReturnInstruction otherReturn = (ReturnInstruction) other;
-							InlineConditional cond = new InlineConditional(instruction, firstReturn, otherReturn);
-							instruction.getHolder().removeInstruction(instruction);
-							otherReturn.getHolder().replaceInstruction(otherReturn, cond);
-							// TODO Clean this up & make it remove the block
-							// unused things
-						}
-					}
-
-				} else {
-					BasicBlock elseBlock = instruction.getElse();
-					if (elseBlock == null) {
-
-						return;
-					}
-					DynamicArray<Instruction> targetPrintables = targetBlock.getPrintableInstructions(null);
-					DynamicArray<Instruction> elsePrintables = elseBlock.getPrintableInstructions(null);
-
-					if (targetPrintables.size() != elsePrintables.size() || targetPrintables.size() > MAX_ALLOWED) {
-						continue instr;
-					}
-					boolean apply = true;
-					c: for (int index = 0; index < targetPrintables.size(); index++) {
-						Instruction targetPrintable = targetPrintables.get(index);
-						Instruction elsePrintable = elsePrintables.get(index);
-						if (targetPrintable.getType() != elsePrintable.getType() || !canBe(elsePrintable)) {
-							apply = false;
-							break c;
-						}
-
-					}
-					if (apply) {
-						c: for (int index = 0; index < targetPrintables.size(); index++) {
-							Instruction targetPrintable = targetPrintables.get(index);
-							Instruction elsePrintable = elsePrintables.get(index);
-							InlineConditional cond = new InlineConditional(instruction, targetPrintable, elsePrintable);
-							holder.addAfter(instruction, cond);
-						}
-						holder.removeInstruction(instruction);
-
-					}
-
-				}
-
-			}
-
-		}
+//		for (int depth = biggestDepth; depth >= 0; depth--) {
+//			ArrayList<ConditionalInstruction> instructions = this.instructions.get(depth);
+//			if (instructions == null) {
+//				continue;
+//			}
+//			instr: for (ConditionalInstruction instruction : instructions) {
+//
+//				BasicBlock holder = instruction.getHolder();
+//				BasicBlock targetBlock = instruction.getTarget();
+//				if (!instruction.hasElse()) {
+//					Instruction first = targetBlock.getFirstPrintableInstruction(null);
+//					if (first instanceof ReturnInstruction) {
+//						Instruction other = holder.getFirstPrintableInstruction(instruction);
+//						if (other instanceof ReturnInstruction) {
+//							ReturnInstruction firstReturn = (ReturnInstruction) first;
+//							ReturnInstruction otherReturn = (ReturnInstruction) other;
+//							InlineConditional cond = new InlineConditional(instruction, firstReturn, otherReturn);
+//							instruction.getHolder().removeInstruction(instruction);
+//							otherReturn.getHolder().replaceInstruction(otherReturn, cond);
+//							// TODO Clean this up & make it remove the block
+//							// unused things
+//						}
+//					}
+//
+//				} else {
+//					BasicBlock elseBlock = instruction.getElse();
+//					if (elseBlock == null) {
+//
+//						return;
+//					}
+//					DynamicArray<Instruction> targetPrintables = targetBlock.getPrintableInstructions(null);
+//					DynamicArray<Instruction> elsePrintables = elseBlock.getPrintableInstructions(null);
+//
+//					if (targetPrintables.size() != elsePrintables.size() || targetPrintables.size() > MAX_ALLOWED) {
+//						continue instr;
+//					}
+//					boolean apply = true;
+//					c: for (int index = 0; index < targetPrintables.size(); index++) {
+//						Instruction targetPrintable = targetPrintables.get(index);
+//						Instruction elsePrintable = elsePrintables.get(index);
+//						if (targetPrintable.getType() != elsePrintable.getType() || !canBe(elsePrintable)) {
+//							apply = false;
+//							break c;
+//						}
+//
+//					}
+//					if (apply) {
+//						c: for (int index = 0; index < targetPrintables.size(); index++) {
+//							Instruction targetPrintable = targetPrintables.get(index);
+//							Instruction elsePrintable = elsePrintables.get(index);
+//							InlineConditional cond = new InlineConditional(instruction, targetPrintable, elsePrintable);
+//							holder.addAfter(instruction, cond);
+//						}
+//						holder.removeInstruction(instruction);
+//
+//					}
+//
+//				}
+//
+//			}
+//
+//		}
 	}
 
 	private boolean canBe(Instruction t) {

@@ -10,11 +10,11 @@ import com.wycody.cs2d.script.inst.types.StackType;
 
 public interface Var {
     Supplier<GetVarInstruction> PUSH_VAR_CLAN = () ->
-            new GetVarInstruction(InstructionType.PUSH_VARCLAN, StackType.INT, "varclan");
+            new GetVarInstruction(InstructionType.PUSH_VARCLAN, StackType.INT, "varclan_citadel");
     Supplier<GetVarInstruction> PUSH_VARBIT_CLAN = () ->
-            new GetVarInstruction(InstructionType.PUSH_VARCLAN_BIT, StackType.INT, "varbitclan");
+            new GetVarInstruction(InstructionType.PUSH_VARCLAN_BIT, StackType.INT, "varclan_citadel_bit");
     Supplier<GetVarInstruction> PUSH_VAR_CLAN_LONG = () ->
-            new GetVarInstruction(InstructionType.PUSH_VARCLAN_LONG, StackType.LONG, "varclan_long");
+            new GetVarInstruction(InstructionType.PUSH_VARCLAN_LONG, StackType.LONG, "varclan_citadel_long");
     Supplier<GetVarInstruction> PUSH_VARCLANSETTING = () ->
             new GetVarInstruction(InstructionType.PUSH_VARCLANSETTING, StackType.INT, "varclansetting");
     Supplier<GetVarInstruction> PUSH_VARCLANSETTING_BIT = () ->

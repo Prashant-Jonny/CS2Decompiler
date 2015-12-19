@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
+import com.wycody.cs2d.script.CS2Field;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.types.StackType;
@@ -15,7 +16,6 @@ public class StoreInstruction extends Instruction {
 	private Object variable;
 	private Object value;
 	private StackType field_type;
-	private boolean isArray;
 
 	// increment
 	private boolean incr;
@@ -24,38 +24,26 @@ public class StoreInstruction extends Instruction {
 	private boolean incrBefore;
 
 	public StoreInstruction(InstructionType type, StackType field_type, Function<StoreInstruction, Object> processer) {
-		this(type, field_type, processer, false);
-	}
-
-	public StoreInstruction(InstructionType type, StackType field_type, Function<StoreInstruction, Object> processer, boolean isArray) {
 		super(type);
 		this.processer = processer;
 		this.field_type = field_type;
-		this.isArray = isArray;
 	}
 
 	@Override
 	public void process(Context context) {
-		if (isArray) {
-			variable = "array" + integerOperand + "[" + pop(StackType.INT) + "]";
-		} else {
-			switch (field_type) {
-			case INT:
-				variable = script.getIntegerFields()[integerOperand];
-				break;
-			case LONG:
-				variable = script.getLongFields()[integerOperand];
-				break;
-			case OBJECT:
-				variable = script.getObjectFields()[integerOperand];
-				break;
-			}
-
-		}
+        switch (field_type) {
+            case INT:
+                variable = script.getIntegerFields()[integerOperand];
+                break;
+            case LONG:
+                variable = script.getLongFields()[integerOperand];
+                break;
+            case OBJECT:
+                variable = script.getObjectFields()[integerOperand];
+                break;
+        }
 		value = processer.apply(this);
-		if(!isArray) {
-			script.getFieldNameMapper().checkStore(this);
-		}
+		script.getFieldNameMapper().checkStore(this);
 	}
 
 	public String getPrintString(int indent, boolean semicon) {
@@ -78,13 +66,17 @@ public class StoreInstruction extends Instruction {
 				return (variable.toString() + " " + incrOperator + "= " + incrValue + (semicon ? ";" : ""));
 			}
 		} else {
-			return ((indent == 1 ? (field_type.getGenericType() + " ") : "") + variable.toString() + " = " + value + (semicon ? ";" : ""));
+            CS2Field field = ((CS2Field) variable);
+            return (!field.isDeclared() ? (field_type.getGenericType() + " ") : "") + variable.toString() + " = " + value + (semicon ? ";" : "");
 		}
 	}
 
 	@Override
 	public void print(Context context, ScriptPrinter printer) {
+
 		printer.println(getPrintString(printer.getIndent(), true));
+		if (variable instanceof CS2Field)
+			((CS2Field) variable).setDeclared(true);
 	}
 
 	@Override
@@ -151,21 +143,6 @@ public class StoreInstruction extends Instruction {
 	 */
 	public void setField_type(StackType field_type) {
 		this.field_type = field_type;
-	}
-
-	/**
-	 * @return the isArray
-	 */
-	public boolean isArray() {
-		return isArray;
-	}
-
-	/**
-	 * @param isArray
-	 *            the isArray to set
-	 */
-	public void setArray(boolean isArray) {
-		this.isArray = isArray;
 	}
 
 	/**

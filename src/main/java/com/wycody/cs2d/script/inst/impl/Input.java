@@ -9,6 +9,7 @@ import com.wycody.cs2d.script.inst.nodes.push.impl.MethodPush;
 import com.wycody.cs2d.script.inst.types.StackType;
 
 public interface Input {
+    
 	Supplier<MultiPushInstruction> PUSH_PRESSED_MOUSE_BUTTONS = () ->
 			new MultiPushInstruction(InstructionType.PUSH_MOUSE_BUTTONS_STATE)
 					.setTypes(StackType.INT, StackType.INT, StackType.INT)

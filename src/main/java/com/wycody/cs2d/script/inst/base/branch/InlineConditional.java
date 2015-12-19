@@ -42,14 +42,9 @@ public class InlineConditional extends Instruction {
 			ReturnInstruction falseReturn = (ReturnInstruction) falseInstr;
 
 			if(trueReturn.getReturnType() == ReturnType.BOOLEAN) {
-				int trueVal = (int) trueReturn.getReturnObjects()[0];
-				int falseVal = (int) falseReturn.getReturnObjects()[0];
+				Object trueVal = trueReturn.getReturnObjects()[0];
 				String cond = real.getCondition();
-				if(trueVal == 1) {
-					
-				} else {
-					cond = "!(" + cond + ")";
-				}
+				
 				printer.println("return " + cond + ";");
 			} else {
 				printer.println("return " + real.getCondition() + " ? " + trueReturn.getReturnObjectsText() + " : " + falseReturn.getReturnObjectsText() + ";");

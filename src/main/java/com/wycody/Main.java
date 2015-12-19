@@ -20,8 +20,10 @@ import com.wycody.cs2d.rev.RS3Revision;
 import com.wycody.cs2d.rev.impl.Revision742;
 import com.wycody.cs2d.rev.impl.Revision835;
 import com.wycody.cs2d.rev.impl.Revision850;
+import com.wycody.cs2d.rev.impl.Revision861;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.inst.Instruction;
+import com.wycody.cs2d.script.name.FromFileScriptNameMap;
 import com.wycody.cs2d.script.name.ScriptNameMap;
 import com.wycody.cs2d.utils.ConfigParser;
 import com.wycody.cs2d.utils.ScriptDumper;
@@ -54,48 +56,28 @@ public class Main {
 		BasicConfigurator.configure();
 		Logger.getRootLogger().setLevel(Level.INFO);
 
-		File f = new File("C:\\Users\\Ethan\\Documents\\rscd\\850\\");
+		File f = new File("C:\\Users\\Ethan\\Documents\\rscd\\850 newer\\");
 
 		if (new File("F:\\LIVE\\").exists()) {
-			/*
-			 * FileStore s = FileStore.open(new File("F:\\LIVE\\")); Cache c =
-			 * new Cache(s); Revision revision = new Revision850(c);
-			 * paramTypeList = new ParamTypeList(c); enumTypeList = new
-			 * EnumTypeList(c); structTypeList = new StructTypeList(c);
-			 * 
-			 * Context context = new
-			 * Context().withCache(c).withDisassembler(revision).
-			 * withInstructionDecoder(revision).withPrinter(new
-			 * ConsolePrinter()); CS2Decompiler decompiler = new
-			 * CS2Decompiler(context);
-			 * 
-			 * //int scriptId = 534; //1013 - wtf int scriptId = 1013; if
-			 * (args.length > 0) { try{ scriptId = Integer.parseInt(args[0]);
-			 * }catch(NumberFormatException nfe){} } File fSrc = new File(
-			 * "F:\\LIVE\\IMPORT\\" + scriptId + ".rs2"); CS2Script script =
-			 * decompiler.decompile(scriptId, fSrc);// 3220);
-			 * script.print(context);
-			 */
-
 			Fear.main(args);
 		} else if (f.exists()) {
 			// int scriptId = 534;
 			// 1013 - wtf
 			// int scriptId = 1434;////1895; //47;
 //get_item_count_in_inv(int inv_type, int obj_type) = script_1
-			int scriptId =699;//10218;//86;//343; // 11497 or 11494
-			//1768
-			//decode835(new File("C:\\Users\\Ethan\\Desktop\\cache835\\"), scriptId);
 			
-			FileStore s = FileStore.open(f);// "E:\\Misc\\Runescape Private
+			//Running script 3238
+			//Running script 9066
+			int scriptId =1384;//10218;//86;//343; // 11497 or 11494
+			//decode835(new File("C:\\Users\\Ethan\\Desktop\\cache835\\"), scriptId);
+			FileStore s = FileStore.open(f);
 			Cache c = new Cache(s);
 			RS2Revision revision = new Revision850(c);
 
 			ConfigParser config = new ConfigParser();
 			// config.download("850");
 			Revision850.print_unknowns = true;
-		Revision850.debug_instructions = true;
-			// Revision850.debug_instructions = true;
+			Revision850.debug_instructions = true;
 			config.loadRevision("850", revision);
 
 			Main.paramTypeList = new ParamTypeList(c);
@@ -104,8 +86,7 @@ public class Main {
 
 			Context context = new Context().withCache(c).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 			CS2Decompiler decompiler = new CS2Decompiler(context);
-			ScriptNameMap map = new FromFileScriptNameMap();
-			map.load("./data/745+/rs3scripts.txt");
+			ScriptNameMap map = new FromFileScriptNameMap("./data/745+/rs3scripts.txt");
 			
 			context.withScriptNameMap(map).withBlockEditing(true).withDebug(false).withCache(c).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 
@@ -119,8 +100,6 @@ public class Main {
 			}
 			CS2Script script = decompiler.decompile(scriptId);
 			script.print(context);
-			//6881368, 6881373, 6881367, 6881375, 6881376, 6881383, 6881534, 6881551, 6881377
-			//System.out.println((6881377 >> 16) & 0xFFFF);
 		} else {
 			int scriptId = 765;
 
@@ -169,15 +148,16 @@ public class Main {
         Context context = new Context();
         CS2Decompiler decompiler = new CS2Decompiler(context);
 		RS3Revision revision = new Revision835(cache);
-
-        context.withBlockEditing(true).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
+        ScriptNameMap map = new FromFileScriptNameMap("./data/745+/rs3scripts.txt");
+			
+        context.withScriptNameMap(map).withBlockEditing(true).withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
         
         File outputDir = new File(System.getProperty("user.home") + "/RuneScape/cache/output/835/decompiled_cs2/");
         ScriptDumper.dump(context, scriptId, outputDir);
     }
 
 	public static ArrayList<CS2Script> findInstruction(CS2Decompiler decompiler, int id) throws IOException {
-		ArrayList<CS2Script> scripts = new ArrayList<CS2Script>();
+		ArrayList<CS2Script> scripts = new ArrayList<>();
 		a: for (int scriptId = 0; scriptId < decompiler.getContext().getCache().getFileCount(12); scriptId++) {
 			CS2Script script = decompiler.disassemble(scriptId);
 

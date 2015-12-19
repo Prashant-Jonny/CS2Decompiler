@@ -1,0 +1,4 @@
+197=playerdesign2_client_random
+546=duel_arena_opponent_cash_stake
+1333=duel_arena_player_cash_stake
+1924=qbd2_artifacts_state

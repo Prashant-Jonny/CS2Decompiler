@@ -85,13 +85,14 @@ public class SwitchAnalyzer extends Analyzer {
 			if(firstMatch == null) {
 				return;
 			}
-			defaultMatch = instruction.getHolder().findNearestMatchJump(firstMatch[0]);
+			defaultMatch = instruction.getHolder().findDuplicationJump(firstMatch[0]);
 		}
 
 		if (defaultMatch != null) {
 			Instruction defaultInstr = instruction.getHolder().getInstructions().last();
+			DynamicArray<Instruction> defaultBlock = instruction.getHolder().cut(instruction, null);
 			defaultInstr.getHolder().removeInstruction(defaultInstr);
-			instruction.setDefaultCase((JumpInstruction) defaultInstr);
+			instruction.setDefaultBlock(new BasicBlock(-1, defaultBlock));
 			
 		}
 //		if (defaultMatch == null) {

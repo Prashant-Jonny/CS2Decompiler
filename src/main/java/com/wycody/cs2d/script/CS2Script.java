@@ -354,7 +354,7 @@ public class CS2Script {
 	 */
 	public Object popInteger(int address) {
 		if (integerStack.size() == 0) {
-			throw new Error("Empty stack at script: " + this.id + " at adress: " + address);
+			throw new IllegalStateException("Empty stack at script: " + this.id + " at adress: " + address);
 		}
 
 		return integerStack.pop();
@@ -457,6 +457,7 @@ public class CS2Script {
 		ScriptPrinter printer = context.getPrinter();
 		printer.initializeForScript(this);
 		if (footerComment != null) {
+            footerComment.addLine("Script ID: "+getId());
 			footerComment.print(context, printer);
 		}
 

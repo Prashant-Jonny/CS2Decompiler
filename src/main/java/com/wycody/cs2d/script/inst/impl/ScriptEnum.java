@@ -1,8 +1,10 @@
 package com.wycody.cs2d.script.inst.impl;
 
+import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.base.CallMethodInstruction;
 import com.wycody.cs2d.script.inst.base.PushEnumValueInstruction;
+import com.wycody.cs2d.script.inst.base.rs3.EnumSpecials;
 import com.wycody.cs2d.script.inst.types.StackType;
 import java.util.function.Supplier;
 
@@ -21,13 +23,15 @@ public interface ScriptEnum {
      * Gets a value out of the specified enumeration. Returns either a string or an int, depending on the value type specified.
      * Uses legacy chars to identify variable types (pre-RS3)
      */
-    Supplier<PushEnumValueInstruction> LEGACY_PUSH_VALUE = () -> new PushEnumValueInstruction(true);
+    Supplier<PushEnumValueInstruction> LEGACY_PUSH_VALUE = () -> new PushEnumValueInstruction(true,true);
     
     /**
      * Gets a value out of the specified enumeration. Returns either a string or an int, depending on the value type specified.
      * Uses script var type IDs identify variable types (RS3)
      */
-    Supplier<PushEnumValueInstruction> PUSH_VALUE = () -> new PushEnumValueInstruction(false);
+    Supplier<PushEnumValueInstruction> PUSH_VALUE = () -> new PushEnumValueInstruction(false,true);
+    Supplier<PushEnumValueInstruction> PUSH_VALUE_1 = () -> new PushEnumValueInstruction(false,false);
+    Supplier<Instruction> GET_VALUE_KEYS_KEY_BY_INDEX = () -> new EnumSpecials.EnumValueKeyGetterInstruction();
     
     /**
      * Checks whether the enum contains the given int value. Returns 1 if the value exists, 0 otherwise

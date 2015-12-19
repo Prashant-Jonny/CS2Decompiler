@@ -1,38 +1,45 @@
 package com.wycody.cs2d.script.inst.base;
 
-import com.wycody.cs2d.script.inst.types.StackType;
 import com.jagex.core.constants.SerialEnum;
 import com.jagex.game.runetek5.config.vartype.constants.ScriptVarType;
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.print.ScriptPrinter;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
+import com.wycody.cs2d.script.inst.types.StackType;
 
 public class PushEnumValueInstruction extends Instruction {
     private boolean useLegacyChar;
+    private boolean checkKeyType;
 
-    public PushEnumValueInstruction(boolean useLegacyChar) {
+    public Object enumId;
+    public PushEnumValueInstruction(boolean useLegacyChar, boolean keyType) {
         super(InstructionType.PUSH_ENUM_VAL);
         this.useLegacyChar = useLegacyChar;
+        this.checkKeyType = keyType;
     }
 
     @Override
     public void process(Context context) {
         Object slot = pop(StackType.INT);
-        Object enumId = pop(StackType.INT);
+        enumId = pop(StackType.INT);
         int valueType = (Integer) pop(StackType.INT);
-        int keyType = (Integer) pop(StackType.INT);
+        int keyType=1;
+
+        if(checkKeyType)
+            keyType = (Integer) pop(StackType.INT);
 
         ScriptVarType valueVarType; 
-        ScriptVarType keyVarType;
+        ScriptVarType keyVarType = null;
         if (useLegacyChar) {
-            valueVarType = ScriptVarType.getByChar((char) valueType); 
-            keyVarType = ScriptVarType.getByChar((char) keyType); 
+            valueVarType = ScriptVarType.getByChar((char) valueType);
+            if(checkKeyType)
+                keyVarType = ScriptVarType.getByChar((char) keyType);
         } else {
             valueVarType = SerialEnum.forID(ScriptVarType.values(), valueType); 
             keyVarType = SerialEnum.forID(ScriptVarType.values(), keyType);
         }
-        String call = "enum<" + keyVarType.name() + "," + valueVarType.name() + ">("+enumId+", "+slot+")";
+        String call = "enum<" + (checkKeyType ? (""+ keyVarType.name() + ",") : "") + valueVarType.name() + ">("+enumId+", "+slot+")";
         
         if (valueVarType == ScriptVarType.STRING) {
             push(StackType.OBJECT, call);

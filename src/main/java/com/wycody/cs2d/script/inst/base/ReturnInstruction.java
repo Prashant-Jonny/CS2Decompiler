@@ -100,8 +100,6 @@ public class ReturnInstruction extends Instruction {
 		if (retType == ReturnType.VOID) {
 			return ("");
 		} else if (retType == ReturnType.BOOLEAN) {
-			if (retObjs.length != 1 || !(retObjs[0] instanceof Integer))
-				throw new Error("The return type is boolean while the return instruction is not!");
 			return "" + (((Integer) retObjs[0]) != 0);
 		} else {
 			return temp.substring(1, temp.length() - 1);

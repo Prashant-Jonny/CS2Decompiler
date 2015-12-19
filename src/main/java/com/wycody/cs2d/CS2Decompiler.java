@@ -157,7 +157,6 @@ public class CS2Decompiler {
 	public static Function<Integer, WrappedByteBuffer> scriptLoader = null;
 
 	public CS2Script disassemble(int scriptId) {
-
 		WrappedByteBuffer data = null;
 		try {
 			if (scriptLoader == null) {

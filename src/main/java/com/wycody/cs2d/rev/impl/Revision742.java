@@ -17,6 +17,7 @@ import com.wycody.cs2d.script.inst.impl.Player;
 import com.wycody.cs2d.script.inst.impl.Pop;
 import com.wycody.cs2d.script.inst.impl.Push;
 import com.wycody.cs2d.script.inst.impl.Quest;
+import com.wycody.cs2d.script.inst.impl.RuneDate;
 import com.wycody.cs2d.script.inst.impl.ScriptEnum;
 import com.wycody.cs2d.script.inst.impl.Store;
 import com.wycody.cs2d.script.inst.impl.Text;
@@ -46,33 +47,34 @@ public class Revision742 extends RS2Revision {
         registerInstruction(-1, Unsorted.MISSING);
         
         // Control flow
-        registerInstruction(606, Push.PUSH_INT);
-        registerInstruction(1044, Var.PUSH_VARP);
-        registerInstruction(122, Var.STORE_VARP);
-        registerInstruction(145, Push.PUSH_OBJECT);
-        registerInstruction(323, Branch.GOTO);        
-        registerInstruction(362, Branch.INT_NE);
-        registerInstruction(703, Branch.INT_EQ);
-        registerInstruction(588, Branch.INT_LT);
-        registerInstruction(573, Branch.INT_GT);   
-        registerInstruction(2, Unsorted.RETURN);
-        registerInstruction(541, Var.PUSH_VARP_BIT);
-        registerInstruction(326, Var.STORE_VARP_BIT);
-        registerInstruction(443, Branch.INT_LE);
-        registerInstruction(1019, Branch.INT_GE);
-        registerInstruction(611, Push.LOAD_INT);
-        registerInstruction(497, Store.STORE_INT);
-        registerInstruction(320, Push.LOAD_OBJ);
-        registerInstruction(568, Store.STORE_OBJ);
-        registerInstruction(471, Unsorted.CONCAT_STRS);
-        registerInstruction(1037, Pop.POP_INT);
-        registerInstruction(16, Pop.POP_OBJ);
-        registerInstruction(3, Unsorted.CALL_SCRIPT);
-        registerInstruction(176, Var.PUSH_VARC);
-        registerInstruction(874, Var.STORE_VARC);
-        registerInstruction(960, Array.CREATE);
-        registerInstruction(32, Push.ARRAY);
-        registerInstruction(260, Store.ARRAY);
+        /*
+            registerInstruction(606, Push.PUSH_INT);
+            registerInstruction(1044, Var.PUSH_VARP);
+            registerInstruction(122, Var.STORE_VARP);
+            registerInstruction(145, Push.PUSH_OBJECT);
+            registerInstruction(323, Branch.GOTO);
+            registerInstruction(362, Branch.INT_NE);
+            registerInstruction(703, Branch.INT_EQ);
+            registerInstruction(588, Branch.INT_LT);
+            registerInstruction(573, Branch.INT_GT);
+            registerInstruction(2, Unsorted.RETURN);
+            registerInstruction(541, Var.PUSH_VARP_BIT);
+            registerInstruction(326, Var.STORE_VARP_BIT);
+            registerInstruction(443, Branch.INT_LE);
+            registerInstruction(1019, Branch.INT_GE);
+            registerInstruction(611, Push.LOAD_INT);
+            registerInstruction(497, Store.STORE_INT);
+            registerInstruction(320, Push.LOAD_OBJ);
+            registerInstruction(568, Store.STORE_OBJ);
+            registerInstruction(471, Unsorted.CONCAT_STRS);
+            registerInstruction(1037, Pop.POP_INT);
+            registerInstruction(16, Pop.POP_OBJ);
+            registerInstruction(3, Unsorted.CALL_SCRIPT);
+            registerInstruction(176, Var.PUSH_VARC);
+            registerInstruction(874, Var.STORE_VARC);
+            registerInstruction(960, Array.CREATE);
+            registerInstruction(32, Push.ARRAY);
+            registerInstruction(260, Store.ARRAY);*/
         registerInstruction(679, Var.PUSH_VARC_STR);
         registerInstruction(671, Var.STORE_VARC_STR);
         registerInstruction(623, Branch.SWITCH);
@@ -154,7 +156,7 @@ public class Revision742 extends RS2Revision {
         //Active component - interaction setters
         registerInstruction(163, ActiveWidget.SETOP);
         registerInstruction(665, ActiveWidget.SETDEFAULTSLOT);
-        registerInstruction(275, ActiveWidget.SETCONTENTTYPE);
+        registerInstruction(275, ActiveWidget.SETDRAGMODE);
         //2x unknown
         registerInstruction(1036, ActiveWidget.SETAPPLYTEXT);
         registerInstruction(1008, ActiveWidget.SETUSEOP);
@@ -280,7 +282,7 @@ public class Revision742 extends RS2Revision {
         //Component - interaction
         registerInstruction(641, Widget.SETOP);
         registerInstruction(993, Widget.SETDEFAULTSLOT);
-        registerInstruction(85, Widget.SETCONTENTTYPE);
+        registerInstruction(85, Widget.SETDRAGMODE);
         //2x unknown
         registerInstruction(562, Widget.SETAPPLYTEXT);
         registerInstruction(915, Widget.SETUSEOP);
@@ -297,7 +299,7 @@ public class Revision742 extends RS2Revision {
         registerInstruction(893, Widget.BIND_MOUSEDRAGPAST_HANDLER);
         registerInstruction(564, Widget.BIND_MOUSERELEASE_HANDLER);
         registerInstruction(816, Widget.BIND_MOUSEOVER_HANDLER);
-        registerInstruction(942, Widget.BIND_MOUSE_HOVER_OUT_HANDLER);
+        registerInstruction(942, Widget.BIND_MOUSELEAVE_HANDLER);
         registerInstruction(900, Widget.BIND_DRAGRELEASE_HANDLER);
         registerInstruction(706, Widget.BIND_DESELECT_HANDLER);
         registerInstruction(1016, Widget.BIND_VARP_HANDLER);
@@ -305,7 +307,7 @@ public class Revision742 extends RS2Revision {
         registerInstruction(191, Widget.BIND_OPTION_HANDLER);
         registerInstruction(648, Widget.BIND_DRAG_HANDLER);
         registerInstruction(994, Widget.BIND_MOUSEDRAG_HANDLER);
-        registerInstruction(472, Widget.BIND_MOUSE_HOVER_IN_HANDLER);
+        registerInstruction(472, Widget.BIND_MOUSEREPEAT_HANDLER);
         registerInstruction(398, Widget.BIND_INV_HANDLER);
         registerInstruction(935, Widget.BIND_STAT_HANDLER);
         registerInstruction(946, Widget.BIND_SELECT_HANDLER);
@@ -546,7 +548,7 @@ public class Revision742 extends RS2Revision {
         registerInstruction(31, Text.TO_LOWER);
         registerInstruction(579, Text.SUBSTR);
         
-        registerInstruction(221, Text.RUNEDATE_TO_STRING);
+
         registerInstruction(79, Text.GENDER);
         registerInstruction(819, Text.INT_TO_STR);
         registerInstruction(130, Text.COMPARE);
@@ -712,14 +714,15 @@ public class Revision742 extends RS2Revision {
         registerInstruction(1017, Quest.PUSH_STARTED);
         registerInstruction(578, Quest.PUSH_COMPLETED);
         registerInstruction(853, Quest.PUSH_PARAM);
+        
+        // Time
+        registerInstruction(221, RuneDate.TO_STRING);
+        registerInstruction(386, RuneDate.FROM_TIMESTAMP);
         System.out.println("Registered " + getRegisteredInstructions().size() + " instruction.");
         
     }
 
-  public static void main(String[] args) {
-	Revision742 rev = new Revision742();
-	
-}
+
     @Override
     public void registerLarges() {
         registerLarge(3);

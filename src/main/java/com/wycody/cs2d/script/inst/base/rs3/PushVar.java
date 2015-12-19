@@ -20,26 +20,29 @@ public class PushVar extends Instruction {
 		super(id, address, InstructionType.PUSH_VAR);
 	}
 
+
+	public String getTypeName(){
+		VarType type = (VarType) objectOperand;
+		boolean usePlayerMap = integerOperand == 1;
+
+		VarDomainType domain = type.getDomain();
+		String outcome = "%var";
+		//this stuff was in a class becuse it gets used for other instructsions
+		if(domain == null) {
+			outcome += "bit";
+		} else {
+			outcome += domain.name().toLowerCase().replace("_", "");
+		}
+
+		outcome += type.getId();
+		return outcome;
+	}
+
 	@Override
 	public void process(Context context) {
 		VarType type = (VarType) objectOperand;
-		boolean usePlayerMap = integerOperand == 1;
 		BaseVarType baseVar = type.dataType.baseType;
-
-		System.out.flush();
-		System.err.flush();
-		System.err.println(address + " => " + baseVar);
-
-		VarDomainType domain = type.getDomain();
-        String outcome = "%var";
-        //this stuff was in a class becuse it gets used for other instructsions
-        if(domain == null) {
-        	outcome += "bit";
-        } else {
-        	outcome += domain.name().toLowerCase().replace("_", "");
-        }
-        
-        outcome += type.getId();
+		String outcome = this.getTypeName();
         
 		if(baseVar == BaseVarType.INTEGER) {
 			push(StackType.INT, outcome);
@@ -66,5 +69,14 @@ public class PushVar extends Instruction {
 	@Override
 	public int getPopCount(StackType type) {
 		return 0;
+	}
+
+	@Override
+	public String toString(){
+		VarType type = (VarType) objectOperand;
+		boolean usePlayerMap = integerOperand == 1;
+		BaseVarType baseVar = type.dataType.baseType;
+
+		return "PushVar - " + baseVar;
 	}
 }

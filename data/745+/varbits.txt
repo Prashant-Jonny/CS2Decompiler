@@ -563,6 +563,7 @@
 16140=herblore_habitat_tool_leprechaun_num_guthix_vines_stored_highbits
 16372=livid_farm_helped_pauline_produce_count
 16374=livid_farm_num_unlocked_spells
+16564=right_click_reporting
 20139=daily_divine_location_amount_gathered
 20147=divination_cooldown_minutes_remaining
 22409=num_elder_chronicles_caught
@@ -692,7 +693,6 @@
 29873=kril_tsutsaroth_prestige
 29874=hard_mode_kril_tsutsaroth_prestige
 29875=har_aken_prestige
-29875=har_aken_prestige
 29876=kalphite_king_prestige
 29877=legiones_prestige
 29878=nex_prestige
@@ -702,3 +702,5 @@
 29882=hard_mode_vorago_prestige
 29883=beastmaster_durzag_prestige
 29884=yakamaru_prestige
+23015=tradable_bonds_in_pouch
+23016=untradable_bonds_in_pouch

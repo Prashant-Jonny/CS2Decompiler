@@ -6,7 +6,6 @@ import com.wycody.cs2d.script.flow.impl.BasicBlock;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionBaseType;
 import com.wycody.cs2d.script.inst.InstructionType;
-import com.wycody.cs2d.script.inst.base.branch.JumpInstruction;
 import com.wycody.cs2d.script.inst.types.StackType;
 
 /**
@@ -20,11 +19,11 @@ public class SwitchInstruction extends Instruction {
 	 * The switch block of the instruction
 	 */
 	private SwitchBlock block;
-
-	/**
-	 * The default case jump instruction
-	 */
-	private Instruction defaultInstruction;
+//
+//	/**
+//	 * The default case jump instruction
+//	 */
+//	private Instruction defaultInstruction;
 
 	private BasicBlock defaultBlock;
 
@@ -70,10 +69,14 @@ public class SwitchInstruction extends Instruction {
 			}
 			printNode(context, printer, getTarget(node));
 		}
-		if (defaultInstruction != null && defaultBlock.getInstructions().size() > 0) {
+//		if (defaultInstruction != null && defaultBlock.getInstructions().size() > 0) {
+//			printer.println("default:");
+//			printNode(context, printer, defaultBlock);
+//
+//		}
+		if(defaultBlock != null) {
 			printer.println("default:");
 			printNode(context, printer, defaultBlock);
-
 		}
 		printer.untab();
 		printer.println("}");
@@ -144,28 +147,34 @@ public class SwitchInstruction extends Instruction {
 	}
 
 	public BasicBlock[] getTargets() {
-		BasicBlock[] targets = new BasicBlock[block.getCases().size() + (defaultInstruction != null && defaultInstruction instanceof JumpInstruction ? 1 : 0)];
+		BasicBlock[] targets = new BasicBlock[block.getCases().size() + (defaultBlock != null ? 1 : 0)];
 		for (int caseIndex = 0; caseIndex < block.getCases().size(); caseIndex++) {
 			targets[caseIndex] = getTarget(block.getCase(caseIndex));
 		}
-		if (defaultInstruction != null && defaultInstruction instanceof JumpInstruction) {
+		if (defaultBlock != null) {
 			targets[targets.length - 1] = defaultBlock;
 		}
 		return targets;
 	}
 
-	public void setDefaultCase(JumpInstruction defaultInstruction) {
-		if(defaultBlock == null) {
-			defaultBlock = script.getGenerator().generateCustomBlock();
-		}
-		this.defaultInstruction = defaultInstruction;
-		defaultBlock.getInstructions().clear();
-		defaultBlock.addInstruction(defaultInstruction);
+//	public void addToDefaultBlock(Instruction defaultInstruction) {
+//		if(defaultBlock == null) {
+//			defaultBlock = script.getGenerator().generateCustomBlock();
+//		}
+//		this.defaultInstruction = defaultInstruction;
+//		defaultBlock.getInstructions().clear();
+//		defaultBlock.addInstruction(defaultInstruction);
+//
+//	}
 
+//	public Instruction getDefaultInstruction() {
+//		return defaultInstruction;
+//	}
+
+	public void setDefaultBlock(BasicBlock defaultBlock) {
+		this.defaultBlock = defaultBlock;
 	}
 
-	public Instruction getDefaultInstruction() {
-		return defaultInstruction;
-	}
+	
 
 }

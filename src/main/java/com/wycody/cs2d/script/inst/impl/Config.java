@@ -63,6 +63,16 @@ public interface Config {
                     .setPrefixFormatters(ocFormatter);
     
     /**
+     * Returns whether the specified object (item) never stacks, even when in a stacking inventory.
+     */
+    Supplier<CallMethodInstruction> PUSH_OBJ_NEVERSTACKS = () ->
+            new CallMethodInstruction(InstructionType.PUSH_OC_NEVERSTACKS)
+                    .setName("neverStacks")
+                    .setArgumentTypes(StackType.INT)
+                    .setPushType(StackType.INT)
+                    .setPrefixFormatters(ocFormatter);
+    
+    /**
      * Gets the base object ID for the specified noted object (item).
      */
     Supplier<CallMethodInstruction> PUSH_OBJ_FROMCERT = () ->
@@ -235,6 +245,12 @@ public interface Config {
             new PushParamInstruction(InstructionType.PUSH_STRUCT_PARAM, "getStruct", StackType.INT);
 
     /**
+     * Gets the value of the specified worldmap config parameter. Returns either string or int depending on the parameter type
+     */
+    Supplier<Instruction> PUSH_WORLDMAP_PARAM = () ->
+            new PushParamInstruction(InstructionType.PUSH_WORLDMAP_PARAM, "getWorldmapParam", StackType.INT);
+    
+    /**
      * Gets the idle animation for the specified base (render) type.
      */
     Supplier<CallMethodInstruction> PUSH_BASE_IDLEANIM = () ->
@@ -243,5 +259,7 @@ public interface Config {
                     .setArgumentTypes(StackType.INT)
                     .setPushType(StackType.INT)
                     .setPrefixFormatters(x -> "getBaseConfig("+x+")");
+
+
     
 }

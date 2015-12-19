@@ -19,8 +19,10 @@ public class CallMethodInstruction extends Instruction {
 	private Function<Object, Object>[] argumentFormatters = null;
 	private Function<Object, Object>[] prefixFormatter = null;
 	private StackType[] returnTypes = null;
-	private String nameFormat;
+	private String[] nameFormat;
 	private boolean reverseArgs = true;
+
+	private boolean formatCount;
 
 	/*
 	 * prefixFormatter is for when the first argument is something special. e.g.
@@ -34,6 +36,7 @@ public class CallMethodInstruction extends Instruction {
 		this.returnTypes = new StackType[] { returnType };
 		this.argumentTypes = argumentTypes;
 		this.arguments = new Object[this.argumentTypes.length];
+		this.nameFormat = null;
 	}
 
 	public CallMethodInstruction(InstructionType type) {
@@ -99,7 +102,7 @@ public class CallMethodInstruction extends Instruction {
 	}
 
 	public CallMethodInstruction setFormattedName(String format) {
-		this.nameFormat = format;
+		this.nameFormat = format == null ? null : format.split("\\|\\|");
 		return this;
 	}
 
@@ -116,7 +119,7 @@ public class CallMethodInstruction extends Instruction {
 		 * PRINTING ORDER BY HAND! I WILL MAKE AN EXCEPTION FOR ONES WITH NO
 		 * DISPLAY FORMAT SET!
 		 */
-		if (this.nameFormat == null && reverseArgs) {
+		if ((this.nameFormat == null || this.nameFormat.length == 0) && reverseArgs) {
 			for (int i = 0; argumentTypes != null && i < argumentTypes.length; i++) {
 				arguments[argumentTypes.length - i - 1] = pop(argumentTypes[argumentTypes.length - 1 - i]);
 			}
@@ -129,28 +132,21 @@ public class CallMethodInstruction extends Instruction {
 		if (this.returnTypes != null && this.returnTypes.length > 0) {
 			if (this.returnTypes.length == 1 && this.returnTypes[0] != null) {
 				push(this.returnTypes[0], this.generate());
+			} else if(this.nameFormat != null && this.nameFormat.length > 1){
+				String name = "arguments_" + this.address;
+				for (int i = 0; i < this.returnTypes.length; i++)
+					push(this.returnTypes[i],this.nameFormat[i] + "(" + name + ")");
 			} else if (this.returnTypes.length > 1) {
 				for (int i = 0; i < this.returnTypes.length; i++) {
-					push(this.returnTypes[i], "results[" + i + "]");
+					push(this.returnTypes[i], "results"+this.address+"[" + i + "]");
 				}
 			}
 		}
 	}
 
-	private String generate() {
-		StringBuilder str = new StringBuilder();
-
-		if (this.nameFormat != null) {
-			Object[] arguments = this.arguments.clone();
-			if (this.prefixFormatter != null) {
-				for (int i = 0; i < arguments.length && i < this.prefixFormatter.length; i++) {
-					if (this.prefixFormatter[i] != null) {
-						arguments[i] = this.prefixFormatter[i].apply(arguments[i]);
-					}
-				}
-			}
-
-			char[] nameChars = this.nameFormat.toCharArray();
+	private void handlePlaceHolders(String formatstr, Object[] arguments, StringBuilder str) {
+		try {
+			char[] nameChars = formatstr.toCharArray();
 			for (int i = 0; i < nameChars.length; i++) {
 				if (nameChars[i] == '%') {
 					int x = 0;
@@ -159,18 +155,18 @@ public class CallMethodInstruction extends Instruction {
 					}
 					if (i < nameChars.length) {
 						switch (Character.toLowerCase(nameChars[i])) {
-						case 'b':
-							str.append(CS2Utils.getBoolean(arguments[x - 1]));
-							break;
-						case 'c':
-							str.append(CS2Utils.getColor(arguments[x - 1]));
-							break;
-						case 'w':
-							str.append(CS2Utils.getWidget(arguments[x - 1]));
-							break;
-						default:
-							i--;
-							str.append(arguments[x - 1]);
+							case 'b':
+								str.append(CS2Utils.getBoolean(arguments[x - 1]));
+								break;
+							case 'c':
+								str.append(CS2Utils.getColor(arguments[x - 1]));
+								break;
+							case 'w':
+								str.append(CS2Utils.getWidget(arguments[x - 1]));
+								break;
+							default:
+								i--;
+								str.append(arguments[x - 1]);
 						}
 					} else {
 						str.append(arguments[x - 1]);
@@ -191,6 +187,41 @@ public class CallMethodInstruction extends Instruction {
 					str.append(nameChars[i]);
 				}
 			}
+		}catch(Throwable t){
+			throw new RuntimeException(t);
+		}
+	}
+
+
+	private String generate() {
+		StringBuilder str = new StringBuilder();
+
+		if (this.nameFormat != null && this.nameFormat.length > 0) {
+			Object[] arguments = this.arguments.clone();
+			if (this.prefixFormatter != null) {
+				for (int i = 0; i < arguments.length && i < this.prefixFormatter.length; i++) {
+					if (this.prefixFormatter[i] != null) {
+						arguments[i] = this.prefixFormatter[i].apply(arguments[i]);
+					}
+				}
+			}
+
+			if(this.nameFormat.length == 1) {
+				handlePlaceHolders(this.nameFormat[0],arguments,str);
+			}else{
+				String name = "arguments_" + this.address;
+				String arg = name + " = [";
+
+				for(int i=1; i < arguments.length; i++)
+					arg += arguments[i-1] + ",";
+				if(arguments.length > 0)
+					arg += arguments[arguments.length-1];
+				arg += "];";
+
+				str.append(arg);
+				str.append("\n");
+			}
+
 
 			return str.toString();
 		}
@@ -233,10 +264,10 @@ public class CallMethodInstruction extends Instruction {
 
 	@Override
 	public void print(Context context, ScriptPrinter printer) {
-		if (this.returnTypes == null || this.returnTypes.length == 0 || (this.returnTypes.length == 1 && this.returnTypes[0] == null)) {
+		if (this.returnTypes == null || this.nameFormat != null && this.nameFormat.length > 1 || this.returnTypes.length == 0 || (this.returnTypes.length == 1 && this.returnTypes[0] == null)) {
 			printer.println(generate() + ";");
 		} else if (this.returnTypes.length > 1) {
-			printer.println("Object[] results = " + generate() + ";");
+			printer.println("Object[] results_"+this.address+" = " + generate() + ";");
 		}
 	}
 
@@ -280,9 +311,28 @@ public class CallMethodInstruction extends Instruction {
 		}
 
 		s.append(StackType.format(this.argumentTypes)).append(" -> ").append(StackType.format(this.returnTypes)).append("\t");
-		s.append(this.nameFormat).append("\t");
+		s.append(this.encodeType()).append("\t");
 		return s.toString();
 	}
+
+
+	private String encodeType() {
+		if(this.nameFormat == null || this.nameFormat.length == 0) {
+			return "";
+		} else if(this.nameFormat.length == 1){
+			return this.nameFormat[0];
+		} else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("[");
+			for(int i=0; i < this.nameFormat.length; i++){
+				if(i > 0)
+					sb.append(",");
+				sb.append(this.nameFormat[i]);
+			}
+			return sb.append("]").toString().intern();
+		}
+	}
+
 
 	@Override
 	public String toString() {

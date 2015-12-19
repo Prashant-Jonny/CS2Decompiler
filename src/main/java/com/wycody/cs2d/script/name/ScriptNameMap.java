@@ -22,7 +22,7 @@ public abstract class ScriptNameMap {
 	/**
 	 * The registered maps
 	 */
-	private TreeMap<Integer, TreeList<NameMap>> maps;
+	protected TreeMap<Integer, TreeList<NameMap>> maps;
 
 	/**
 	 * Construct a new {@link ScriptNameMap} object.
@@ -62,7 +62,7 @@ public abstract class ScriptNameMap {
 			String[] mainSplit = line.split(" = ");
 			if (mainSplit.length != 2) {
 				reader.close();
-				throw new Error("Expected one equal but inputed more than one at: " + line + " (" + path + ")");
+				throw new RuntimeException("Expected one equal but inputed more than one at: " + line + " (" + path + ")");
 			}
 			String refactored = mainSplit[1];
 			int id = 0;
@@ -71,7 +71,7 @@ public abstract class ScriptNameMap {
 			} catch (Exception e) {
 				e.printStackTrace();
 				reader.close();
-				throw new Error("Could not parse id at " + line + " (" + path + ")");
+				throw new RuntimeException("Could not parse id at " + line + " (" + path + ")");
 			}
 			String scriptName = refactored;
 			StackType[] argsType = new StackType[0];
@@ -91,7 +91,7 @@ public abstract class ScriptNameMap {
 					String[] splitedArg = argRaw.split(" ");
 					if (splitedArg.length != 2) {
 						reader.close();
-						throw new Error("Expected parameter format as follow (type name) but inputed: " + argRaw + ", at: " + line + " (" + path + ")");
+						throw new RuntimeException("Expected parameter format as follow (type name) but inputed: " + argRaw + ", at: " + line + " (" + path + ")");
 
 					}
 					String argTypeName = splitedArg[0];
@@ -99,7 +99,7 @@ public abstract class ScriptNameMap {
 					StackType type = StackType.forType(argTypeName);
 					if (type == null) {
 						reader.close();
-						throw new Error("Could not identify StackType for type: " + type + ", at: " + line + " (" + path + ")");
+						throw new RuntimeException("Could not identify StackType for type: " + type + ", at: " + line + " (" + path + ")");
 					}
 					argsType[i] = type;
 					argsName[i] = argName;

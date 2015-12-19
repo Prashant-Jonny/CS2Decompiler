@@ -1,0 +1,7 @@
+93=Backpack
+94=Equipped
+95=Bank
+530=Beast_Of_Burden
+90=Trade_Offer
+540=Lent_Items
+676=Death_Reclaim_Interface

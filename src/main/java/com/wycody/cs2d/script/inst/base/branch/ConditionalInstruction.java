@@ -143,7 +143,7 @@ public class ConditionalInstruction extends BranchInstruction {
 			printer.println("}");
 
 		} else if (blockType == FOR_BLOCK) {
-			printer.print("for (" + (forVarDeclare != null ? forVarDeclare.getPrintString(1, true) : ";") + " " + getCondition() + "; " + forVarIncr.getPrintString(0, false) + ") {");
+			printer.println("for (" + (forVarDeclare != null ? forVarDeclare.getPrintString(1, true) : ";") + " " + getCondition() + "; " + forVarIncr.getPrintString(0, false) + ") {");
 			printer.tab();
 			BasicBlock block = getTarget();
 			if (!context.isDebug()) {
@@ -160,7 +160,6 @@ public class ConditionalInstruction extends BranchInstruction {
 			printer.println("if (" + getCondition() + ")" + (needBrackets ? " {" : ""));
 			printer.tab();
 
-	
 			if (!context.isDebug()) {
 				block.print(context, printer);
 			} else {
@@ -188,7 +187,7 @@ public class ConditionalInstruction extends BranchInstruction {
 				}
 				printer.untab();
 				if (needBrackets)
-				printer.println("}");
+					printer.println("}");
 			}
 
 		}
@@ -204,6 +203,7 @@ public class ConditionalInstruction extends BranchInstruction {
 	public void printIfBlock(Context context, ScriptPrinter printer) {
 
 	}
+
 	@Override
 	public int getPushCount(StackType type) {
 		return 0;
@@ -369,4 +369,11 @@ public class ConditionalInstruction extends BranchInstruction {
 		return elseBlock != null;
 	}
 
+	public void addRelation(RelationType type, ConditionalInstruction instruction) {
+		relations.add(new Relation(instruction, type));
+	}
+
+	public DynamicArray<ConditionalInstruction> getElseIfs() {
+		return elseIfs;
+	}
 }

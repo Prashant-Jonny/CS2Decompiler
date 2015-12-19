@@ -1,6 +1,6 @@
 package com.wycody.cs2d.analyze.impl;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import org.apache.commons.collections4.list.TreeList;
@@ -23,9 +23,12 @@ public class ConditionalRelationDetect extends Analyzer {
 
 	private TreeList<BasicBlock> affectedBlocks;
 
+	private ArrayList<ConditionalInstruction> orIgnores;
+
 	public ConditionalRelationDetect(CS2Script script) {
 		super(script);
 		affectedBlocks = new TreeList<BasicBlock>();
+		orIgnores = new ArrayList<>();
 	}
 
 	@Override
@@ -44,7 +47,7 @@ public class ConditionalRelationDetect extends Analyzer {
 					if (depth > biggestDepth) {
 						biggestDepth = depth;
 					}
-					if (!instructions.keySet().contains(depth)) {
+					if (!instructions.containsKey(depth)) {
 						instructions.put(depth, new TreeList<ConditionalInstruction>());
 					}
 					instructions.get(depth).add((ConditionalInstruction) instruction);
@@ -58,11 +61,12 @@ public class ConditionalRelationDetect extends Analyzer {
 	@Override
 	public void process() {
 		for (int depth = biggestDepth; depth >= 0; depth--) {
-			List<ConditionalInstruction> instructions = this.instructions.get(depth);
+			TreeList<ConditionalInstruction> instructions = this.instructions.get(depth);
 			if (instructions == null) {
 				continue;
 			}
-			b: for (ConditionalInstruction instruction : instructions) {
+			b:for(int i = instructions.size()-1; i >= 0; i--) {
+				ConditionalInstruction instruction = instructions.get(i);
 				if (instruction.getElse() != null) {
 					continue b;
 				}
@@ -72,18 +76,18 @@ public class ConditionalRelationDetect extends Analyzer {
 			}
 		}
 		for (int depth = biggestDepth; depth >= 0; depth--) {
-			List<ConditionalInstruction> instructions = this.instructions.get(depth);
+			TreeList<ConditionalInstruction> instructions = this.instructions.get(depth);
 			if (instructions == null) {
 				continue;
 			}
-			b: for (ConditionalInstruction instruction : instructions) {
+			b:for(int i = instructions.size()-1; i >= 0; i--) {
+				ConditionalInstruction instruction = instructions.get(i);
 				if (instruction.getElse() != null) {
 					continue b;
 				}
-
 				detectOr(instruction);
-
 			}
+
 		}
 
 	}
@@ -115,8 +119,10 @@ public class ConditionalRelationDetect extends Analyzer {
 		if (first instanceof ConditionalInstruction) {
 			ConditionalInstruction condFirst = (ConditionalInstruction) first;
 			if (condFirst.getTarget() == instruction.getTarget()) {
-				instruction.getRelations().add(new Relation(condFirst, RelationType.OR));
+				//	orIgnores.add(condFirst);
+				
 				condFirst.getHolder().removeInstruction(condFirst);
+				instruction.addRelation(RelationType.OR, condFirst);
 				int index = instruction.getHolder().getSuccessors().indexOf(condFirst.getTarget());
 				if (index != -1)
 					instruction.getHolder().getSuccessors().remove(index);

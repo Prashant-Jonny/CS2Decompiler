@@ -8,6 +8,9 @@ import com.wycody.cs2d.print.ScriptPrinter;
 import com.wycody.cs2d.script.CS2Script;
 import com.wycody.cs2d.script.name.NameMap;
 import com.wycody.cs2d.script.name.ScriptNameMap;
+import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -15,6 +18,8 @@ import com.wycody.cs2d.script.name.ScriptNameMap;
  * @date Nov 30, 2015
  */
 public class ScriptDumper {
+
+	private static final Logger logger = LoggerFactory.getLogger(ScriptDumper.class.getName());
 
 	private static final File DEFAULT_DIRECTORY = new File("data/lastDump/");
 	private static final String DEFAULT_EXT = "cs2";
@@ -70,8 +75,8 @@ public class ScriptDumper {
 			script.print(context);
 			context.getPrinter().finish();           
             System.out.println("Saved script "+name+" as "+file.getAbsolutePath());
-		} catch (Throwable ex) {
-         
+		} catch (IOException | RuntimeException ex) {
+            logger.error("Error decoding script "+scriptId, ex);
 		}
 		context.withPrinter(beforePrinter);
 	}

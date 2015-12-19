@@ -50,8 +50,8 @@ public class Revision718 extends RS2Revision {
 
 		registerInstruction(411, Text.INT_TO_STR);
 
-		registerInstruction(210, Widget.BIND_MOUSE_HOVER_IN_HANDLER);
-		registerInstruction(633, Widget.BIND_MOUSE_HOVER_OUT_HANDLER);
+		registerInstruction(210, Widget.BIND_MOUSEREPEAT_HANDLER);
+		registerInstruction(633, Widget.BIND_MOUSELEAVE_HANDLER);
 		registerInstruction(790, Widget.PUSH_HIDDEN);
 		registerInstruction(600, Widget.SETHIDDEN);
 

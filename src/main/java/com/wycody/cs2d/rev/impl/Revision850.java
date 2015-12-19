@@ -43,74 +43,11 @@ public class Revision850 extends RS3Revision {
 	public void registerInstructions() {
         registerInstruction(-1, Unsorted.MISSING);
 
-        // Push,Pop,Store
-        registerInstruction(109,  Push.PUSH_INT);
-        registerInstruction(964,  RS3Var.RS3_PUSH_VAR);
-        registerInstruction(537,  RS3Var.RS3_STORE_VAR);
-        registerInstruction(403,  RS3Var.RS3_PUSH_VARBIT);
-        registerInstruction(687,  RS3Var.RS3_STORE_VARBIT);
-        registerInstruction(226,  Push.PUSH_OBJECT);
-
-        //Branching
-        registerInstruction(375,  Branch.GOTO);
-        registerInstruction(1064, Branch.INT_EQ);
-        registerInstruction(569,  Branch.INT_NE);
-        registerInstruction(281,  Branch.INT_LT);
-        registerInstruction(835,  Branch.INT_GT);
-        registerInstruction(206,  Branch.INT_LE);
-        registerInstruction(131,  Branch.INT_GE);
-
-        //Var
-        registerInstruction(17,   Push.LOAD_INT);
-        registerInstruction(165,  Store.STORE_INT);
-        registerInstruction(244,  Push.LOAD_OBJ);
-        registerInstruction(641,  Store.STORE_OBJ);
-        registerInstruction(26,   Text.CONCAT);
-        registerInstruction(286,  Pop.POP_INT);
-        registerInstruction(122,  Pop.POP_OBJ);
-
-        // TODO: 444, CALL_SCRIPT...SWITCH
-        
-        
-        registerInstruction(342,  Branch.SWITCH);
-        registerInstruction(563,  Push.PUSH_LONG);
-        registerInstruction(84,   Pop.POP_LONG);
-        registerInstruction(483,  Push.LOAD_LONG);
-        registerInstruction(685,  Store.STORE_LONG);
-        registerInstruction(0,    Branch.LONG_NE);
-        registerInstruction(1131, Branch.LONG_EQ);
-        
-        
-        registerInstruction(324, Branch.LONG_LT);
-        registerInstruction(544, Branch.LONG_GT);
-        registerInstruction(445, Branch.LONG_LE);
-        registerInstruction(129, Branch.LONG_GE);
-        
-        /*
-            3x ?
-            TRUE_INT    166
-            FALSE_INT   685
-            CREATE_COMPONENT_CHILD
-            1x ?
-        */
-       // registerInstruction(1123, WidgetContainer.CREATE);
-       // registerInstruction(887, WidgetContainer.DELETE);
-       // registerInstruction(936, WidgetContainer.CLEAR);
-        
-        /*
-            11x ?
-            SET_CURRENT_COMP_POSITION
-            SET_CURRENT_COMP_SIZE
-        */
-       // registerInstruction(404, Widget.SHOW_SELECTED_COMPONENT);
-        //Active component - position
         registerInstruction(945, ActiveWidget.SETPOS);
         registerInstruction(932, ActiveWidget.SETSIZE);
         registerInstruction(404, ActiveWidget.SETHIDE);
         registerInstruction(99, ActiveWidget.SETASPECTRATIO);
         registerInstruction(259, ActiveWidget.SETSOLID);
-        
-        //Active component - attribute setters
         registerInstruction(922, ActiveWidget.SETSCROLLPOS);
         registerInstruction(64, ActiveWidget.SETCOLOUR);
         registerInstruction(577, ActiveWidget.SETFILLED);
@@ -122,48 +59,15 @@ public class Revision850 extends RS3Revision {
         registerInstruction(1178, ActiveWidget.SETMODEL);
         registerInstruction(965, ActiveWidget.SETMODELCONSTRAINTS);
         registerInstruction(179, ActiveWidget.SETANIMATION);
-        //4x unknown
         registerInstruction(683, ActiveWidget.SETTEXT);
         registerInstruction(656, ActiveWidget.SETFONT);
         registerInstruction(585, ActiveWidget.SETTEXTALIGN);
         registerInstruction(615, ActiveWidget.SETSHADED);
-        
-        /*    SET_CUR_INTER_ASPECT_RATIO
-            2x ?
-            SET_CURRENT_COMP_COLOR
-            SET_CURRENT_COMP_FILLED
-            SET_CURRENT_COMP_ALPHA
-            1x ?
-            SET_CURRENT_COMP_SPRITE
-            SET_CURRENT_COMP_SPRITE_ROTATION
-            SET_CURRENT_COMP_SPRITE_REPEAT
-            7x ?
-            SET_CURRENT_COMP_TEXT
-            SET_CURRENT_COMP_FONT
-            SET_CURRENT_COMP_TEXT_ALLIGNMENT
-            SET_CURRENT_COMP_SHADED
-            34x ?
-            SET_CURRENT_COMP_OPTION
-            SET_CURRENT_COMP_DEFAULT_SLOT
-            SET_CURRENT_COMP_CONTENT_TYPE
-            2x ?
-            SET_CURRENT_COMP_APPLY_TEXT
-            SET_CURRENT_COMP_TARGET_OP
-            2x ?
-            SET_CURRENT_COMP_USE_ON_CURSOR(639)
-            SET_CURRENT_COMP_OPTION_CURSOR(213)
-            SET_CURRENT_COMP_DEFAULT_OPTION(294)
-            SET_CURRENT_COMP_OP_CURSOR(568)
-            9x ?*/
-        
-        
-        //Active component - event binding
         registerInstruction(818, ActiveWidget.BIND_MOUSEPRESS_HANDLER);
         registerInstruction(590, ActiveWidget.BIND_MOUSEDRAGPAST_HANDLER);
         registerInstruction(1011, ActiveWidget.BIND_MOUSERELEASE_HANDLER);
         registerInstruction(927, ActiveWidget.BIND_MOUSEOVER_HANDLER);
         registerInstruction(323, ActiveWidget.BIND_MOUSEOUT_HANDLER);
-        //1x unknown
         registerInstruction(764, ActiveWidget.BIND_DESELECT_HANDLER);
         registerInstruction(1117, ActiveWidget.BIND_VARP_HANDLER);
         registerInstruction(197, ActiveWidget.BIND_UPDATE_HANDLER);
@@ -177,14 +81,11 @@ public class Revision850 extends RS3Revision {
         registerInstruction(785, ActiveWidget.BIND_MOUSESCROLL_HANDLER);
         registerInstruction(319, ActiveWidget.BIND_CHAT_HANDLER);
         registerInstruction(1066, ActiveWidget.BIND_KEYPRESS_HANDLER);
-        //4x unused
         registerInstruction(1083, ActiveWidget.BIND_FRIENDLIST_HANDLER);
         registerInstruction(1050, ActiveWidget.BIND_FRIENDCHAT_HANDLER);
         registerInstruction(601, ActiveWidget.BIND_STATUS_HANDLER);
         registerInstruction(172, ActiveWidget.BIND_ATTACHMENT_HANDLER);
-        //1x unknown
         registerInstruction(714, ActiveWidget.BIND_EXCHANGE_HANDLER);
-        //1x unknown
         registerInstruction(1039, ActiveWidget.BIND_RESIZE_HANDLER);
         registerInstruction(159, ActiveWidget.BIND_VARC_HANDLER);
         registerInstruction(613, ActiveWidget.BIND_VARCSTR_HANDLER);
@@ -194,78 +95,35 @@ public class Revision850 extends RS3Revision {
         registerInstruction(650, ActiveWidget.BIND_VARCLAN_HANDLER);
         registerInstruction(939, ActiveWidget.BIND_GROUPCHANNEL_HANDLER);
         registerInstruction(792, ActiveWidget.BIND_VARGROUP_HANDLER);
-        //1x unknown
         registerInstruction(322, ActiveWidget.CLEAR_HANDLERS);
-           /* 2x ?
-            SET_COMP_POSITION(6)
-            SET_COMP_SIZE(126)
-            TOGGLE_SHOW_INTERFACE_COMPONENT(579)
-            SET_COMP_ASPECT_RATIO(284)
-            SET_COMP_SOLID(376)
-            SET_COMP_SCROLL_POSITION(174)
-            SET_COMP_COLOR(409)
-        */
-        
-
-        
         registerInstruction(1046, Widget.SETFILLED);
         registerInstruction(27,Widget.SETALPHA);
         registerInstruction(580,Widget.SETLINEWEIGHT);
         registerInstruction(73,Widget.SETGRAPHIC);
-        
-        /* 
-            9x ?
-            */
         registerInstruction(610,  Widget.SETTEXT);
-/*            8x?
-            SET_COMP_SCROLL
-            1x ?
-            SET_COMP_ZOOM
-            10x ?
-            SET_MEDIA_NPC_HEAD
-            1x ?
-            SET_MEDIA_NPC
-            12x ?
-            SET_COMP_OPTION
-            9x ?  
-        */
-//        registerInstruction(2,    ComponentSetDefaultOption.class);
-        
-        /*
-            10x ?
-            
-            */
-        //Component - event binding
         registerInstruction(1043, Widget.BIND_MOUSEPRESS_HANDLER);
         registerInstruction(985, Widget.BIND_MOUSEDRAGPAST_HANDLER);
         registerInstruction(790, Widget.BIND_MOUSERELEASE_HANDLER);
         registerInstruction(250, Widget.BIND_MOUSEOVER_HANDLER);
-        registerInstruction(663, Widget.BIND_MOUSE_HOVER_OUT_HANDLER);
-        //SET_UNKNOWN1_EVENT_HANDLER(90)
+        registerInstruction(663, Widget.BIND_MOUSELEAVE_HANDLER);
         registerInstruction(879, Widget.BIND_DESELECT_HANDLER);
         registerInstruction(912, Widget.BIND_VARP_HANDLER);
         registerInstruction(880, Widget.BIND_UPDATE_HANDLER);
         registerInstruction(447, Widget.BIND_OPTION_HANDLER);
         registerInstruction(31, Widget.BIND_DRAG_HANDLER);
         registerInstruction(252, Widget.BIND_MOUSEDRAG_HANDLER);
-        registerInstruction(373, Widget.BIND_MOUSE_HOVER_IN_HANDLER);
+        registerInstruction(373, Widget.BIND_MOUSEREPEAT_HANDLER);
         registerInstruction(385, Widget.BIND_INV_HANDLER);
         registerInstruction(1122, Widget.BIND_STAT_HANDLER);
         registerInstruction(1086, Widget.BIND_SELECT_HANDLER);
         registerInstruction(314, Widget.BIND_MOUSESCROLL_HANDLER);
         registerInstruction(556, Widget.BIND_CHAT_HANDLER);
         registerInstruction(942, Widget.BIND_KEYPRESS_HANDLER);
-        //SET_UNUSED1_EVENT_HANDLER(857)
-        //SET_UNUSED2_EVENT_HANDLER(1080)
-        //SET_UNUSED3_EVENT_HANDLER(485)
-        //SET_UNUSED4_EVENT_HANDLER(622)
         registerInstruction(55, Widget.BIND_FRIENDLIST_HANDLER);
         registerInstruction(293, Widget.BIND_FRIENDCHAT_HANDLER);
         registerInstruction(528, Widget.BIND_STATUS_HANDLER);
         registerInstruction(204, Widget.BIND_ATTACHMENT_HANDLER);
-        //SET_UNKNOWN3_EVENT_HANDLER(684)
         registerInstruction(210, Widget.BIND_EXCHANGE_HANDLER);
-        //SET_UNKNOWN4_EVENT_HANDLER(596)
         registerInstruction(681, Widget.BIND_RESIZE_HANDLER);
         registerInstruction(398, Widget.BIND_VARC_HANDLER);
         registerInstruction(300, Widget.BIND_VARCSTR_HANDLER);
@@ -275,64 +133,11 @@ public class Revision850 extends RS3Revision {
         registerInstruction(562, Widget.BIND_VARCLAN_HANDLER);
         registerInstruction(888, Widget.BIND_GROUPCHANNEL_HANDLER);
         registerInstruction(419, Widget.BIND_VARGROUP_HANDLER);
-        //SET_UNKNOWN6_EVENT_HANDLER(60)
         registerInstruction(11, Widget.CLEAR_HANDLERS);
-   
- 
-        /*6x ?
-        RECOLOR_COMP_NPC
-        3x ?
-        SEND_GAME_MESSAGE
-        */
-        
-
-        
-        
-        
-        
         registerInstruction(278,  Unsorted.RETURN);
-        
-        /*
-                76x ?
-        SET_WINDOW_MODE 624
-        7x ?
-        */
         registerInstruction(963, Unsorted.PRINT_TO_CONSOLE);
-        /*
-        5x
-        CALL_JS_3(58),
-        146x ? 
-        */
-        
         registerInstruction(1068, WidgetContainer.SETACTIVE);
         registerInstruction(104, Widget.SETACTIVE);
-        /*
-        SET_SELECTED_INTERFACE
-        GET_CURRENT_COMP_RENDER_X
-        GET_CURRENT_COMP_RENDER_Y
-        1x ?
-        GET_CURRENT_COMP_RENDER_HEIGHT
-        1x ?
-        GET_CURRENT_COMP_DEFAULT_PARENT_HASH
-        14x ?
-        GET_CURRENT_COMP_SPRITE_ID
-        14x ?
-        GET_COMP_RENDER_X
-        GET_COMP_RENDER_Y
-        GET_COMP_RENDER_WIDTH
-        GET_COMP_RENDER_HEIGHT
-        GET_IS_COMP_HIDDEN
-        GET_COMP_DEFAULT_PARENT_HASH
-        GET_COMP_PARENT_HASH
-        1x ?
-        GET_COMP_SCROLL_X
-        GET_COMP_SCROLL_Y
-        2x ?
-        GET_COMP_SCROLL_HEIGHT
-        16x ?
-        GET_FREE_COMP_INDEX
-        7x ?
-        */
         registerInstruction(1030, ClientGeneral.PUSH_CLIENT_CYCLE);
         registerInstruction(966, ClientGeneral.PUSH_INV_SLOTOBJ);
         registerInstruction(1088, ClientGeneral.PUSH_INV_SLOTCOUNT);
@@ -340,132 +145,24 @@ public class Revision850 extends RS3Revision {
         registerInstruction(443, ClientGeneral.PUSH_INV_CATCOUNT);
         registerInstruction(735, ClientGeneral.PUSH_INV_CAPACITY);
         registerInstruction(65, ClientGeneral.PUSH_INV_STOCKCOUNT);
-        
-        //didnt check these 3 for accuracy
         registerInstruction(1175, ClientGeneral.PUSH_STAT_LEVEL);
         registerInstruction(146, ClientGeneral.PUSH_STAT_BASE);
         registerInstruction(276, ClientGeneral.PUSH_STAT_EXPERIENCE);
-        /*
-        15x ?
-        ARE_MEM_ITEMS_ALLOWED
-        11x ?
-        PLAYER_IS_MALE
-        19x ?
-        GET_ENUM_VALUE
-        2x ?
-        GET_ENUM_SIZE
-        16x ?
-        IS_VARCLAN_ENABLED
-        IS_EXCHANGE_SELL_OFFER
-        2x ?
-        GET_EXCHANGE_OFFER_AMOUNT
-        GET_EXCHANGE_PROCESSED_COINS
-        5x ?
-        ADD(475),*/
-        
-
-        
-
-        // PUSH GET_EXCHANGE_COMPLETED_COINS[popInt()]
-        // PUSH (GRAND_EXCHANGE_STATUS[popInt()] == 0)
-        // PUSH (GRAND_EXCHANGE_STATUS[popInt()] == 2)
-        // PUSH (GRAND_EXCHANGE_STATUS[popInt()] == 1)
-        // PUSH (GRAND_EXCHANGE_STATUS[popInt()] == 5)
         registerInstruction(475,  Math.SUM);
         registerInstruction(856,  Math.SUBTRACT);
         registerInstruction(1219, Math.MULTIPLY);
-
-        //TODO: help!? what is this
-        //registerInstruction(987,  Math.DIVIDE_REVERSED);
         registerInstruction(987,  Math.DIVIDE);
         registerInstruction(1189, Math.RANDOM);
-        
-        /*
-        RANDOM_PLUS_ONE(644),
-        LINEAR_INTERPOLATE(476),
-        WOT(108),
-        SET_BIT(132),
-        CLEAR_BIT(1161),
-        TEST_BIT(287),*/
-
         registerInstruction(1186, Math.MODULO);
-        
-        
-        /*POW(236),
-        ROOT(1143),
-        AND(81),
-        OR(313),
-        MIN(952),
-        */
         registerInstruction(313, Math.BITWISE_OR);
         registerInstruction(952,  Math.MIN);
         registerInstruction(241,  Math.MAX);
         registerInstruction(977,  Math.FRAC_MULTIPLY);
-        //241
-        //TODO: 977, 241 
-        
-        /*
-        FRAC_MUL(977),
-        6x ?
-        GET_COLOR_HTML
-        4x ?
-        */
         registerInstruction(560,  Text.INT_TO_STR);
-
-        /*
-        COMPARE_STRINGS
-        GET_LINE_COUNT
-        9x ?
-        */
         registerInstruction(986,  Text.STRLEN);
-        
-        /*
-        7x ?
-        GET_STRING_WIDTH
-        3x ?
-        GET_OBJ_NAME
-        1x ?
-        GET_OBJ_INV_OP
-        2x ?
-        GET_OBJ_CATEGORY
-        9x ?
-        IS_MEMBERS_ITEM
-        GET_OBJ_PARAM_BY_DEFAULT_VAL
-        GET_OBJ_CURSOR_OP
-        4x ?
-        GET_OBJ_NAME_COLOR
-        GET_NPC_PARAM_BY_DEFAULT_VAL
-        1x ?*/
-        
+        registerInstruction(4, Config.PUSH_WORLDMAP_PARAM);
         registerInstruction(282, Config.PUSH_STRUCT_PARAM);
         registerInstruction(338, Config.PUSH_NPC_PARAM);
-        /*
-        55x ?
-        GET_MAP_SEGMENT_COORDS
-        16x ?
-        LOAD_INT_ZERO
-        21x ?
-        GET_ACC_CREATION_STATUS
-        */
-        registerInstruction(1006, Unsorted.GET_CURRENT_TOOLKIT_PREFERENCE);
-        /*
-        75x ?
-        GET_ROOT_INTERFACE
-        126 ?
-        */
-        
-        registerInstruction(1115, Unsorted.NOP);
-        /*
-            31x ?
-        */
-        registerInstruction(28,   Unsorted.TWITCH_LOGOUT);
-        /*
-            32x ?
-        */
-        registerInstruction(831,  Unsorted.IS_WINDOWS);
-        /*
-            22x ?
-        */
         registerInstruction(408, ScriptEnum.PUSH_VALUE_STR);
         registerInstruction(608, ScriptEnum.PUSH_VALUE);
         registerInstruction(285, ScriptEnum.PUSH_CONTAINS_INT);
@@ -476,8 +173,6 @@ public class Revision850 extends RS3Revision {
         registerInstruction(789, ScriptEnum.PUSH_INTVALKEY);
         registerInstruction(642, ScriptEnum.PUSH_STRVALKEY);
         
-        
-        registerInstruction(444, Unsorted.CALL_SCRIPT);
 
         
 	}
@@ -537,9 +232,6 @@ Unknown opcode: 342
             unids.add(id);
             if(print_unknowns)
                 System.err.println("Unknown opcode: " + id);
-        }else{
-//            System.err.println();
-            //System.err.println("opcode: "+id);
         }
         
         int instKey = registeredInstructions.containsKey(id) ? id : -1;
@@ -572,10 +264,10 @@ Unknown opcode: 342
             System.err.println(" ------ CRITICAL DEBUG INFO ------ ");
 */
         } else if (instr.getType() == InstructionType.PUSH_OBJ) {
-            int idx = buffer.getUnsignedByte();
-            BaseVarType baseVarType = SerialEnum.forID(BaseVarType.values(), idx);
-            switch (baseVarType) {
-                case INTEGER:                   
+                int idx = buffer.getUnsignedByte();
+                BaseVarType baseVarType = SerialEnum.forID(BaseVarType.values(), idx);
+                switch (baseVarType) {
+                    case INTEGER:
                     instr = Push.PUSH_INT.get();
                     instr.setBaseData(109,address);
                     instr.setIntegerOperand(buffer.getInt());

@@ -212,6 +212,15 @@ public interface Widget {
                     .setPrefixFormatters(widgetFormatter);
     
     /**
+     * Sets the scale width of the specified graphic component
+     */
+    Supplier<CallMethodInstruction> SETSCALE = () ->
+            new CallMethodInstruction(InstructionType.COMP_SETSCALE)
+                    .setFormattedName("%1.setScale(%2)")
+                    .setArgumentTypes(StackType.INT, StackType.INT)
+                    .setPrefixFormatters(widgetFormatter);
+    
+    /**
      * Sets the background colour of the specified component
      */
     Supplier<CallMethodInstruction> SETBACKGROUNDCOL = () ->
@@ -337,11 +346,11 @@ public interface Widget {
                     .setArgumentTypes(StackType.INT, StackType.INT, StackType.INT);
     
     /**
-     * Sets the content type for the specified component
+     * Sets the drag mode for the specified component
      */
-    Supplier<CallMethodInstruction> SETCONTENTTYPE = () ->
-            new CallMethodInstruction(InstructionType.COMP_SETCONTENTTYPE)
-                    .setFormattedName("%1w.setContentType(%2)")
+    Supplier<CallMethodInstruction> SETDRAGMODE = () ->
+            new CallMethodInstruction(InstructionType.COMP_SETDRAGMODE)
+                    .setFormattedName("%1w.setDragMode(%2)")
                     .setArgumentTypes(StackType.INT, StackType.INT);
     
     /**
@@ -435,8 +444,8 @@ public interface Widget {
     /**
      * Sets the mouse out event handler for the specified component
      */
-    Supplier<EventBindInstruction> BIND_MOUSE_HOVER_OUT_HANDLER = () ->
- new EventBindInstruction(InstructionType.COMP_SET_MOUSEOUT_HANDLER, "MouseHoverOut", false);
+    Supplier<EventBindInstruction> BIND_MOUSELEAVE_HANDLER = () ->
+ new EventBindInstruction(InstructionType.COMP_SET_MOUSELEAVE_HANDLER, "MouseLeave", false);
     
     /**
      * Sets the drag release event handler for the specified component
@@ -481,10 +490,10 @@ public interface Widget {
             new EventBindInstruction(InstructionType.COMP_SET_MOUSEDRAG_HANDLER, "MouseDrag", false);
     
     /**
-     * Sets the mouse move event handler for the specified component
+     * Sets the mouse repeat event handler for the specified component, which is called constantly while the mouse is on the component
      */
-    Supplier<EventBindInstruction> BIND_MOUSE_HOVER_IN_HANDLER = () ->
- new EventBindInstruction(InstructionType.COMP_SET_MOUSEHOVER_HANDLER, "MouseHoverIn", false);
+    Supplier<EventBindInstruction> BIND_MOUSEREPEAT_HANDLER = () ->
+ new EventBindInstruction(InstructionType.COMP_SET_MOUSEREPEAT_HANDLER, "MouseRepeat", false);
     
     /**
      * Sets the inventory update event handler for the specified component

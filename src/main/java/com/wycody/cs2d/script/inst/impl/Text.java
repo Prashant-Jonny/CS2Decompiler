@@ -80,11 +80,7 @@ public interface Text {
                     .setPushType(StackType.INT);
     
         
-    Supplier<CallMethodInstruction> RUNEDATE_TO_STRING = () ->
-            new CallMethodInstruction(InstructionType.RUNEDAY_STR)
-                    .setName("runedayToString")
-                    .setArgumentTypes(StackType.INT,StackType.INT,StackType.OBJECT)
-                    .setPushType(StackType.INT);
+
     
     //TODO: should make this '+' again.
     Supplier<InfixInstruction> CONCAT_CHAR = () ->

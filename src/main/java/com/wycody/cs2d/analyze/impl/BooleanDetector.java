@@ -49,27 +49,29 @@ public class BooleanDetector extends Analyzer {
 
 	@Override
 	public void process() {
+		boolean retBool = true;
 		for (int depth = returnBiggestDepth; depth >= 0; depth--) {
 			List<ReturnInstruction> instructions = this.returnInstructions.get(depth);
 			if (instructions == null) {
 				continue;
 			}
-			boolean retBool = true;
+	
 			b: for (ReturnInstruction retInstr : instructions) {
 				Object[] retObjs = retInstr.getReturnObjects();
 				if (retObjs != null && retObjs.length == 1) {
 					if (retObjs[0] instanceof Integer) {
 						int value = (int) retObjs[0];
-						if (value == 0 || value == 1)
+						if (value == 0 || value == 1) {
 							continue b;
-						
-						else {
-							retBool = false;
-							break;
 						}
 					}
 				}
+
+				retBool = false;
+				break b;
+
 			}
+
 			if (retBool) {
 				for (ReturnInstruction retInstr : instructions) {
 					retInstr.setReturnType(ReturnType.BOOLEAN);
@@ -79,7 +81,6 @@ public class BooleanDetector extends Analyzer {
 		}
 
 	}
-
 
 	@Override
 	public void finalyze() {

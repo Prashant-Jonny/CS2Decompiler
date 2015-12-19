@@ -10,6 +10,8 @@ import com.wycody.cs2d.script.inst.InstructionBaseType;
 import com.wycody.cs2d.script.inst.InstructionType;
 import com.wycody.cs2d.script.inst.base.branch.ConditionalInstruction;
 import com.wycody.cs2d.script.inst.base.branch.JumpInstruction;
+import com.wycody.cs2d.script.inst.swtch.SwitchBlock;
+import com.wycody.cs2d.script.inst.swtch.SwitchInstruction;
 import com.wycody.cs2d.script.inst.walker.InstructionWalker;
 import com.wycody.cs2d.script.inst.walker.WalkState;
 import com.wycody.cs2d.script.inst.walker.WalkerAction;
@@ -40,6 +42,12 @@ public class BasicBlock extends Block {
 	public BasicBlock(int address) {
 		super(address);
 		this.instructions = new DynamicArray<>(Instruction.class);
+
+	}
+
+	public BasicBlock(int address, DynamicArray<Instruction> instructions) {
+		super(address);
+		this.instructions = instructions;
 
 	}
 
@@ -249,7 +257,6 @@ public class BasicBlock extends Block {
 			public WalkState visitInstr(int depth, Instruction instruction) {
 				if (instruction.getHolder() == BasicBlock.this) {
 					if (after != null && instruction.getHolder().getInstructions().indexOf(after) >= instruction.getHolder().getInstructions().indexOf(instruction)) {
-
 						return WalkState.CONTINUE;
 					}
 				}
@@ -259,7 +266,6 @@ public class BasicBlock extends Block {
 						if (ignores == instruction.getClass()) {
 							return WalkState.CONTINUE;
 						}
-
 					}
 					instr[0] = instruction;
 					return WalkState.STOP_WALKING;
@@ -384,7 +390,7 @@ public class BasicBlock extends Block {
 		return null;
 	}
 
-	public Match<JumpInstruction> findNearestMatchJump(JumpInstruction target) {
+	public Match<JumpInstruction> findDuplicationJump(JumpInstruction target) {
 		Match<JumpInstruction> match = new Match<>();
 		InstructionWalker thisWalker = new InstructionWalker(this, InstructionWalker.RESOLVE_JUMPS | InstructionWalker.RESOLVE_FALSE_BLOCKS, new WalkerAction() {
 
@@ -532,5 +538,28 @@ public class BasicBlock extends Block {
 			throw new Error("Could not find the instruction to replace with.");
 		instructions.add(index, with);
 	}
+
+	// after index = 2, before index = 5
+	// index = 3
+	// index = 1
+	public DynamicArray<Instruction> cut(SwitchInstruction after, Instruction before) {
+		DynamicArray<Instruction> instructions = new DynamicArray<>(Instruction.class);
+
+		for (Instruction instruction : this.instructions) {
+			if (after != null && after.getAddress() >= instruction.getAddress())
+				continue;
+			if (before != null && before.getAddress() <= instruction.getAddress())
+				continue;
+			removeInstruction(instruction);
+			instructions.add(instruction);
+
+		}
+		return instructions;
+	}
+
+//	public static Object ofArray(int id, DynamicArray<Instruction> defaultBlock) {
+//		//BasicBlock block = new BasicBlock(SwitchBlock.generateDefaultBlockId());
+//
+//	}
 
 }

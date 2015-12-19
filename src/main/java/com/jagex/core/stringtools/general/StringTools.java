@@ -644,6 +644,26 @@ public final class StringTools {
 			'\u02DC', '\u2122', '\u0161', '\u203A', '\u0153', '\0', '\u017E',
 			'\u0178' };
 
+	public static String escapeString(byte[]baseChars, int offset, int length) {
+		char[] characters = new char[length];
+		int charIndex = 0;
+		for (int bIndex = 0; bIndex < length; bIndex++) {
+			int c = baseChars[offset + bIndex] & 0xff;
+			if (c != 0) {
+				if (c >= 128 && c < 160) {
+					int i_6_ = CHARACTERS[c - 128];
+					if (0 == i_6_) {
+						i_6_ = 63;
+					}
+					c = i_6_;
+				}
+			}
+			characters[charIndex++] = (char) c;
+
+		}
+		return new String(characters, 0, charIndex);
+	}
+	
 	public static char getCharacterFromByte(byte var0) {
 		int var1 = var0 & 255;
 		if (var1 == 0) {

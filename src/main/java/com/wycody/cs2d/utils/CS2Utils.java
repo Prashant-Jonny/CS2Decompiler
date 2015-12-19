@@ -96,6 +96,10 @@ public class CS2Utils {
 				return "getKeyCode()";
 			case -2147483639:
 				return "getKeyChar()";
+            case -2147483645:
+				return "caller";
+			case -2147483642:
+				return "target";
 			}
 			return val;
 		} else if (val instanceof CS2Field) {

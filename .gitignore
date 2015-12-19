@@ -6,6 +6,7 @@
 .dropbox
 .project
 /data/dumps
+./src/main/java/com/thedoge
 nb-configuration.xml
 nbactions.xml
 install-to-project-repo.py

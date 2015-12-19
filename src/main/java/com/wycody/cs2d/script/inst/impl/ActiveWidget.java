@@ -10,7 +10,7 @@ import com.wycody.cs2d.script.inst.types.StackType;
 
 public interface ActiveWidget {
     String AC_PREFIX = "getActiveWidget().";
-    String AC_PREFIX_NO_DOT = "getActiveWidget()";
+    String AC_PREFIX_NO_DOT = "getActiveWidget";
 
     /**
      * Sets the position of the current active component, in the format (xoff, yoff, xPosMode, yPosMode)
@@ -176,6 +176,14 @@ public interface ActiveWidget {
                     .setArgumentTypes(StackType.INT);
     
     /**
+     * Sets the scale width of the active graphic component
+     */
+    Supplier<CallMethodInstruction> SETSCALE = () ->
+            new CallMethodInstruction(InstructionType.AC_SETSCALE)
+                    .setName(AC_PREFIX+"setScale")
+                    .setArgumentTypes(StackType.INT);
+    
+    /**
      * Sets the background colour of the active component
      */
     Supplier<CallMethodInstruction> SETBACKGROUNDCOL = () ->
@@ -268,8 +276,8 @@ public interface ActiveWidget {
      */
     Supplier<CallMethodInstruction> SETOBJECT = () ->
             new CallMethodInstruction(InstructionType.AC_SETOBJECT)
-                    .setName(AC_PREFIX+"setObject")
-                    .setArgumentTypes(StackType.INT);
+                    .setFormattedName(AC_PREFIX+"setObject(%2, %1)")
+                    .setArgumentTypes(StackType.INT, StackType.INT);
     
     /**
      * Sets the option text at the given slot for the active component
@@ -288,11 +296,27 @@ public interface ActiveWidget {
                     .setArgumentTypes(StackType.INT, StackType.INT);
     
     /**
-     * Sets the content type for the active component
+     * Sets the drag mode for the active component
      */
-    Supplier<CallMethodInstruction> SETCONTENTTYPE = () ->
-            new CallMethodInstruction(InstructionType.AC_SETCONTENTTYPE)
-                    .setName(AC_PREFIX+"setContentType")
+    Supplier<CallMethodInstruction> SETDRAGMODE = () ->
+            new CallMethodInstruction(InstructionType.AC_SETDRAGMODE)
+                    .setName(AC_PREFIX+"setDragMode")
+                    .setArgumentTypes(StackType.INT);
+    
+    /**
+     * Sets the first unknown drag-related integer for the active component
+     */
+    Supplier<CallMethodInstruction> SETDRAGINT1 = () ->
+            new CallMethodInstruction(InstructionType.AC_SETDRAGINT1)
+                    .setName(AC_PREFIX+"setDragInt1")
+                    .setArgumentTypes(StackType.INT);
+    
+    /**
+     * Sets the second unknown drag-related integer for the active component
+     */
+    Supplier<CallMethodInstruction> SETDRAGINT2 = () ->
+            new CallMethodInstruction(InstructionType.AC_SETDRAGINT2)
+                    .setName(AC_PREFIX+"setDragInt2")
                     .setArgumentTypes(StackType.INT);
     
     /**

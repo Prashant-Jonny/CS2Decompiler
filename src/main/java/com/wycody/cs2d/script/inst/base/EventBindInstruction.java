@@ -59,7 +59,7 @@ public class EventBindInstruction extends Instruction {
         this.isActiveComponent = isActiveComponent;
     }
 
-    
+
     @Override
     public void process(Context context) {
         if (isActiveComponent) {
@@ -68,7 +68,6 @@ public class EventBindInstruction extends Instruction {
             prefix = CS2Utils.getWidget(script, pop(StackType.INT));
         }
         String signature = (String) pop(StackType.OBJECT);     
-        
         if (signature.startsWith("\"") && signature.endsWith("\"") && signature.length() >= 2) {
             signature = signature.substring(1, signature.length()-1);//Strip the quote marks off.
         }  
@@ -90,7 +89,6 @@ public class EventBindInstruction extends Instruction {
         byte[] DBG = signature.getBytes();
         
         for (int i = args.length - 1; i >= 0; i--) {
-        	
         	ScriptVarType varType = ScriptVarType.getByChar(signature.charAt(i));
             if (varType == ScriptVarType.STRING) {
                 args[i] = pop(StackType.OBJECT);
@@ -117,9 +115,8 @@ public class EventBindInstruction extends Instruction {
             printer.println(prefix+".remove"+handlerName+"Event();");
         } else {
             StringBuilder bldr = new StringBuilder();
-			bldr.append(prefix).append(".set").append(handlerName).append("Event(~" + target.getName() + "(");
+			bldr.append(prefix).append(".set").append(handlerName).append("Event(~").append(target.getName()).append("(");
 
-          //  bldr.append(scriptId);
             if (args.length > 0) {
             	for(int i = 0; i < args.length; i++) {
             		Object o = args[i];

@@ -65,7 +65,7 @@ public class Revision835 extends RS3Revision {
         registerInstruction(449, Unsorted.CALL_SCRIPT);
         registerInstruction(134, Array.CREATE);
         registerInstruction(1188, Push.ARRAY);
-        registerInstruction(859, Store.ARRAY);
+        registerInstruction(859, Array.STORE);
         registerInstruction(1049, Branch.SWITCH);
         registerInstruction(1176, Push.PUSH_LONG);
         registerInstruction(1187, Pop.POP_LONG);
@@ -117,7 +117,8 @@ public class Revision835 extends RS3Revision {
         registerInstruction(0, ActiveWidget.SETFONT);
         registerInstruction(621, ActiveWidget.SETTEXTALIGN);
         registerInstruction(1154, ActiveWidget.SETSHADED);
-        //2x unknown
+        //1x unknown
+        registerInstruction(759, ActiveWidget.SETSCALE);
         registerInstruction(211, ActiveWidget.SETBACKGROUNDCOL);
         registerInstruction(955, ActiveWidget.SETFLIPY);
         registerInstruction(316, ActiveWidget.SETFLIPX);
@@ -130,15 +131,17 @@ public class Revision835 extends RS3Revision {
         registerInstruction(1177, ActiveWidget.SETPARAM_INT);
         registerInstruction(995, ActiveWidget.SETPARAM_STR);
         //4x unknown
-        //registerInstruction(-1, ActiveWidget.SETMONOCHROMEFONT);
-        //2x unknown
-        //registerInstruction(-1, ActiveWidget.SETOBJECT);
+        registerInstruction(1183, ActiveWidget.SETMONOCHROMEFONT);
+        registerInstruction(1055, ActiveWidget.SETPARAM_INT);//For some reason this is duplicated...
+        //1x unknown
+        registerInstruction(297, ActiveWidget.SETOBJECT);
         
         //Active component - interaction setters
         registerInstruction(275, ActiveWidget.SETOP);
         registerInstruction(1105, ActiveWidget.SETDEFAULTSLOT);
-        registerInstruction(359, ActiveWidget.SETCONTENTTYPE);
-        //2x unknown
+        registerInstruction(359, ActiveWidget.SETDRAGMODE);
+        registerInstruction(522, ActiveWidget.SETDRAGINT1);
+        registerInstruction(253, ActiveWidget.SETDRAGINT2);
         registerInstruction(98, ActiveWidget.SETAPPLYTEXT);
         registerInstruction(1004, ActiveWidget.SETUSEOP);
         registerInstruction(16, ActiveWidget.CLEAROPS);
@@ -210,7 +213,8 @@ public class Revision835 extends RS3Revision {
         registerInstruction(772, Widget.SETFONT);
         registerInstruction(663, Widget.SETTEXTALIGN);
         registerInstruction(1100, Widget.SETSHADED);
-        //2x unknown
+        //1x unknown
+        registerInstruction(1091, Widget.SETSCALE);
         registerInstruction(1166, Widget.SETBACKGROUNDCOL);
         registerInstruction(824, Widget.SETFLIPY);
         registerInstruction(432, Widget.SETFLIPX);
@@ -225,12 +229,12 @@ public class Revision835 extends RS3Revision {
         //4x unknown
         //registerInstruction(-1 Widget.SETMONOCHROMEFONT);
         //1x unknown
-        //registerInstruction(-1, Widget.SETOBJECT);
+        registerInstruction(946, Widget.SETOBJECT);
         
         //Component - interaction
         registerInstruction(957, Widget.SETOP);
         registerInstruction(235, Widget.SETDEFAULTSLOT);
-        registerInstruction(537, Widget.SETCONTENTTYPE);
+        registerInstruction(537, Widget.SETDRAGMODE);
         //2x unknown
         registerInstruction(411, Widget.SETAPPLYTEXT);
         registerInstruction(1067, Widget.SETUSEOP);
@@ -247,7 +251,7 @@ public class Revision835 extends RS3Revision {
         registerInstruction(332, Widget.BIND_MOUSEDRAGPAST_HANDLER);
         registerInstruction(348, Widget.BIND_MOUSERELEASE_HANDLER);
         registerInstruction(1019, Widget.BIND_MOUSEOVER_HANDLER);
-        registerInstruction(131, Widget.BIND_MOUSE_HOVER_OUT_HANDLER);
+        registerInstruction(131, Widget.BIND_MOUSELEAVE_HANDLER);
         registerInstruction(959, Widget.BIND_DRAGRELEASE_HANDLER);
         registerInstruction(1157, Widget.BIND_DESELECT_HANDLER);
         registerInstruction(189, Widget.BIND_VARP_HANDLER);
@@ -255,7 +259,7 @@ public class Revision835 extends RS3Revision {
         registerInstruction(854, Widget.BIND_OPTION_HANDLER);
         registerInstruction(1054, Widget.BIND_DRAG_HANDLER);
         registerInstruction(19, Widget.BIND_MOUSEDRAG_HANDLER);
-        registerInstruction(813, Widget.BIND_MOUSE_HOVER_IN_HANDLER);
+        registerInstruction(813, Widget.BIND_MOUSEREPEAT_HANDLER);
         registerInstruction(475, Widget.BIND_INV_HANDLER);
         registerInstruction(736, Widget.BIND_STAT_HANDLER);
         registerInstruction(648, Widget.BIND_SELECT_HANDLER);
@@ -277,7 +281,9 @@ public class Revision835 extends RS3Revision {
         registerInstruction(928, Widget.BIND_CLANSETTINGS_HANDLER);
         registerInstruction(140, Widget.BIND_CLANCHANNEL_HANDLER);
         registerInstruction(315, Widget.BIND_VARCLAN_HANDLER);
-        //registerInstruction(-1, Widget.CLEAR_HANDLERS);
+        registerInstruction(923, Widget.BIND_GROUPCHANNEL_HANDLER);
+        //2x unknown
+        registerInstruction(1136, Widget.CLEAR_HANDLERS);
         
         //General action executors
         registerInstruction(82, ClientGeneral.SEND_MESSAGE);
@@ -425,7 +431,10 @@ public class Revision835 extends RS3Revision {
         registerInstruction(492, ClientGeneral.PUSH_COORD_X);
         registerInstruction(269, ClientGeneral.PUSH_COORD_LEVEL);
         registerInstruction(427, ClientGeneral.PUSH_COORD_Y);
-        //8x unknown
+        //5x unknown
+        registerInstruction(709, ClientGeneral.PUSH_UPDATE_VECTOR3);
+        registerInstruction(1095, ClientGeneral.PUSH_VECTOR3);
+        //1x unknown
         registerInstruction(450, ClientGeneral.PUSH_MAP_MEMBERS);
         //2x unknown
         registerInstruction(531, ClientGeneral.PUSH_INV_OTHERPLAYER_SLOTOBJ);
@@ -447,6 +456,9 @@ public class Revision835 extends RS3Revision {
         registerInstruction(845, ClientGeneral.PUSH_LANGUAGE);
         //4x unknown
         registerInstruction(795, ClientGeneral.PUSH_APPLET_FOCUSED);
+        //1x unknown
+        registerInstruction(266, ClientGeneral.PUSH_MOUSEX);
+        registerInstruction(987, ClientGeneral.PUSH_MOUSEY);
         
         //Enum instructions
         registerInstruction(1028, ScriptEnum.PUSH_VALUE_STR);
@@ -565,7 +577,7 @@ public class Revision835 extends RS3Revision {
         //1x unknown
         registerInstruction(642, Text.COLOR_TO_CHAT_STR);
         registerInstruction(649, Text.TO_LOWER);       
-        registerInstruction(820, Text.RUNEDATE_TO_STRING);
+   //     registerInstruction(820, Text.RUNEDATE_TO_STRING);
         registerInstruction(680, Text.GENDER);
         registerInstruction(1068, Text.INT_TO_STR);
         registerInstruction(317, Text.COMPARE);
@@ -598,7 +610,8 @@ public class Revision835 extends RS3Revision {
         registerInstruction(1050, Config.PUSH_OBJ_IOP);
         registerInstruction(602, Config.PUSH_OBJ_COST);
         registerInstruction(778, Config.PUSH_OBJ_STACKABLE);
-        //2x unknown
+        //1x unknown
+        registerInstruction(485, Config.PUSH_OBJ_NEVERSTACKS);
         registerInstruction(363, Config.PUSH_OBJ_FROMCERT);
         registerInstruction(295, Config.PUSH_OBJ_TOCERT);
         //3x unknown
@@ -628,20 +641,15 @@ public class Revision835 extends RS3Revision {
         
         //Chat instructions
         registerInstruction(331, Chat.PUSH_PUBLICFILTERSTATUS);
+        //CHAT_BYCATEGORY
         registerInstruction(889, Chat.PUSH_BYID);
         registerInstruction(376, Chat.PUSH_PRIVATEFILTERSTATUS);
-        //registerInstruction(-1, Chat.PUSH_NAME);
-        //registerInstruction(-1, Chat.PUSH_CLAN);
-        //registerInstruction(-1, Chat.PUSH_QUICKCHATID);
         registerInstruction(3, Chat.PUSH_PLAYER_NAME);
         registerInstruction(721, Chat.PUSH_TRADEFILTERSTATUS);
         registerInstruction(277, Chat.PUSH_HISTORYSIZE);
-        //registerInstruction(-1, Chat.PUSH_ARGS);
-        //registerInstruction(-1, Chat.PUSH_NAMEUNFILTERED);
+        registerInstruction(1139, Chat.PUSH_NEXTLINEID);
+        registerInstruction(748, Chat.PUSH_PREVLINEID);
         registerInstruction(207, Chat.PUSH_PLAYER_NAMESIMPLE);
-        //registerInstruction(-1, Chat.PUSH_ID);
-        //registerInstruction(-1, Chat.PUSH_TIME);
-        //registerInstruction(-1, Chat.PUSH_NAMESIMPLE);
         registerInstruction(442, Chat.PUSH_QC_CATEGORY_NAME);
         registerInstruction(177, Chat.PUSH_QC_CATEGORY_SUBCATCOUNT);
         registerInstruction(455, Chat.PUSH_QC_CATEGORY_SUBCAT);
@@ -664,6 +672,10 @@ public class Revision835 extends RS3Revision {
         registerInstruction(426, WindowMode.FS_SET_DIMENSIONS);
         //3x unknown
         registerInstruction(8, WindowMode.PUSH_MODE);
+        
+        
+        
+        registerInstruction(1098, Unsorted.PUSH_EMPTY_INT);
         
         //Login instructions
         registerInstruction(334, Login.PUSH_RESPONSE);

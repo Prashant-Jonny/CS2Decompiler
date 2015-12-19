@@ -18,6 +18,23 @@ public class StoreVar extends Instruction {//TODO is this being done correct?
 		super(id, address, InstructionType.STORE_VAR);
 	}
 
+	public String getTypeName(){
+		VarType type = (VarType) objectOperand;
+		boolean usePlayerMap = integerOperand == 1;
+
+		VarDomainType domain = type.getDomain();
+		String outcome = "%var";
+		//this stuff was in a class becuse it gets used for other instructsions
+		if(domain == null) {
+			outcome += "bit";
+		} else {
+			outcome += domain.name().toLowerCase().replace("_", "");
+		}
+
+		outcome += type.getId();
+		return outcome;
+	}
+
 	@Override
 	public void process(Context context) {
 		VarType type = (VarType) objectOperand;

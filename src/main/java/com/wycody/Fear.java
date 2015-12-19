@@ -12,6 +12,7 @@ import com.jagex.core.constants.SerialEnum;
 import com.jagex.game.runetek5.config.vartype.constants.ScriptVarType;
 import com.thedoge.Blocks.DummyBlock;
 import com.thedoge.Blocks.MultiBlock;
+import com.thedoge.Update;
 import com.thedoge.funky.Factory;
 import com.wycody.cs2d.script.inst.Instruction;
 import com.wycody.cs2d.script.inst.InstructionType;
@@ -66,12 +67,17 @@ public class Fear {
 	 */
 	public static void main(String[] args) throws IOException {
 
+		test742(new String[]{"1369"});
+//		test742(new String[]{"292"});
+
+
 
         Revision850.debug_instructions=true;
         Revision850.print_unknowns=true;
+	//	test850(new String[]{"1000"});
    //     test850(new String[]{"7958"});
-       test850(new String[]{"10218"});
-
+//      test850(new String[]{"10218"});
+//	test742(new String[0]);
 /*
 Unknown opcode: 648
 Unknown opcode: 956
@@ -85,7 +91,7 @@ script: 3103
 script: 3106
          */
 
-
+/*
 		if(args.length > 1 && args[0].equalsIgnoreCase("dec")) {
 			test850(new String[]{args[1]});
 		}else if(args.length > 1 && args[0].equalsIgnoreCase("find")){
@@ -108,7 +114,7 @@ script: 3106
 			;
 			//test850(args);
 		}
-
+*/
 		//test742(args);
 	}
 
@@ -120,16 +126,19 @@ script: 3106
             
             RS2Revision revision = new Revision742();
             ConfigParser config = new ConfigParser();
-          //  config.download("742");
+			Update.updateFile(Update.Revision._742);
             config.loadRevision("742", revision);
             
 			Cache cache = new Cache(s);
 			paramTypeList = new ParamTypeList(cache);
 			Context context = new Context();
 			CS2Decompiler decompiler = new CS2Decompiler(context);
-           
+
+			Main.paramTypeList = new ParamTypeList(cache);
+			Main.enumTypeList = new EnumTypeList(cache);
+			Main.structTypeList = new StructTypeList(cache);
             
-			context.withDebug(true).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
+			context.withDebug(false).withCache(cache).withDecompiler(decompiler).withDisassembler(revision).withInstructionDecoder(revision).withPrinter(new ConsolePrinter());
 
 
 
@@ -147,10 +156,11 @@ script: 3106
             //686
             //2002
 			//1957
-			CS2Script script = decompiler.disassemble(686);//793
-            Factory factory = new Factory();
-            MultiBlock block = factory.breakDown(script);
-            block.print(0);
+			CS2Script script = decompiler.disassemble(Integer.parseInt(args[0]));//793
+			decompiler.decompile(script);
+//            Factory factory = new Factory();
+//            MultiBlock block = factory.breakDown(script);
+//            block.print(0);
 
 			//script.print(context);
             /*
@@ -304,14 +314,13 @@ script: 3106
 	}
 
 
-	private static void test850(String[] args) throws FileNotFoundException{
+	public static void test850(String[] args) throws FileNotFoundException{
         if (new File("F:\\LIVE\\").exists()) {
 			FileStore s = FileStore.open(new File("F:\\CACHES\\850"));
 			Cache c = new Cache(s);
 			RS2Revision revision = new Revision850(c);
             
             ConfigParser config = new ConfigParser();
-            //config.download("850");
             config.loadRevision("850", revision);
             
 			Main.paramTypeList = new ParamTypeList(c);

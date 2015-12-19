@@ -159,6 +159,24 @@ public interface Chat {
                     .setPrefixFormatters(chatFormatter);
     
     /**
+     * Gets ID of the next chat line beside the specified line
+     */
+    Supplier<CallMethodInstruction> PUSH_NEXTLINEID = () ->
+            new CallMethodInstruction(InstructionType.PUSH_CHAT_NEXTLINEID)
+                    .setName("getNextChatLineId")
+                    .setArgumentTypes(StackType.INT)
+                    .setPushType(StackType.INT);
+    
+    /**
+     * Gets ID of the next chat line beside the specified line
+     */
+    Supplier<CallMethodInstruction> PUSH_PREVLINEID = () ->
+            new CallMethodInstruction(InstructionType.PUSH_CHAT_PREVLINEID)
+                    .setName("getPreviousChatLineId")
+                    .setArgumentTypes(StackType.INT)
+                    .setPushType(StackType.INT);
+    
+    /**
      * Gets the unfiltered name of the user who sent the specified chat line
      */
     Supplier<CallMethodInstruction> PUSH_NAMEUNFILTERED = () ->

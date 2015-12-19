@@ -1,5 +1,6 @@
 package com.wycody.cs2d;
 
+import com.google.common.collect.Iterables;
 import com.wycody.cs2d.print.ScriptPrinter;
 import com.wycody.cs2d.rev.RS2Revision;
 import com.wycody.cs2d.script.CS2Assembler;
@@ -8,6 +9,9 @@ import com.wycody.cs2d.script.inst.InstructionDecoder;
 import com.wycody.cs2d.script.name.ScriptNameMap;
 
 import net.openrs.cache.Cache;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * This class is the context for CS2Decompiler, hold various methods and
@@ -157,7 +161,7 @@ public class Context {
 	}
 
 	/**
-	 * @param allowBlockEditing
+	 * @param blockEditing
 	 *            the allowBlockEditing to set
 	 */
 	public void setBlockEditing(boolean blockEditing) {
@@ -273,6 +277,33 @@ public class Context {
 	public Context withScriptNameMap(ScriptNameMap scriptNameMap) {
 		this.scriptNameMap = scriptNameMap;
 		return this;
+	}
+
+/*
+	for (int scriptId = 0; scriptId < context.getCache().getFileCount(12); scriptId++) {
+				CS2Script script = context.getDecompiler().disassemble(scriptId);
+ */
+	public Iterator<CS2Script> getDisassembledIterator() throws IOException {
+		final Cache cache = getCache();
+		final int scriptCount = getCache().getFileCount(12);
+		final CS2Decompiler decompiler = getDecompiler();
+
+		return new Iterator<CS2Script>() {
+			private int nextIndex = 0;
+			@Override
+			public boolean hasNext() {
+				return nextIndex < scriptCount;
+			}
+
+			@Override
+			public CS2Script next() {
+				try {
+					return decompiler.disassemble(nextIndex++);
+				}catch(Exception e){
+					return null;
+				}
+			}
+		};
 	}
 
 }

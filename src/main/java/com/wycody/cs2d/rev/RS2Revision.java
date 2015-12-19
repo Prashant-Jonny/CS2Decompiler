@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.wycody.cs2d.Context;
 import com.wycody.cs2d.script.CS2Assembler;
 import com.wycody.cs2d.script.CS2Field;
@@ -19,8 +22,6 @@ import com.wycody.io.Buffer;
 import com.wycody.utils.DynamicArray;
 
 import net.openrs.io.WrappedByteBuffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Handles the revision control methods
@@ -246,20 +247,43 @@ public abstract class RS2Revision implements CS2Assembler, InstructionDecoder {
 		return buffer.trimAndGet();
 	}
 
+	static char[] charFix = { '\u20ac', '\0', '\u201a', '\u0192',
+			'\u201e', '\u2026', '\u2020', '\u2021', '\u02c6', '\u2030',
+			'\u0160', '\u2039', '\u0152', '\0', '\u017d', '\0', '\0', '\u2018',
+			'\u2019', '\u201c', '\u201d', '\u2022', '\u2013', '\u2014',
+			'\u02dc', '\u2122', '\u0161', '\u203a', '\u0153', '\0', '\u017e',
+			'\u0178' };
+
+
+
+
 	@Override
 	public Instruction decode(CS2Script script, Context context, WrappedByteBuffer buffer, int id, int address) {
 		int instKey = registeredInstructions.containsKey(id) ? id : -1;
 		Instruction instr = registeredInstructions.get(instKey).get();
 		instr.setBaseData(id, address);
 
+
+//
+//		if(instKey == -1) {
+//			System.out.flush();
+//			System.err.flush();
+//			System.err.println("ERROR: UNKNOWN INSTRUCTION WITH OPCODE: " + id);
+//			System.err.flush();
+//		}
+
+
 		if (instr.getType() == InstructionType.PUSH_OBJ) {
-			instr.setObjectOperand(buffer.getString().intern());
+			String b= buffer.readEscapedString();
+
+			instr.setObjectOperand(b.intern());
 		} else if (instr.getType() == InstructionType.PUSH_LONG) {
 			instr.setLongOperand(buffer.getLong());
 		} else {
 			instr.setIntegerOperand(isLarge(id) ? buffer.getInt() : buffer.getUnsignedByte());
 		}
 		instr.setScript(script);
+
 		return instr;
 	}
 }

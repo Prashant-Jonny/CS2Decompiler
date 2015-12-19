@@ -20,6 +20,7 @@ import com.wycody.cs2d.script.inst.base.CallMethodInstruction;
 import com.wycody.cs2d.script.inst.base.EventBindInstruction;
 import com.wycody.cs2d.script.inst.base.PushParamInstruction;
 import com.wycody.cs2d.script.inst.impl.*;
+import com.wycody.cs2d.script.inst.impl.Math;
 import com.wycody.cs2d.script.inst.types.StackType;
 
 /**
@@ -83,8 +84,9 @@ public class ConfigParser {
     
     
     public void loadRevision(String revision, RS2Revision target) {
+        String line="";
         try{
-            String line;
+
             BufferedReader r = new BufferedReader(new FileReader(new File("config/"+revision+".tsv")));
             r.readLine(); // Skip header of tsv export.
             while((line = r.readLine()) != null){
@@ -106,11 +108,19 @@ public class ConfigParser {
                 final String formats = parts.length > 5 ? parts[5] : "";
                 //6 => comment
 
+
+                if(opcode_name.equalsIgnoreCase("ARRAY_LOAD_PUSH_INDEX_BEFORE"))
+                    continue;
+                if(opcode_name.equalsIgnoreCase("ARRAY_LOAD_PUSH_INDEX_AFTER"))
+                    continue;
+                if(opcode_name.equalsIgnoreCase("ARRAY_STORE_PUSH_INDEX"))
+                    continue;
+
                 boolean emptyData=false;
 
                 for(int i=0; !emptyData && i < 6; i++)
                     if(i != 5 && parts[i].trim().length() <= 0) {
-                        System.out.println("Skipping opcode: " + opcode + " reason: Empty data");
+//                        System.out.println("Skipping opcode: " + opcode + " reason: Empty data");
                         emptyData=true;
                     }
 
@@ -118,20 +128,22 @@ public class ConfigParser {
                     continue;
 
                 if(opcode >= 0){
-                    if(specials.containsKey(opcode_name)){
-                        target.registerInstruction(opcode, specials.get(opcode_name));
-                    }else if(name_format.startsWith("PARAM:")){
-                        final StackType[] stack_in = parseArguments(opcode_in);
-                        assert stack_in.length > 1 && stack_in[stack_in.length-1] != null;
-                        Supplier<Instruction> ins = () -> new PushParamInstruction(InstructionType.PUSH_STRUCT_PARAM,"",stack_in[0]);
-                        target.registerInstruction(opcode,ins);
-                    }else if(formats == null || !formats.toUpperCase().startsWith("BIND_EVENT")) {
-                        final StackType[] stack_in = parseArguments(opcode_in);
-                        final StackType[] stack_out = parseArguments(opcode_out);
-                        final Function<Object, Object>[] formatters = parseFormatters(formats);
-                        target.registerInstruction(opcode, generateSupplier(name_format,stack_in,stack_out,opcode_name,formatters));
-                    } else if(formats.equalsIgnoreCase("BIND_EVENT") || formats.equalsIgnoreCase("BIND_EVENT_ACTIVE")) {
-                        target.registerInstruction(opcode, () -> (new EventBindInstruction(InstructionType.COMP_SET_HANDLER,name_format,formats.equalsIgnoreCase("BIND_EVENT_ACTIVE"))));
+                    if(!opcode_name.equalsIgnoreCase("NO_EXIST")) {
+                        if (specials.containsKey(opcode_name)) {
+                            target.registerInstruction(opcode, specials.get(opcode_name));
+                        } else if (name_format.startsWith("PARAM:")) {
+                            final StackType[] stack_in = parseArguments(opcode_in);
+                            assert stack_in.length > 1 && stack_in[stack_in.length - 1] != null;
+                            Supplier<Instruction> ins = () -> new PushParamInstruction(InstructionType.PUSH_STRUCT_PARAM, "", stack_in[0]);
+                            target.registerInstruction(opcode, ins);
+                        } else if (formats.equalsIgnoreCase("BIND_EVENT") || formats.equalsIgnoreCase("BIND_EVENT_ACTIVE")) {
+                            target.registerInstruction(opcode, () -> (new EventBindInstruction(InstructionType.COMP_SET_HANDLER, name_format, formats.equalsIgnoreCase("BIND_EVENT_ACTIVE"))));
+                        } else {
+                            final StackType[] stack_in = parseArguments(opcode_in);
+                            final StackType[] stack_out = parseArguments(opcode_out);
+                            final Function<Object, Object>[] formatters = parseFormatters(formats);
+                            target.registerInstruction(opcode, generateSupplier(name_format, stack_in, stack_out, opcode_name, formatters));
+                        }
                     }
                 }else{
                     System.out.println("Error: opcode < 0 !?" + opcode);
@@ -140,6 +152,12 @@ public class ConfigParser {
 
             
         }catch(Throwable t){
+            System.out.println(line);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             throw new RuntimeException(t);
         }
     }
@@ -230,7 +248,7 @@ public class ConfigParser {
                 return CS2Utils::getSkillDataType;
 
             default:
-                throw new RuntimeException("Invalid formatter type in config.");
+                throw new RuntimeException("Invalid formatter type in config. ("+c+")");
         }
     }
 
@@ -240,6 +258,8 @@ public class ConfigParser {
 
     static{
         specials = new HashMap<>();
+        specials.put("GET_NPC_PARAM_BY_DEFAULT_VAL", Config.PUSH_STRUCT_PARAM);
+        specials.put("GET_WORLDMAP_PARAM", Config.PUSH_WORLDMAP_PARAM);
         specials.put("CC_PUSH_PARAM", ActiveWidget.PUSH_PARAM);
         specials.put("GET_OBJ_PARAM_BY_DEFAULT_VAL", Config.PUSH_OBJ_PARAM);
         specials.put("NEW_ARRAY", Array.CREATE);
@@ -281,14 +301,196 @@ public class ConfigParser {
         specials.put("GROUP_GET_PARM_OR_BIT", Var.GROUP_GET_MULTI_VAR);
 
 
-        /*
-        191	ARRAY_LOAD_PUSH_INDEX_BEFORE
-        809	ARRAY_LOAD_PUSH_INDEX_AFTER
-        979	ARRAY_STORE_PUSH_INDEX
+        specials.put("ADD", Math.SUM);
+        specials.put("ROOT", Math.ROOT);
+        specials.put("POW", Math.POWER);
+        specials.put("MOD", Math.MODULO);
+        specials.put("MAX", Math.MAX);
+        specials.put("MIN", Math.MIN);
+        specials.put("OR", Math.BITWISE_OR);
+        specials.put("FRAC_MUL", Math.FRAC_MULTIPLY);
+        specials.put("SUBTRACT", Math.SUBTRACT);
+        specials.put("MULTIPLY", Math.MULTIPLY);
+        specials.put("DIVIDE", Math.DIVIDE);
+        specials.put("RANDOM", Math.RANDOM);
+        specials.put("RANDOM_PLUS_ONE", Math.RANDOM); //TODO fix
 
-        specials.put("ARRAY_LOAD_PUSH_INDEX_BEFORE",);
-        specials.put("ARRAY_LOAD_PUSH_INDEX_AFTER",);
-        specials.put("ARRAY_STORE_PUSH_INDEX",);
+
+        /*
+        registerInstruction(408, ScriptEnum.PUSH_VALUE_STR);
+        registerInstruction(285, ScriptEnum.PUSH_CONTAINS_INT);
+        registerInstruction(237, ScriptEnum.PUSH_CONTAINS_STR);
+        registerInstruction(51, ScriptEnum.PUSH_SIZE);
+        registerInstruction(1082, ScriptEnum.PUSH_INTVALKEYS_COUNT);
+        registerInstruction(621, ScriptEnum.PUSH_STRVALKEYS_COUNT);
+        registerInstruction(789, ScriptEnum.PUSH_INTVALKEY);
+        registerInstruction(642, ScriptEnum.PUSH_STRVALKEY);
          */
+        specials.put("GET_ENUM_VALUE", ScriptEnum.PUSH_VALUE_1);
+
+
+
+
+        /*
+
+        registerInstruction(945, ActiveWidget.SETPOS);
+        registerInstruction(932, ActiveWidget.SETSIZE);
+        registerInstruction(404, ActiveWidget.SETHIDE);
+        registerInstruction(99, ActiveWidget.SETASPECTRATIO);
+        registerInstruction(259, ActiveWidget.SETSOLID);
+        registerInstruction(922, ActiveWidget.SETSCROLLPOS);
+        registerInstruction(64, ActiveWidget.SETCOLOUR);
+        registerInstruction(577, ActiveWidget.SETFILLED);
+        registerInstruction(457, ActiveWidget.SETALPHA);
+        registerInstruction(832, ActiveWidget.SETLINEWEIGHT);
+        registerInstruction(488, ActiveWidget.SETGRAPHIC);
+        registerInstruction(318, ActiveWidget.SETGRAPHICROTATION);
+        registerInstruction(694, ActiveWidget.SETGRAPHICREPEAT);
+        registerInstruction(1178, ActiveWidget.SETMODEL);
+        registerInstruction(965, ActiveWidget.SETMODELCONSTRAINTS);
+        registerInstruction(179, ActiveWidget.SETANIMATION);
+        registerInstruction(683, ActiveWidget.SETTEXT);
+        registerInstruction(656, ActiveWidget.SETFONT);
+        registerInstruction(585, ActiveWidget.SETTEXTALIGN);
+        registerInstruction(615, ActiveWidget.SETSHADED);
+        registerInstruction(818, ActiveWidget.BIND_MOUSEPRESS_HANDLER);
+        registerInstruction(590, ActiveWidget.BIND_MOUSEDRAGPAST_HANDLER);
+        registerInstruction(1011, ActiveWidget.BIND_MOUSERELEASE_HANDLER);
+        registerInstruction(927, ActiveWidget.BIND_MOUSEOVER_HANDLER);
+        registerInstruction(323, ActiveWidget.BIND_MOUSEOUT_HANDLER);
+        registerInstruction(764, ActiveWidget.BIND_DESELECT_HANDLER);
+        registerInstruction(1117, ActiveWidget.BIND_VARP_HANDLER);
+        registerInstruction(197, ActiveWidget.BIND_UPDATE_HANDLER);
+        registerInstruction(1179, ActiveWidget.BIND_OPTION_HANDLER);
+        registerInstruction(345, ActiveWidget.BIND_DRAG_HANDLER);
+        registerInstruction(815, ActiveWidget.BIND_MOUSEDRAG_HANDLER);
+        registerInstruction(782, ActiveWidget.BIND_MOUSEMOVE_HANDLER);
+        registerInstruction(382, ActiveWidget.BIND_INV_HANDLER);
+        registerInstruction(359, ActiveWidget.BIND_STAT_HANDLER);
+        registerInstruction(71, ActiveWidget.BIND_SELECT_HANDLER);
+        registerInstruction(785, ActiveWidget.BIND_MOUSESCROLL_HANDLER);
+        registerInstruction(319, ActiveWidget.BIND_CHAT_HANDLER);
+        registerInstruction(1066, ActiveWidget.BIND_KEYPRESS_HANDLER);
+        registerInstruction(1083, ActiveWidget.BIND_FRIENDLIST_HANDLER);
+        registerInstruction(1050, ActiveWidget.BIND_FRIENDCHAT_HANDLER);
+        registerInstruction(601, ActiveWidget.BIND_STATUS_HANDLER);
+        registerInstruction(172, ActiveWidget.BIND_ATTACHMENT_HANDLER);
+        registerInstruction(714, ActiveWidget.BIND_EXCHANGE_HANDLER);
+        registerInstruction(1039, ActiveWidget.BIND_RESIZE_HANDLER);
+        registerInstruction(159, ActiveWidget.BIND_VARC_HANDLER);
+        registerInstruction(613, ActiveWidget.BIND_VARCSTR_HANDLER);
+        registerInstruction(461, ActiveWidget.BIND_USE_HANDLER);
+        registerInstruction(760, ActiveWidget.BIND_CLANSETTINGS_HANDLER);
+        registerInstruction(296, ActiveWidget.BIND_CLANCHANNEL_HANDLER);
+        registerInstruction(650, ActiveWidget.BIND_VARCLAN_HANDLER);
+        registerInstruction(939, ActiveWidget.BIND_GROUPCHANNEL_HANDLER);
+        registerInstruction(792, ActiveWidget.BIND_VARGROUP_HANDLER);
+        registerInstruction(322, ActiveWidget.CLEAR_HANDLERS);
+        registerInstruction(1046, Widget.SETFILLED);
+        registerInstruction(27,Widget.SETALPHA);
+        registerInstruction(580,Widget.SETLINEWEIGHT);
+        registerInstruction(73,Widget.SETGRAPHIC);
+        registerInstruction(610,  Widget.SETTEXT);
+        registerInstruction(1043, Widget.BIND_MOUSEPRESS_HANDLER);
+        registerInstruction(985, Widget.BIND_MOUSEDRAGPAST_HANDLER);
+        registerInstruction(790, Widget.BIND_MOUSERELEASE_HANDLER);
+        registerInstruction(250, Widget.BIND_MOUSEOVER_HANDLER);
+        registerInstruction(663, Widget.BIND_MOUSE_HOVER_OUT_HANDLER);
+        registerInstruction(879, Widget.BIND_DESELECT_HANDLER);
+        registerInstruction(912, Widget.BIND_VARP_HANDLER);
+        registerInstruction(880, Widget.BIND_UPDATE_HANDLER);
+        registerInstruction(447, Widget.BIND_OPTION_HANDLER);
+        registerInstruction(31, Widget.BIND_DRAG_HANDLER);
+        registerInstruction(252, Widget.BIND_MOUSEDRAG_HANDLER);
+        registerInstruction(373, Widget.BIND_MOUSE_HOVER_IN_HANDLER);
+        registerInstruction(385, Widget.BIND_INV_HANDLER);
+        registerInstruction(1122, Widget.BIND_STAT_HANDLER);
+        registerInstruction(1086, Widget.BIND_SELECT_HANDLER);
+        registerInstruction(314, Widget.BIND_MOUSESCROLL_HANDLER);
+        registerInstruction(556, Widget.BIND_CHAT_HANDLER);
+        registerInstruction(942, Widget.BIND_KEYPRESS_HANDLER);
+        registerInstruction(55, Widget.BIND_FRIENDLIST_HANDLER);
+        registerInstruction(293, Widget.BIND_FRIENDCHAT_HANDLER);
+        registerInstruction(528, Widget.BIND_STATUS_HANDLER);
+        registerInstruction(204, Widget.BIND_ATTACHMENT_HANDLER);
+        registerInstruction(210, Widget.BIND_EXCHANGE_HANDLER);
+        registerInstruction(681, Widget.BIND_RESIZE_HANDLER);
+        registerInstruction(398, Widget.BIND_VARC_HANDLER);
+        registerInstruction(300, Widget.BIND_VARCSTR_HANDLER);
+        registerInstruction(303, Widget.BIND_USE_HANDLER);
+        registerInstruction(310, Widget.BIND_CLANSETTINGS_HANDLER);
+        registerInstruction(668, Widget.BIND_CLANCHANNEL_HANDLER);
+        registerInstruction(562, Widget.BIND_VARCLAN_HANDLER);
+        registerInstruction(888, Widget.BIND_GROUPCHANNEL_HANDLER);
+        registerInstruction(419, Widget.BIND_VARGROUP_HANDLER);
+        registerInstruction(11, Widget.CLEAR_HANDLERS);
+        registerInstruction(278,  Unsorted.RETURN);
+        registerInstruction(963, Unsorted.PRINT_TO_CONSOLE);
+        registerInstruction(1068, WidgetContainer.SETACTIVE);
+        registerInstruction(104, Widget.SETACTIVE);
+        registerInstruction(1030, ClientGeneral.PUSH_CLIENT_CYCLE);
+        registerInstruction(966, ClientGeneral.PUSH_INV_SLOTOBJ);
+        registerInstruction(1088, ClientGeneral.PUSH_INV_SLOTCOUNT);
+        registerInstruction(115, ClientGeneral.PUSH_INV_OBJCOUNT);
+        registerInstruction(443, ClientGeneral.PUSH_INV_CATCOUNT);
+        registerInstruction(735, ClientGeneral.PUSH_INV_CAPACITY);
+        registerInstruction(65, ClientGeneral.PUSH_INV_STOCKCOUNT);
+        registerInstruction(1175, ClientGeneral.PUSH_STAT_LEVEL);
+        registerInstruction(146, ClientGeneral.PUSH_STAT_BASE);
+        registerInstruction(276, ClientGeneral.PUSH_STAT_EXPERIENCE);
+        registerInstruction(475,  Math.SUM);
+        registerInstruction(856,  Math.SUBTRACT);
+        registerInstruction(1219, Math.MULTIPLY);
+        registerInstruction(987,  Math.DIVIDE);
+        registerInstruction(1189, Math.RANDOM);
+        registerInstruction(1186, Math.MODULO);
+        registerInstruction(313, Math.BITWISE_OR);
+        registerInstruction(952,  Math.MIN);
+        registerInstruction(241,  Math.MAX);
+        registerInstruction(977,  Math.FRAC_MULTIPLY);
+        registerInstruction(560,  Text.INT_TO_STR);
+        registerInstruction(986,  Text.STRLEN);
+
+
+        registerInstruction(4, Config.PUSH_WORLDMAP_PARAM);
+        registerInstruction(282, Config.PUSH_STRUCT_PARAM);
+        registerInstruction(338, Config.PUSH_NPC_PARAM);
+        registerInstruction(408, ScriptEnum.PUSH_VALUE_STR);
+        registerInstruction(608, ScriptEnum.PUSH_VALUE);
+        registerInstruction(285, ScriptEnum.PUSH_CONTAINS_INT);
+        registerInstruction(237, ScriptEnum.PUSH_CONTAINS_STR);
+        registerInstruction(51, ScriptEnum.PUSH_SIZE);
+        registerInstruction(1082, ScriptEnum.PUSH_INTVALKEYS_COUNT);
+        registerInstruction(621, ScriptEnum.PUSH_STRVALKEYS_COUNT);
+        registerInstruction(789, ScriptEnum.PUSH_INTVALKEY);
+        registerInstruction(642, ScriptEnum.PUSH_STRVALKEY);
+         */
+
+        /* Older revisions */
+        specials.put("PUSH_VARP",Var.PUSH_VARP);
+        specials.put("STORE_VARP",Var.STORE_VARP);
+        specials.put("PUSH_VARP_BIT",Var.PUSH_VARP_BIT);
+        specials.put("STORE_VARP_BIT",Var.STORE_VARP_BIT);
+        specials.put("PUSH_VARC",Var.PUSH_VARC);
+        specials.put("STORE_VARC",Var.STORE_VARC);
+
+
+
+        /* Newer stuff */
+        specials.put("PUSH_WORLDMAP_PARAM",Config.PUSH_WORLDMAP_PARAM); //TODO: check spreadsheet neme.
+        specials.put("GET_STRUCT_VALUE",Config.PUSH_STRUCT_PARAM);
+        specials.put("GET_NPC_PARAM_BY_DEFAULT_VAL",Config.PUSH_NPC_PARAM);
+        specials.put("PUSH_VALUE_STR",ScriptEnum.PUSH_VALUE_STR); //TODO: check spreadsheet neme.
+        specials.put("PUSH_VALUE",ScriptEnum.PUSH_VALUE); //TODO: check spreadsheet neme.
+        specials.put("PUSH_CONTAINS_INT",ScriptEnum.PUSH_CONTAINS_INT); //TODO: check spreadsheet neme.
+        specials.put("PUSH_CONTAINS_STR",ScriptEnum.PUSH_CONTAINS_STR); //TODO: check spreadsheet neme.
+        specials.put("PUSH_SIZE",ScriptEnum.PUSH_SIZE); //TODO: check spreadsheet neme.
+        specials.put("PUSH_INTVALKEYS_COUNT",ScriptEnum.PUSH_INTVALKEYS_COUNT); //TODO: check spreadsheet neme.
+        specials.put("PUSH_STRVALKEYS_COUNT",ScriptEnum.PUSH_STRVALKEYS_COUNT); //TODO: check spreadsheet neme.
+        specials.put("PUSH_INTVALKEY",ScriptEnum.PUSH_INTVALKEY); //TODO: check spreadsheet neme.
+        specials.put("PUSH_STRVALKEY",ScriptEnum.PUSH_STRVALKEY); //TODO: check spreadsheet neme.
+
+
+        specials.put("GET_VALUE_KEYS_KEY_BY_INDEX", ScriptEnum.GET_VALUE_KEYS_KEY_BY_INDEX);
     }
 }

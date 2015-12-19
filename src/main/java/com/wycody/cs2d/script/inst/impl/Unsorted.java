@@ -37,6 +37,10 @@ public interface Unsorted {
     Supplier<Instruction> CALL_SCRIPT = CallScriptInstruction::new;
     Supplier<Instruction> CONCAT_STRS = ConcatStringsInstruction::new;
     
+    Supplier<CallMethodInstruction> PUSH_EMPTY_INT = () ->
+            new CallMethodInstruction(InstructionType.PUSH_EMPTY_INT).setName("push(0)")
+                    .setPushType(StackType.INT).setArgumentTypes(StackType.NONE).fixDefaultType();
+    
     // TODO: InstructionType once the correct name is known.
     Supplier<CallMethodInstruction> GET_CURRENT_TOOLKIT_PREFERENCE = () ->
             new CallMethodInstruction(InstructionType.MIN)
